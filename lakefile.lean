@@ -5,6 +5,7 @@ package «pod» {
   srcDir := "src/lean"
 }
 
+@[default_target]
 lean_lib «Pod»
 
 def buildBindingsO (pkg : Package) (flags : Array String) (stem : String) : IndexBuildM (BuildJob FilePath) := do
