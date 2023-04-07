@@ -5,6 +5,24 @@
 
 static void lean_pod_default_foreach(void* a, b_lean_obj_arg b) {}
 
+static inline uint32_t lean_pod_Float32_toBits(float x) {
+    union {
+        float f32;
+        uint32_t u32;
+    } u;
+    u.f32 = x;
+    return u.u32;
+}
+
+static inline float lean_pod_Float32_fromBits(uint32_t x) {
+    union {
+        uint32_t u32;
+        float f32;
+    } u;
+    u.u32 = x;
+    return u.f32;
+}
+
 typedef struct {
     lean_object* owner;
     uint8_t* ptr;
