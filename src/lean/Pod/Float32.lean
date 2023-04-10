@@ -1,5 +1,8 @@
+namespace Pod
+
 structure Float32 where
   val : UInt32
+deriving Inhabited
 
 namespace Float32
 
@@ -17,27 +20,27 @@ def pi : Float32 := .mk 0x40490FDB
 
 end Float32
 
-instance : Inhabited Float32 := ⟨.zero⟩
+end Pod
 
 @[extern "lean_pod_Float_toFloat32"]
-opaque Float.toFloat32 : Float → Float32
+opaque Float.toFloat32 : Float → Pod.Float32
 
 @[extern "lean_pod_UInt8_toFloat32"]
-opaque UInt8.toFloat32 : UInt8 → Float32
+opaque UInt8.toFloat32 : UInt8 → Pod.Float32
 
 @[extern "lean_pod_UInt16_toFloat32"]
-opaque UInt16.toFloat32 : UInt16 → Float32
+opaque UInt16.toFloat32 : UInt16 → Pod.Float32
 
 @[extern "lean_pod_UInt32_toFloat32"]
-opaque UInt32.toFloat32 : UInt32 → Float32
+opaque UInt32.toFloat32 : UInt32 → Pod.Float32
 
 @[extern "lean_pod_UInt64_toFloat32"]
-opaque UInt64.toFloat32 : UInt64 → Float32
+opaque UInt64.toFloat32 : UInt64 → Pod.Float32
 
 @[extern "lean_pod_USize_toFloat32"]
-opaque USize.toFloat32 : USize → Float32
+opaque USize.toFloat32 : USize → Pod.Float32
 
-namespace Float32
+namespace Pod.Float32
 
 @[extern "lean_pod_Float32_toString"]
 opaque toString : Float32 → String
@@ -190,34 +193,34 @@ opaque abs : Float32 → Float32
 @[extern "lean_pod_Float32_scaleB"]
 opaque scaleB (x : Float32) (i : @& Int) : Float32
 
-end Float32
+end Pod.Float32
 
-instance : ToString Float32 := ⟨Float32.toString⟩
-instance : Repr Float32 := ⟨λ x _ ↦ x.toString⟩
-instance : ReprAtom Float32 := ⟨⟩
-instance {n} : OfNat Float32 n := ⟨(Float.ofNat n).toFloat32⟩
+instance : ToString Pod.Float32 := ⟨Pod.Float32.toString⟩
+instance : Repr Pod.Float32 := ⟨λ x _ ↦ x.toString⟩
+instance : ReprAtom Pod.Float32 := ⟨⟩
+instance {n} : OfNat Pod.Float32 n := ⟨(Float.ofNat n).toFloat32⟩
 
-instance : OfScientific Float32 where
+instance : OfScientific Pod.Float32 where
   ofScientific m s e := Float.toFloat32 (Float.ofScientific m s e)
 
-instance : LT Float32 where
-  lt x y := Float32.blt x y
+instance : LT Pod.Float32 where
+  lt x y := Pod.Float32.blt x y
 
-instance : LE Float32 where
-  le x y := Float32.ble x y
+instance : LE Pod.Float32 where
+  le x y := Pod.Float32.ble x y
 
-instance {x y : Float32} : Decidable (x < y) :=
+instance {x y : Pod.Float32} : Decidable (x < y) :=
   if h : x.blt y then .isTrue h else .isFalse h
 
-instance {x y : Float32} : Decidable (x ≤ y) :=
+instance {x y : Pod.Float32} : Decidable (x ≤ y) :=
   if h : x.ble y then .isTrue h else .isFalse h
 
-instance : Add Float32 := ⟨Float32.add⟩
-instance : Sub Float32 := ⟨Float32.sub⟩
-instance : Mul Float32 := ⟨Float32.mul⟩
-instance : Div Float32 := ⟨Float32.div⟩
-instance : Neg Float32 := ⟨Float32.neg⟩
-instance : BEq Float32 := ⟨Float32.beq⟩
-instance : Pow Float32 Float32 := ⟨Float32.pow⟩
-instance : Min Float32 := ⟨Float32.min⟩
-instance : Max Float32 := ⟨Float32.max⟩
+instance : Add Pod.Float32 := ⟨Pod.Float32.add⟩
+instance : Sub Pod.Float32 := ⟨Pod.Float32.sub⟩
+instance : Mul Pod.Float32 := ⟨Pod.Float32.mul⟩
+instance : Div Pod.Float32 := ⟨Pod.Float32.div⟩
+instance : Neg Pod.Float32 := ⟨Pod.Float32.neg⟩
+instance : BEq Pod.Float32 := ⟨Pod.Float32.beq⟩
+instance : Pow Pod.Float32 Pod.Float32 := ⟨Pod.Float32.pow⟩
+instance : Min Pod.Float32 := ⟨Pod.Float32.min⟩
+instance : Max Pod.Float32 := ⟨Pod.Float32.max⟩

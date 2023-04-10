@@ -1,6 +1,8 @@
 import Pod.Lemmas
 import Pod.Util
 
+namespace Pod
+
 opaque BytesViewPointed (size : USize) : NonemptyType
 def BytesView (size : USize) : Type := (BytesViewPointed size).type
 instance {size} : Nonempty (BytesView size) := (BytesViewPointed size).property
@@ -14,7 +16,7 @@ opaque take {size} (bv : @& BytesView size) (count : USize) (h : count ≤ size)
 opaque drop {size} (bv : BytesView size) (count : USize) (h : count ≤ size) : BytesView (size - count)
 
 @[extern "lean_pod_BytesView_slice"]
-opaque BytesView.slice {size}
+opaque slice {size}
   (bv : BytesView size) (start : USize) (length : USize)
   (bounded : start.toNat + length.toNat ≤ size.toNat) : BytesView length :=
   let «start≤size» : start ≤ size := by
@@ -84,10 +86,12 @@ def getUInt64Be! {size} (bv : BytesView size) (i : USize) : UInt64 := mkGet! $ b
 
 end BytesView
 
-instance {size} : GetElem (BytesView size) USize UInt8 λ _ i ↦ i < size where
-  getElem := BytesView.getUInt8
+end Pod
 
-instance {size} : GetElem (BytesView size) Nat UInt8 λ _ i ↦ i < size.toNat where
+instance {size} : GetElem (Pod.BytesView size) USize UInt8 λ _ i ↦ i < size where
+  getElem := Pod.BytesView.getUInt8
+
+instance {size} : GetElem (Pod.BytesView size) Nat UInt8 λ _ i ↦ i < size.toNat where
   getElem := λ bp i h ↦ bp.getUInt8 i.toUSize $ by
     show i % USize.size < size.toNat
     rw [Nat.mod_eq_of_lt $ Nat.lt_trans h size.val.isLt]
@@ -95,5 +99,5 @@ instance {size} : GetElem (BytesView size) Nat UInt8 λ _ i ↦ i < size.toNat w
     · exact h
     · rfl
 
-instance {size} : GetElem (BytesView size) (Fin size.toNat) UInt8 λ _ _ ↦ True where
+instance {size} : GetElem (Pod.BytesView size) (Fin size.toNat) UInt8 λ _ _ ↦ True where
   getElem := λ bp i _ ↦ bp[i.val]'i.isLt
