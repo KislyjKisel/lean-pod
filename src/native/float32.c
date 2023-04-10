@@ -97,7 +97,7 @@ LEAN_EXPORT lean_obj_res lean_pod_Float32_frExp(uint32_t x_w) {
     float x = lean_pod_Float32_fromBits(x_w);
     lean_object* result = lean_alloc_ctor(0, 2, 0);
     int exp;
-    lean_ctor_set(result, 0, lean_box_float(frexp(x, &exp)));
+    lean_ctor_set(result, 0, lean_box_uint32(lean_pod_Float32_toBits(frexpf(x, &exp))));
     lean_ctor_set(result, 1, isfinite(x) ? lean_int_to_int(exp) : lean_box(0));
     return result;
 }
