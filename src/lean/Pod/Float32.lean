@@ -114,79 +114,79 @@ opaque isUnordered : Float32 → Float32 → Bool
 @[extern "lean_pod_Float32_frExp"]
 opaque frExp : Float32 → Float32 × Int
 
-@[extern "sinf"]
+@[extern "lean_pod_Float32_sin"]
 opaque sin : Float32 → Float32
 
-@[extern "cosf"]
+@[extern "lean_pod_Float32_cos"]
 opaque cos : Float32 → Float32
 
-@[extern "tanf"]
+@[extern "lean_pod_Float32_tan"]
 opaque tan : Float32 → Float32
 
-@[extern "asinf"]
+@[extern "lean_pod_Float32_asin"]
 opaque asin : Float32 → Float32
 
-@[extern "acosf"]
+@[extern "lean_pod_Float32_acos"]
 opaque acos : Float32 → Float32
 
-@[extern "atanf"]
+@[extern "lean_pod_Float32_atan"]
 opaque atan : Float32 → Float32
 
-@[extern "atan2f"]
+@[extern "lean_pod_Float32_atan2"]
 opaque atan2 : Float32 → Float32 → Float32
 
-@[extern "asinhf"]
+@[extern "lean_pod_Float32_sinh"]
 opaque sinh : Float32 → Float32
 
-@[extern "acoshf"]
+@[extern "lean_pod_Float32_cosh"]
 opaque cosh : Float32 → Float32
 
-@[extern "atanhf"]
+@[extern "lean_pod_Float32_tanh"]
 opaque tanh : Float32 → Float32
 
-@[extern "asinhf"]
+@[extern "lean_pod_Float32_asinh"]
 opaque asinh : Float32 → Float32
 
-@[extern "acoshf"]
+@[extern "lean_pod_Float32_acosh"]
 opaque acosh : Float32 → Float32
 
-@[extern "atanhf"]
+@[extern "lean_pod_Float32_atanh"]
 opaque atanh : Float32 → Float32
 
-@[extern "expf"]
+@[extern "lean_pod_Float32_exp"]
 opaque exp : Float32 → Float32
 
-@[extern "exp2f"]
+@[extern "lean_pod_Float32_exp2"]
 opaque exp2 : Float32 → Float32
 
-@[extern "logf"]
+@[extern "lean_pod_Float32_log"]
 opaque log : Float32 → Float32
 
-@[extern "log2f"]
+@[extern "lean_pod_Float32_log2"]
 opaque log2 : Float32 → Float32
 
-@[extern "log10f"]
+@[extern "lean_pod_Float32_log10"]
 opaque log10 : Float32 → Float32
 
-@[extern "powf"]
+@[extern "lean_pod_Float32_pow"]
 opaque pow : Float32 → Float32 → Float32
 
-@[extern "sqrtf"]
+@[extern "lean_pod_Float32_sqrt"]
 opaque sqrt : Float32 → Float32
 
-@[extern "cbrtf"]
+@[extern "lean_pod_Float32_cbrt"]
 opaque cbrt : Float32 → Float32
 
-@[extern "ceilf"]
+@[extern "lean_pod_Float32_ceil"]
 opaque ceil : Float32 → Float32
 
-@[extern "floorf"]
+@[extern "lean_pod_Float32_floor"]
 opaque floor : Float32 → Float32
 
-@[extern "roundf"]
+@[extern "lean_pod_Float32_round"]
 opaque round : Float32 → Float32
 
-@[extern "fabsf"]
+@[extern "lean_pod_Float32_abs"]
 opaque abs : Float32 → Float32
 
 /-- Efficiently computes `x * 2^i`. -/

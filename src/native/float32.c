@@ -102,6 +102,46 @@ LEAN_EXPORT lean_obj_res lean_pod_Float32_frExp(uint32_t x_w) {
     return result;
 }
 
+#define LEAN_POD_FLOAT32_F1(fn)\
+LEAN_EXPORT uint32_t lean_pod_Float32_##fn(uint32_t x) {\
+    return lean_pod_Float32_toBits(fn##f(lean_pod_Float32_fromBits(x)));\
+}
+
+LEAN_POD_FLOAT32_F1(sin);
+LEAN_POD_FLOAT32_F1(cos);
+LEAN_POD_FLOAT32_F1(tan);
+LEAN_POD_FLOAT32_F1(asin);
+LEAN_POD_FLOAT32_F1(acos);
+LEAN_POD_FLOAT32_F1(atan);
+LEAN_POD_FLOAT32_F1(sinh);
+LEAN_POD_FLOAT32_F1(cosh);
+LEAN_POD_FLOAT32_F1(tanh);
+LEAN_POD_FLOAT32_F1(asinh);
+LEAN_POD_FLOAT32_F1(acosh);
+LEAN_POD_FLOAT32_F1(atanh);
+LEAN_POD_FLOAT32_F1(exp);
+LEAN_POD_FLOAT32_F1(exp2);
+LEAN_POD_FLOAT32_F1(log);
+LEAN_POD_FLOAT32_F1(log2);
+LEAN_POD_FLOAT32_F1(log10);
+LEAN_POD_FLOAT32_F1(sqrt);
+LEAN_POD_FLOAT32_F1(cbrt);
+LEAN_POD_FLOAT32_F1(ceil);
+LEAN_POD_FLOAT32_F1(floor);
+LEAN_POD_FLOAT32_F1(round);
+
+LEAN_EXPORT uint32_t lean_pod_Float32_abs(uint32_t x) {
+    return lean_pod_Float32_toBits(fabsf(lean_pod_Float32_fromBits(x)));
+}
+
+LEAN_EXPORT uint32_t lean_pod_Float32_atan2(uint32_t y, uint32_t x) {
+    return lean_pod_Float32_toBits(atan2f(lean_pod_Float32_fromBits(y), lean_pod_Float32_fromBits(x)));
+}
+
+LEAN_EXPORT uint32_t lean_pod_Float32_pow(uint32_t x, uint32_t y) {
+    return lean_pod_Float32_toBits(powf(lean_pod_Float32_fromBits(x), lean_pod_Float32_fromBits(y)));
+}
+
 LEAN_EXPORT uint32_t lean_pod_Float32_scaleB(uint32_t x_w, b_lean_obj_arg i) {
     float x = lean_pod_Float32_fromBits(x_w);
     if (lean_is_scalar(i)) {
