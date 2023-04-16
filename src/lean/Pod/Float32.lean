@@ -6,6 +6,8 @@ deriving Inhabited
 
 namespace Float32
 
+/-! # Transparent Float32 constants -/
+
 def zero : Float32 := .mk 0x00000000
 def negZero : Float32 := .mk 0x80000000
 def one : Float32 := .mk 0x3F800000
@@ -39,6 +41,8 @@ opaque UInt64.toFloat32 : UInt64 → Pod.Float32
 
 @[extern "lean_pod_USize_toFloat32"]
 opaque USize.toFloat32 : USize → Pod.Float32
+
+def Nat.toFloat32 (n : Nat) : Pod.Float32 := n.toFloat.toFloat32
 
 namespace Pod.Float32
 
@@ -198,7 +202,7 @@ end Pod.Float32
 instance : ToString Pod.Float32 := ⟨Pod.Float32.toString⟩
 instance : Repr Pod.Float32 := ⟨λ x _ ↦ x.toString⟩
 instance : ReprAtom Pod.Float32 := ⟨⟩
-instance {n} : OfNat Pod.Float32 n := ⟨(Float.ofNat n).toFloat32⟩
+instance {n} : OfNat Pod.Float32 n := ⟨n.toFloat32⟩
 
 instance : OfScientific Pod.Float32 where
   ofScientific m s e := Float.toFloat32 (Float.ofScientific m s e)
