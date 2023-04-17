@@ -10,18 +10,18 @@ instance {size alignment} : Nonempty (BytesView size alignment) := (BytesViewPoi
 
 namespace BytesView
 
-@[extern "lean_pod_BytesView_id"]
-opaque weaken {size alignment0 alignment1} (h : alignment1 ≤ alignment0) : BytesView size alignment0 → BytesView size alignment1
+@[extern "lean_pod_BytesView_weaken"]
+opaque weaken {size} {alignment0 alignment1 : @& Nat} (h : alignment1 ≤ alignment0) : BytesView size alignment0 → BytesView size alignment1
 
-@[extern "lean_pod_BytesView_id"]
-opaque take {size alignment} (bv : BytesView size alignment) (count : USize) (h : count ≤ size) : BytesView count alignment
+@[extern "lean_pod_BytesView_take"]
+opaque take {size} {alignment : @& Nat} (bv : BytesView size alignment) (count : USize) (h : count ≤ size) : BytesView count alignment
 
 @[extern "lean_pod_BytesView_drop"]
-opaque drop {size alignment} (bv : BytesView size alignment) (count : USize) (h : count ≤ size) : BytesView (size - count) (alignment.gcd count.toNat)
+opaque drop {size} {alignment : @& Nat} (bv : BytesView size alignment) (count : USize) (h : count ≤ size) : BytesView (size - count) (alignment.gcd count.toNat)
 
 @[extern "lean_pod_BytesView_slice"]
-opaque slice {size alignment}
-  (bv : BytesView size alignment) (start : USize) (length : USize)
+opaque slice {size} {alignment : @& Nat}
+  (bv : BytesView size alignment) (start length : USize)
   (bounded : start.toNat + length.toNat ≤ size.toNat) : BytesView length (alignment.gcd start.toNat) :=
   let «start≤size» : start ≤ size := by
     apply Nat.le_trans $ Nat.le_sub_of_add_le bounded
@@ -34,7 +34,7 @@ opaque slice {size alignment}
     exact bounded
 
 @[extern "lean_pod_BytesView_getUInt8"]
-opaque getUInt8 {size alignment} (bv : @& BytesView size alignment) (i : USize) (h : i < size) : UInt8
+opaque getUInt8 {size} {alignment : @& Nat} (bv : @& BytesView size alignment) (i : USize) (h : i < size) : UInt8
 
 @[extern "lean_pod_BytesView_getUInt16Ne"]
 opaque getUInt16Ne {size} (bv : @& BytesView size UInt16.alignment) (i : USize) (h : i + 1 < size) : UInt16
