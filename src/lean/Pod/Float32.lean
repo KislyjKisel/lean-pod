@@ -42,8 +42,6 @@ opaque UInt64.toFloat32 : UInt64 → Pod.Float32
 @[extern "lean_pod_USize_toFloat32"]
 opaque USize.toFloat32 : USize → Pod.Float32
 
-def Nat.toFloat32 (n : Nat) : Pod.Float32 := n.toFloat.toFloat32
-
 namespace Pod.Float32
 
 @[extern "lean_pod_Float32_toString"]
@@ -197,15 +195,34 @@ opaque abs : Float32 → Float32
 @[extern "lean_pod_Float32_scaleB"]
 opaque scaleB (x : Float32) (i : @& Int) : Float32
 
+def ofBinaryScientific (m : Nat) (e : Int) : Float32 :=
+  let s := m.log2 - 31
+  let m := (m >>> s).toUInt32
+  let e := e + s
+  m.toFloat32.scaleB e
+
+def ofScientific (m : Nat) (s : Bool) (e : Nat) : Float32 :=
+  if s
+    then
+      let s := 32 - m.log2
+      let m := (m <<< (3 * e + s)) / 5 ^ e
+      ofBinaryScientific m (-4 * e - s)
+    else
+      ofBinaryScientific (m * 5 ^ e) e
+
+def ofNat (n : Nat) : Float32 := ofScientific n false 0
+
 end Pod.Float32
+
+def Nat.toFloat32 (n : Nat) : Pod.Float32 := Pod.Float32.ofNat n
 
 instance : ToString Pod.Float32 := ⟨Pod.Float32.toString⟩
 instance : Repr Pod.Float32 := ⟨λ x _ ↦ x.toString⟩
 instance : ReprAtom Pod.Float32 := ⟨⟩
 instance {n} : OfNat Pod.Float32 n := ⟨n.toFloat32⟩
 
-instance : OfScientific Pod.Float32 where
-  ofScientific m s e := Float.toFloat32 (Float.ofScientific m s e)
+@[default_instance mid+1]
+instance : OfScientific Pod.Float32 := ⟨Pod.Float32.ofScientific⟩
 
 instance : LT Pod.Float32 where
   lt x y := Pod.Float32.blt x y
