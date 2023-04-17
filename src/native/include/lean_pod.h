@@ -3,8 +3,6 @@
 #include <stdint.h>
 #include <lean/lean.h>
 
-static void lean_pod_default_foreach(void* a, b_lean_obj_arg b) {}
-
 static inline uint32_t lean_pod_Float32_toBits(float x) {
     union {
         float f32;
@@ -36,12 +34,19 @@ typedef struct {
     uint8_t* ptr;
 } lean_pod_BytesView;
 
-static inline lean_object* lean_pod_BytesView_wrap (lean_pod_BytesView const* obj) {
+static void lean_pod_BytesView_foreach(void* bytesView, b_lean_obj_arg f) {
+    lean_apply_1(f, ((lean_pod_BytesView*)bytesView)->owner);
+}
+
+static inline lean_object* lean_pod_BytesView_wrap (uint8_t* ptr, lean_object* owner) {
+    lean_pod_BytesView* bv = malloc(sizeof(lean_pod_BytesView));
+    bv->owner = owner;
+    bv->ptr = ptr;
     static lean_external_class* class_ = NULL;
     if (class_ == NULL) {
-        class_ = lean_register_external_class(free, lean_pod_default_foreach);
+        class_ = lean_register_external_class(free, lean_pod_BytesView_foreach);
     }
-    return lean_alloc_external(class_, (void*)obj);
+    return lean_alloc_external(class_, (void*)bv);
 }
 
 static inline lean_pod_BytesView* lean_pod_BytesView_unwrap (b_lean_obj_arg obj) {

@@ -1,7 +1,9 @@
+/-! # Float32 -/
+
 namespace Pod
 
 structure Float32 where
-  val : UInt32
+  bits : UInt32
 deriving Inhabited
 
 namespace Float32
@@ -245,3 +247,9 @@ instance : BEq Pod.Float32 := ⟨Pod.Float32.beq⟩
 instance : Pow Pod.Float32 Pod.Float32 := ⟨Pod.Float32.pow⟩
 instance : Min Pod.Float32 := ⟨Pod.Float32.min⟩
 instance : Max Pod.Float32 := ⟨Pod.Float32.max⟩
+
+
+/-! # Float -/
+
+@[extern "lean_pod_Float_bits"]
+opaque Float.bits : Float → UInt64

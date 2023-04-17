@@ -6,7 +6,7 @@ package «pod» {
 }
 
 @[default_target]
-lean_lib «Pod»
+lean_lib Pod
 
 def buildBindingsO (pkg : Package) (flags : Array String) (stem : String) : IndexBuildM (BuildJob FilePath) := do
   let oFile := pkg.irDir / "native" / (stem ++ ".o")
@@ -19,11 +19,13 @@ extern_lib «lean-pod» (pkg : Package) := do
     #["-I", (← getLeanIncludeDir).toString, "-fPIC"].append $
       Array.mk $ ((get_config? cflags).getD "").splitOn.filter $ not ∘ String.isEmpty
 
-  let bindingsBytesViewOFile ← buildBindingsO pkg flags "bytes_view"
-  let bindingsFloat32OFile ← buildBindingsO pkg flags "float32"
   let bindingsUIntOFile ← buildBindingsO pkg flags "uint"
+  let bindingsFloat32OFile ← buildBindingsO pkg flags "float"
+  let bindingsBytesViewOFile ← buildBindingsO pkg flags "bytes_view"
+  let bindingsBytesRefOFile ← buildBindingsO pkg flags "bytes_ref"
   buildStaticLib (pkg.libDir / name) #[
-    bindingsBytesViewOFile,
+    bindingsUIntOFile,
     bindingsFloat32OFile,
-    bindingsUIntOFile
+    bindingsBytesViewOFile,
+    bindingsBytesRefOFile
   ]

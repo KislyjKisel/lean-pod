@@ -1,6 +1,6 @@
-import Pod.BytesRef
-import Pod.BytesView
-import Pod.Float32
+import Pod.Util
 import Pod.Lemmas
 import Pod.UInt
-import Pod.Util
+import Pod.Float
+import Pod.BytesView
+import Pod.BytesRef

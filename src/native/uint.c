@@ -11,3 +11,7 @@ LEAN_EXPORT uint32_t lean_pod_UInt32_bswap(uint32_t x) {
 LEAN_EXPORT uint64_t lean_pod_UInt64_bswap(uint64_t x) {
     return lean_pod_bswap64(x);
 }
+
+LEAN_EXPORT lean_obj_res lean_pod_UInt64_getAlignment(b_lean_obj_arg unit) {
+    return lean_usize_to_nat(_Alignof(uint64_t));
+}

@@ -153,3 +153,12 @@ LEAN_EXPORT uint32_t lean_pod_Float32_scaleB(uint32_t x_w, b_lean_obj_arg i) {
         return lean_pod_Float32_toBits(x * (1.0f / 0.0f));
     }
 }
+
+LEAN_EXPORT uint64_t lean_pod_Float_bits(double x) {
+    union {
+        double d;
+        uint64_t b;
+    } u;
+    u.d = x;
+    return u.b;
+}
