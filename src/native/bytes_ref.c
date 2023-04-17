@@ -16,13 +16,6 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt8(b_lean_obj_arg br, size_t i)
     return lean_pod_BytesRef_notStError();
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt16(b_lean_obj_arg br, size_t i) {
-    if (LEAN_LIKELY(lean_is_st(br))) {
-        return lean_io_result_mk_ok(lean_pod_BytesView_unwrap(br)->ptr[i]);
-    }
-    return lean_pod_BytesRef_notStError();
-}
-
 LEAN_EXPORT lean_obj_res lean_pod_BytesRef_setUInt8(b_lean_obj_arg br, size_t i, uint8_t value) {
     if (LEAN_LIKELY(lean_is_st(br))) {
         lean_pod_BytesView_unwrap(br)->ptr[i] = value;
