@@ -20,6 +20,10 @@ def UInt64.bswap (value : UInt64) : UInt64 :=
   ((value &&& 0x000000000000FF00) <<< 40) |||
   ((value &&& 0x00000000000000FF) <<< 56)
 
+def UInt8.bitWidth : Nat := 8
+def UInt8.byteWidth : Nat := 1
+def UInt8.alignment : Nat := 1
+
 def UInt16.bitWidth : Nat := 16
 def UInt16.byteWidth : Nat := 2
 def UInt16.alignment : Nat := 2
