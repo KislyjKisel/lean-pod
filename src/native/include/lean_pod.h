@@ -45,18 +45,20 @@ static void lean_pod_BytesView_finalize(void* bytesView) {
 static void lean_pod_BytesView_foreach(void* bytesView, b_lean_obj_arg f) {
     lean_object* owner = ((lean_pod_BytesView*)bytesView)->owner;
     if(owner != NULL) {
+        lean_inc_ref(f);
+        lean_inc(owner);
         lean_apply_1(f, owner);
     }
 }
 
-static inline lean_object* lean_pod_BytesView_wrap (uint8_t* ptr, lean_object* owner) {
-    lean_pod_BytesView* bv = malloc(sizeof(lean_pod_BytesView));
-    bv->owner = owner;
-    bv->ptr = ptr;
+static inline lean_obj_res lean_pod_BytesView_wrap (uint8_t* ptr, lean_obj_arg owner) {
     static lean_external_class* class_ = NULL;
     if (class_ == NULL) {
         class_ = lean_register_external_class(lean_pod_BytesView_finalize, lean_pod_BytesView_foreach);
     }
+    lean_pod_BytesView* bv = malloc(sizeof(lean_pod_BytesView));
+    bv->owner = owner;
+    bv->ptr = ptr;
     return lean_alloc_external(class_, (void*)bv);
 }
 

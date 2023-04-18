@@ -5,8 +5,10 @@ package «pod» {
   srcDir := "src/lean"
 }
 
-@[default_target]
 lean_lib Pod
+
+@[default_target]
+lean_exe Main
 
 def buildBindingsO (pkg : Package) (flags : Array String) (stem : String) : IndexBuildM (BuildJob FilePath) := do
   let oFile := pkg.irDir / "native" / (stem ++ ".o")
