@@ -8,6 +8,7 @@ namespace Pod
 
 inductive Mutability where
   | Mutable
+  -- can't mutate by itself, but content can be mutated through other ptrs
   | Immutable
 
 variable {σ : Type}
@@ -22,11 +23,18 @@ abbrev BytesRefImm (σ : Type) := BytesRef σ .Immutable
 
 instance {size mutab align} : Nonempty (BytesRef σ mutab size align) := (BytesRefPointed σ mutab size align).property
 
+/-- Clones array if it is shared. -/
+@[extern "lean_pod_ByteArray_ref"]
+opaque _root_.ByteArray.ref (ba : ByteArray) : ST σ (BytesRefMut σ ba.size.toUSize 1)
+
 namespace BytesRef
 
 @[extern "lean_pod_BytesRef_drop"]
 opaque weaken {mutab size} {align0 align1 : @& Nat} (h : align1 ≤ align0) :
   BytesRef σ mutab size align0 → BytesRef σ mutab size align1
+
+@[extern "lean_pod_BytesRef_imm"]
+opaque imm {mutab size} {align : @& Nat} : BytesRef σ mutab size align → BytesRefImm σ size align
 
 @[extern "lean_pod_BytesRef_take"]
 opaque take {mutab size} {align : @& Nat} (bv : BytesRef σ mutab size align)

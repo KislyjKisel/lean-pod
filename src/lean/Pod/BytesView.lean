@@ -8,6 +8,9 @@ opaque BytesViewPointed (size : USize) (alignment : Nat) : NonemptyType
 def BytesView (size : USize) (alignment : Nat) : Type := (BytesViewPointed size alignment).type
 instance {size alignment} : Nonempty (BytesView size alignment) := (BytesViewPointed size alignment).property
 
+@[extern "lean_pod_ByteArray_view"]
+opaque _root_.ByteArray.view (ba : ByteArray) : BytesView ba.size.toUSize 1
+
 namespace BytesView
 
 @[extern "lean_pod_BytesView_weaken"]

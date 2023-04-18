@@ -2,8 +2,24 @@
 #include "include/lean_pod.h"
 #include "util.h"
 
+LEAN_EXPORT lean_obj_res lean_pod_ByteArray_ref(lean_obj_arg ba, lean_obj_arg token) {
+    lean_object* resba;
+    if(LEAN_LIKELY(lean_is_exclusive(ba))) {
+        resba = ba;
+    }
+    else {
+        resba = lean_copy_byte_array(ba);
+        lean_dec_ref(ba);
+    }
+    return lean_io_result_mk_ok(lean_pod_BytesView_wrap(lean_sarray_cptr(resba), resba));
+}
+
 LEAN_EXPORT lean_obj_res lean_pod_BytesRef_weaken(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a0, b_lean_obj_arg a1, lean_obj_arg bv) {
     return bv;
+}
+
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_imm(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, lean_obj_arg br) {
+    return br;
 }
 
 LEAN_EXPORT lean_obj_res lean_pod_BytesRef_take(b_lean_obj_arg mut, size_t size, b_lean_obj_arg a, lean_obj_arg bv, size_t count) {
@@ -23,17 +39,17 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesRef_slice(b_lean_obj_arg mut, size_t sz, 
     return lean_pod_BytesRef_drop(mut, sz, a, bv_w, start);
 }
 
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_toByteArray(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br) {
+    lean_object* arr = lean_alloc_sarray(1, sz, sz);
+    memcpy(lean_sarray_cptr(arr), lean_pod_BytesView_unwrap(br)->ptr, sz);
+    return lean_io_result_mk_ok(arr);
+}
+
 static inline lean_obj_res lean_pod_BytesRef_notStError() {
     return lean_io_result_mk_ok(lean_panic_fn(
         lean_box(0),
         lean_mk_string("Error: `BytesRef` used in multithreaded context or while marked persistent")
     ));
-}
-
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_toByteArray(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br) {
-    lean_object* arr = lean_alloc_sarray(1, sz, sz);
-    memcpy(lean_sarray_cptr(arr), lean_pod_BytesView_unwrap(br)->ptr, sz);
-    return lean_io_result_mk_ok(arr);
 }
 
 LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt8(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br, size_t i) {
