@@ -29,7 +29,7 @@ opaque _root_.ByteArray.ref (ba : ByteArray) : ST σ (BytesRefMut σ ba.size.toU
 
 namespace BytesRef
 
-@[extern "lean_pod_BytesRef_drop"]
+@[extern "lean_pod_BytesRef_weaken"]
 opaque weaken {mutab size} {align0 align1 : @& Nat} (h : align1 ≤ align0) :
   BytesRef σ mutab size align0 → BytesRef σ mutab size align1
 

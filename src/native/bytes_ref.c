@@ -14,19 +14,19 @@ LEAN_EXPORT lean_obj_res lean_pod_ByteArray_ref(lean_obj_arg ba, lean_obj_arg to
     return lean_io_result_mk_ok(lean_pod_BytesView_wrap(lean_sarray_cptr(resba), resba));
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_weaken(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a0, b_lean_obj_arg a1, lean_obj_arg bv) {
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_weaken(uint8_t mut, size_t sz, b_lean_obj_arg a0, b_lean_obj_arg a1, lean_obj_arg bv) {
     return bv;
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_imm(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, lean_obj_arg br) {
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_imm(uint8_t mut, size_t sz, b_lean_obj_arg a, lean_obj_arg br) {
     return br;
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_take(b_lean_obj_arg mut, size_t size, b_lean_obj_arg a, lean_obj_arg bv, size_t count) {
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_take(uint8_t mut, size_t size, b_lean_obj_arg a, lean_obj_arg bv, size_t count) {
     return bv;
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_drop(b_lean_obj_arg mut, size_t size, b_lean_obj_arg a, lean_obj_arg bv_w, size_t count) {
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_drop(uint8_t mut, size_t size, b_lean_obj_arg a, lean_obj_arg bv_w, size_t count) {
     lean_pod_BytesView* bv = lean_pod_BytesView_unwrap(bv_w);
     if(lean_is_exclusive(bv_w)) {
         bv->ptr += count;
@@ -35,11 +35,11 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesRef_drop(b_lean_obj_arg mut, size_t size,
     return lean_pod_BytesView_wrap(bv->ptr + count, bv->owner);
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_slice(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, lean_obj_arg bv_w, size_t start, size_t length) {
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_slice(uint8_t mut, size_t sz, b_lean_obj_arg a, lean_obj_arg bv_w, size_t start, size_t length) {
     return lean_pod_BytesRef_drop(mut, sz, a, bv_w, start);
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_toByteArray(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br) {
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_toByteArray(uint8_t mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br) {
     lean_object* arr = lean_alloc_sarray(1, sz, sz);
     memcpy(lean_sarray_cptr(arr), lean_pod_BytesView_unwrap(br)->ptr, sz);
     return lean_io_result_mk_ok(arr);
@@ -52,7 +52,7 @@ static inline lean_obj_res lean_pod_BytesRef_notStError() {
     ));
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt8(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br, size_t i) {
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt8(uint8_t mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br, size_t i) {
     if (LEAN_LIKELY(lean_is_st(br))) {
         return lean_io_result_mk_ok(lean_pod_BytesView_unwrap(br)->ptr[i]);
     }
@@ -68,7 +68,7 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesRef_setUInt8(size_t sz, b_lean_obj_arg a,
 }
 
 #define LEAN_POD_BYTESREF_GET_SET(bw, box)\
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt##bw##Ne(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg br, size_t i) {\
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt##bw##Ne(uint8_t mut, size_t sz, b_lean_obj_arg br, size_t i) {\
     if (LEAN_LIKELY(lean_is_st(br))) {\
         uint##bw##_t u;\
         memcpy(&u, lean_pod_BytesView_unwrap(br)->ptr + i, sizeof(uint##bw##_t));\
@@ -76,10 +76,10 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt##bw##Ne(b_lean_obj_arg mut, s
     }\
     return lean_pod_BytesRef_notStError();\
 }\
-LEAN_EXPORT lean_obj_res LEAN_POD_CONCAT3(lean_pod_BytesRef_getUInt, bw, LEAN_POD_BYTESREF_E_KEEP)(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg br, size_t i) {\
+LEAN_EXPORT lean_obj_res LEAN_POD_CONCAT3(lean_pod_BytesRef_getUInt, bw, LEAN_POD_BYTESREF_E_KEEP)(uint8_t mut, size_t sz, b_lean_obj_arg br, size_t i) {\
     return lean_pod_BytesRef_getUInt##bw##Ne(mut, sz, br, i);\
 }\
-LEAN_EXPORT lean_obj_res LEAN_POD_CONCAT3(lean_pod_BytesRef_getUInt, bw, LEAN_POD_BYTESREF_E_SWAP)(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg br, size_t i) {\
+LEAN_EXPORT lean_obj_res LEAN_POD_CONCAT3(lean_pod_BytesRef_getUInt, bw, LEAN_POD_BYTESREF_E_SWAP)(uint8_t mut, size_t sz, b_lean_obj_arg br, size_t i) {\
     if (LEAN_LIKELY(lean_is_st(br))) {\
         uint##bw##_t u;\
         memcpy(&u, lean_pod_BytesView_unwrap(br)->ptr + i, sizeof(uint##bw##_t));\
