@@ -33,7 +33,7 @@ static inline lean_obj_res lean_pod_BytesRef_notStError() {
 LEAN_EXPORT lean_obj_res lean_pod_BytesRef_toByteArray(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br) {
     lean_object* arr = lean_alloc_sarray(1, sz, sz);
     memcpy(lean_sarray_cptr(arr), lean_pod_BytesView_unwrap(br)->ptr, sz);
-    return arr;
+    return lean_io_result_mk_ok(arr);
 }
 
 LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt8(b_lean_obj_arg mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br, size_t i) {

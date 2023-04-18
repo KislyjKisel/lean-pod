@@ -23,6 +23,12 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesView_slice(size_t sz, b_lean_obj_arg a, l
     return lean_pod_BytesView_drop(sz, a, bv_w, start);
 }
 
+LEAN_EXPORT lean_obj_res lean_pod_BytesView_toByteArray(size_t sz, b_lean_obj_arg a, b_lean_obj_arg br) {
+    lean_object* arr = lean_alloc_sarray(1, sz, sz);
+    memcpy(lean_sarray_cptr(arr), lean_pod_BytesView_unwrap(br)->ptr, sz);
+    return arr;
+}
+
 LEAN_EXPORT uint8_t lean_pod_BytesView_getUInt8(size_t sz, b_lean_obj_arg a, lean_obj_arg bv_w, size_t i) {
     return lean_pod_BytesView_unwrap(bv_w)->ptr[i];
 }

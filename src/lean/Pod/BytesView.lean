@@ -33,6 +33,9 @@ opaque slice {size} {alignment : @& Nat}
     rw [Nat.add_comm]
     exact bounded
 
+@[extern "lean_pod_BytesView_toByteArray"]
+opaque toByteArray {size} {align : @& Nat} (bv : @& BytesView size align) : ByteArray
+
 @[extern "lean_pod_BytesView_getUInt8"]
 opaque getUInt8 {size} {alignment : @& Nat} (bv : @& BytesView size alignment) (i : USize) (h : i < size) : UInt8
 
