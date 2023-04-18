@@ -30,12 +30,23 @@ static inline float lean_pod_Float32_unbox(b_lean_obj_arg obj) {
 }
 
 typedef struct {
-    lean_object* owner;
+    lean_object* owner; // NULLABLE
     uint8_t* ptr;
 } lean_pod_BytesView;
 
+static void lean_pod_BytesView_finalize(void* bytesView) {
+    lean_object* owner = ((lean_pod_BytesView*)bytesView)->owner;
+    if(owner != NULL) {
+        lean_dec(owner);
+    }
+    free(bytesView);
+}
+
 static void lean_pod_BytesView_foreach(void* bytesView, b_lean_obj_arg f) {
-    lean_apply_1(f, ((lean_pod_BytesView*)bytesView)->owner);
+    lean_object* owner = ((lean_pod_BytesView*)bytesView)->owner;
+    if(owner != NULL) {
+        lean_apply_1(f, owner);
+    }
 }
 
 static inline lean_object* lean_pod_BytesView_wrap (uint8_t* ptr, lean_object* owner) {
@@ -44,7 +55,7 @@ static inline lean_object* lean_pod_BytesView_wrap (uint8_t* ptr, lean_object* o
     bv->ptr = ptr;
     static lean_external_class* class_ = NULL;
     if (class_ == NULL) {
-        class_ = lean_register_external_class(free, lean_pod_BytesView_foreach);
+        class_ = lean_register_external_class(lean_pod_BytesView_finalize, lean_pod_BytesView_foreach);
     }
     return lean_alloc_external(class_, (void*)bv);
 }
