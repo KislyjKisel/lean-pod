@@ -33,8 +33,8 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesView_toByteArray(size_t sz, b_lean_obj_ar
     return arr;
 }
 
-LEAN_EXPORT uint8_t lean_pod_BytesView_getUInt8(size_t sz, b_lean_obj_arg a, lean_obj_arg bv_w, size_t i) {
-    return lean_pod_BytesView_unwrap(bv_w)->ptr[i];
+LEAN_EXPORT uint8_t lean_pod_BytesView_getUInt8(size_t sz, b_lean_obj_arg a, b_lean_obj_arg bv, size_t i) {
+    return lean_pod_BytesView_unwrap(bv)->ptr[i];
 }
 
 #define LEAN_POD_BYTESVIEW_GET(bw)\
