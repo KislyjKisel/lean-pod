@@ -54,7 +54,7 @@ static inline lean_obj_res lean_pod_BytesRef_notStError() {
 
 LEAN_EXPORT lean_obj_res lean_pod_BytesRef_getUInt8(uint8_t mut, size_t sz, b_lean_obj_arg a, b_lean_obj_arg br, size_t i, lean_obj_arg token) {
     if (LEAN_LIKELY(lean_is_st(br))) {
-        return lean_io_result_mk_ok(lean_pod_BytesView_unwrap(br)->ptr[i]);
+        return lean_io_result_mk_ok(lean_box(lean_pod_BytesView_unwrap(br)->ptr[i]));
     }
     return lean_pod_BytesRef_notStError();
 }
