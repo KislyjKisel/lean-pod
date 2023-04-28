@@ -12,6 +12,12 @@ LEAN_EXPORT uint64_t lean_pod_UInt64_bswap(uint64_t x) {
     return lean_pod_bswap64(x);
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_UInt64_getAlignment(b_lean_obj_arg unit) {
-    return lean_usize_to_nat(_Alignof(uint64_t));
+LEAN_EXPORT size_t lean_pod_USize_bswap(size_t x) {
+    #if INTPTR_MAX == INT32_MAX
+        return lean_pod_bswap32(x);
+    #elif INTPTR_MAX == INT64_MAX
+        return lean_pod_bswap64(x);
+    #else
+        #error Unsupported
+    #endif
 }

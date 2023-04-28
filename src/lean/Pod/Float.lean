@@ -1,3 +1,5 @@
+import Pod.Storable
+
 /-! # Float32 -/
 
 namespace Pod
@@ -214,9 +216,9 @@ def ofScientific (m : Nat) (s : Bool) (e : Nat) : Float32 :=
 
 def ofNat (n : Nat) : Float32 := ofScientific n false 0
 
-end Pod.Float32
+end Float32
 
-def Nat.toFloat32 (n : Nat) : Pod.Float32 := Pod.Float32.ofNat n
+def _root_.Nat.toFloat32 (n : Nat) : Pod.Float32 := Pod.Float32.ofNat n
 
 instance : ToString Pod.Float32 := ⟨Pod.Float32.toString⟩
 instance : Repr Pod.Float32 := ⟨λ x _ ↦ x.toString⟩
@@ -247,6 +249,14 @@ instance : BEq Pod.Float32 := ⟨Pod.Float32.beq⟩
 instance : Pow Pod.Float32 Pod.Float32 := ⟨Pod.Float32.pow⟩
 instance : Min Pod.Float32 := ⟨Pod.Float32.min⟩
 instance : Max Pod.Float32 := ⟨Pod.Float32.max⟩
+
+instance : Storable Float32 where
+  byteSize := byteSize UInt32
+  byteSize_gt_zero := Storable.byteSize_gt_zero
+  alignment := alignment UInt32
+  alignment_dvd_byteSize := Storable.alignment_dvd_byteSize
+
+end Pod
 
 
 /-! # Float -/

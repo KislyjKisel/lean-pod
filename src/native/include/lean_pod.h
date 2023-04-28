@@ -30,28 +30,24 @@ static inline float lean_pod_Float32_unbox(b_lean_obj_arg obj) {
 }
 
 typedef struct {
-    lean_object* owner; // NULLABLE
-    uint8_t* ptr;
+    lean_object* owner; // NOT NULLABLE
+    char* ptr;
 } lean_pod_BytesView;
 
 static void lean_pod_BytesView_finalize(void* bytesView) {
     lean_object* owner = ((lean_pod_BytesView*)bytesView)->owner;
-    if(owner != NULL) {
-        lean_dec(owner);
-    }
+    lean_dec(owner);
     free(bytesView);
 }
 
 static void lean_pod_BytesView_foreach(void* bytesView, b_lean_obj_arg f) {
     lean_object* owner = ((lean_pod_BytesView*)bytesView)->owner;
-    if(owner != NULL) {
-        lean_inc_ref(f);
-        lean_inc(owner);
-        lean_apply_1(f, owner);
-    }
+    lean_inc_ref(f);
+    lean_inc(owner);
+    lean_apply_1(f, owner);
 }
 
-static inline lean_obj_res lean_pod_BytesView_wrap (uint8_t* ptr, lean_obj_arg owner) {
+static inline lean_obj_res lean_pod_BytesView_wrap (char* ptr, lean_obj_arg owner) {
     static lean_external_class* class_ = NULL;
     if (class_ == NULL) {
         class_ = lean_register_external_class(lean_pod_BytesView_finalize, lean_pod_BytesView_foreach);
@@ -64,6 +60,20 @@ static inline lean_obj_res lean_pod_BytesView_wrap (uint8_t* ptr, lean_obj_arg o
 
 static inline lean_pod_BytesView* lean_pod_BytesView_unwrap (b_lean_obj_arg obj) {
     return (lean_pod_BytesView*) lean_get_external_data(obj);
+}
+
+typedef char* lean_pod_BytesRef;
+
+static inline lean_obj_res lean_pod_BytesRef_wrap (lean_pod_BytesRef ref) {
+    static lean_external_class* class_ = NULL;
+    if (class_ == NULL) {
+        class_ = lean_register_external_class(lean_pod_BytesView_finalize, lean_pod_BytesView_foreach);
+    }
+    return lean_alloc_external(class_, (void*)ref);
+}
+
+static inline lean_pod_BytesRef lean_pod_BytesRef_unwrap (b_lean_obj_arg obj) {
+    return (lean_pod_BytesRef) lean_get_external_data(obj);
 }
 
 static inline uint16_t lean_pod_bswap16(uint16_t value) {

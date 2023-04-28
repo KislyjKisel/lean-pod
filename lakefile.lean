@@ -21,13 +21,12 @@ extern_lib «lean-pod» (pkg : Package) := do
     #["-I", (← getLeanIncludeDir).toString, "-fPIC"].append $
       Array.mk $ ((get_config? cflags).getD "").splitOn.filter $ not ∘ String.isEmpty
 
-  let bindingsUIntOFile ← buildBindingsO pkg flags "uint"
-  let bindingsFloat32OFile ← buildBindingsO pkg flags "float"
-  let bindingsBytesViewOFile ← buildBindingsO pkg flags "bytes_view"
-  let bindingsBytesRefOFile ← buildBindingsO pkg flags "bytes_ref"
   buildStaticLib (pkg.libDir / name) #[
-    bindingsUIntOFile,
-    bindingsFloat32OFile,
-    bindingsBytesViewOFile,
-    bindingsBytesRefOFile
+    (← buildBindingsO pkg flags "endianness"),
+    (← buildBindingsO pkg flags "storable"),
+    (← buildBindingsO pkg flags "uint"),
+    (← buildBindingsO pkg flags "float"),
+    (← buildBindingsO pkg flags "bytes_view"),
+    (← buildBindingsO pkg flags "bytes_ref"),
+    (← buildBindingsO pkg flags "instances")
   ]

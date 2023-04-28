@@ -1,4 +1,4 @@
-import Pod.BytesView
+import Pod
 
 def main : IO Unit := do
   let bb := (ByteArray.mk #[1, 2, 3, 4, 5]).view
