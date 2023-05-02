@@ -27,8 +27,8 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesView_slice(size_t sz, b_lean_obj_arg a, l
     return lean_pod_BytesView_drop(sz, a, bv_w, start);
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesView_toByteArray(size_t sz, b_lean_obj_arg a, b_lean_obj_arg br) {
+LEAN_EXPORT lean_obj_res lean_pod_BytesView_toByteArray(size_t sz, b_lean_obj_arg a, b_lean_obj_arg bv) {
     lean_object* arr = lean_alloc_sarray(1, sz, sz);
-    memcpy(lean_sarray_cptr(arr), lean_pod_BytesView_unwrap(br)->ptr, sz);
+    memcpy(lean_sarray_cptr(arr), lean_pod_BytesView_unwrap(bv)->ptr, sz);
     return arr;
 }

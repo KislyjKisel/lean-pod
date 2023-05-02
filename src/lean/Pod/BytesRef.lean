@@ -10,23 +10,22 @@ inductive Mutability where
 
 variable {σ : Type}
 
-opaque BytesRefPointed (σ : Type) (mutab : Mutability) (size : USize) (align : Nat) : NonemptyType
-
-def BytesRef (σ : Type) (mutab : Mutability) (size : USize) (align : Nat) : Type :=
-  (BytesRefPointed σ mutab size align).type
+structure BytesRef (σ : Type) (mutab : Mutability) (size : USize) (align : Nat) where
+  /-- **unsafe** -/
+  private mk ::
+  ptr : USize
+deriving Nonempty
 
 abbrev BytesRefMut (σ : Type) := BytesRef σ .Mutable
 abbrev BytesRefImm (σ : Type) := BytesRef σ .Immutable
 
-instance {size mutab align} : Nonempty (BytesRef σ mutab size align) := (BytesRefPointed σ mutab size align).property
-
 /-- Clones array if it is shared. -/
 @[extern "lean_pod_ByteArray_withRef"]
-opaque _root_.ByteArray.withRef (ba : ByteArray) (f : BytesRefMut σ ba.size.toUSize 1 → ST σ Unit) : ByteArray
+opaque _root_.ByteArray.withRef (ba : ByteArray) (f : ∀{σ}, BytesRefMut σ ba.size.toUSize 1 → ST σ Unit) : ByteArray
 
 /-- Clones array if it is shared. -/
 @[extern "lean_pod_ByteArray_withRefEx"]
-opaque _root_.ByteArray.withRefEx (ba : ByteArray) (f : BytesRefMut σ ba.size.toUSize 1 → EST ε σ Unit) : Except ε ByteArray
+opaque _root_.ByteArray.withRefEx (ba : ByteArray) (f : ∀{σ}, BytesRefMut σ ba.size.toUSize 1 → EST ε σ Unit) : Except ε ByteArray
 
 namespace BytesRef
 
