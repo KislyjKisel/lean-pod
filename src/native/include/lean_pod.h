@@ -65,11 +65,11 @@ static inline lean_pod_BytesView* lean_pod_BytesView_unwrap (b_lean_obj_arg obj)
 typedef char* lean_pod_BytesRef;
 
 static inline lean_obj_res lean_pod_BytesRef_box(lean_pod_BytesRef ref) {
-    return lean_box_usize(ref);
+    return lean_box_usize((size_t)ref);
 }
 
-static inline lean_obj_res lean_pod_BytesRef_unbox(lean_pod_BytesRef ref) {
-    return lean_unbox_usize(ref);
+static inline lean_pod_BytesRef lean_pod_BytesRef_unbox(b_lean_obj_arg ref) {
+    return (lean_pod_BytesRef)lean_unbox_usize(ref);
 }
 
 static inline uint16_t lean_pod_bswap16(uint16_t value) {

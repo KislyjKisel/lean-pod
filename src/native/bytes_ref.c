@@ -54,12 +54,12 @@ LEAN_EXPORT size_t lean_pod_BytesRef_drop(uint8_t mut, size_t size, b_lean_obj_a
     return br + count;
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_slice(uint8_t mut, size_t sz, b_lean_obj_arg a, size_t br, size_t start, size_t length) {
+LEAN_EXPORT size_t lean_pod_BytesRef_slice(uint8_t mut, size_t sz, b_lean_obj_arg a, size_t br, size_t start, size_t length) {
     return lean_pod_BytesRef_drop(mut, sz, a, br, start);
 }
 
 LEAN_EXPORT lean_obj_res lean_pod_BytesRef_toByteArray(uint8_t mut, size_t sz, b_lean_obj_arg a, size_t br, lean_obj_arg token) {
     lean_object* arr = lean_alloc_sarray(1, sz, sz);
-    memcpy(lean_sarray_cptr(arr), br, sz);
+    memcpy(lean_sarray_cptr(arr), (char*)br, sz);
     return lean_io_result_mk_ok(arr);
 }
