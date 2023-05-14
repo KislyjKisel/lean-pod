@@ -38,15 +38,15 @@ LEAN_EXPORT lean_obj_res lean_pod_ByteArray_withRefEx(lean_obj_arg ba, lean_obj_
     return exok;
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_weaken(uint8_t mut, size_t sz, b_lean_obj_arg a0, b_lean_obj_arg a1, size_t br) {
+LEAN_EXPORT size_t lean_pod_BytesRef_weaken(uint8_t mut, size_t sz, b_lean_obj_arg a0, b_lean_obj_arg a1, size_t br) {
     return br;
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_imm(uint8_t mut, size_t sz, b_lean_obj_arg a, size_t br) {
+LEAN_EXPORT size_t lean_pod_BytesRef_imm(uint8_t mut, size_t sz, b_lean_obj_arg a, size_t br) {
     return br;
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_BytesRef_take(uint8_t mut, size_t size, b_lean_obj_arg a, size_t br, size_t count) {
+LEAN_EXPORT size_t lean_pod_BytesRef_take(uint8_t mut, size_t size, b_lean_obj_arg a, size_t br, size_t count) {
     return br;
 }
 
