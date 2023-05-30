@@ -10,11 +10,9 @@ inductive Mutability where
 
 variable {σ : Type}
 
-structure BytesRef (σ : Type) (mutab : Mutability) (size : USize) (align : Nat) where
-  /-- **unsafe** -/
-  private mk ::
-  ptr : USize
-deriving Nonempty
+opaque BytesRefPointed (σ : Type) (mutab : Mutability) (size : USize) (align : Nat) : NonemptyType
+def BytesRef (σ : Type) (mutab : Mutability) (size : USize) (align : Nat) : Type := (BytesRefPointed σ mutab size align).type
+instance {σ mutab size align} : Nonempty (BytesRef σ mutab size align) := (BytesRefPointed σ mutab size align).property
 
 abbrev BytesRefMut (σ : Type) := BytesRef σ .Mutable
 abbrev BytesRefImm (σ : Type) := BytesRef σ .Immutable
@@ -59,7 +57,6 @@ opaque slice {mutab size} {align : @& Nat} (bv : BytesRef σ mutab size align) (
 
 /--
 Read all bytes into a `ByteArray`.
-**Panics** when used in multithreaded context or if the `ByteRef` was marked persistent.
 -/
 @[extern "lean_pod_BytesRef_toByteArray"]
 opaque toByteArray {mutab size} {align : @& Nat} (bv : @& BytesRef σ mutab size align) : ST σ ByteArray

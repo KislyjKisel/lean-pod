@@ -142,8 +142,9 @@ scoped elab "def_rwbytes_inst" typeName:str : command => do
   setEnv $ ← ofExcept $ externAttr.setParam (← getEnv) declName_rwa0 $
     ExternAttrData.mk none $ [ExternEntry.standard `all s!"lean_pod_{declStr}"]
   Lean.Elab.Command.elabCommand $ ← `(command|
-    opaque $(mkIdent declName) {σ} (br : @& BytesRefMut σ (byteSize $typeId) (alignment $typeId))
-      (value : $typeId) : ST σ Unit
+    opaque $(mkIdent declName) {σ}
+      (br : @& BytesRefMut σ (byteSize $typeId) (alignment $typeId)) (value : $typeId) :
+      ST σ Unit
   )
 
   let declStr := "writeBytesRefOff_" ++ typeStr
@@ -152,10 +153,11 @@ scoped elab "def_rwbytes_inst" typeName:str : command => do
   setEnv $ ← ofExcept $ externAttr.setParam (← getEnv) declName_rwa1 $
     ExternAttrData.mk none $ [ExternEntry.standard `all s!"lean_pod_{declStr}"]
   Lean.Elab.Command.elabCommand $ ← `(command|
-    opaque $(mkIdent declName) {σ size} {align : @& Nat} (br : @& BytesRefMut σ size align) (i : USize)
+    opaque $(mkIdent declName) {σ size} {align : @& Nat}
+      (br : @& BytesRefMut σ size align) (i : USize) (value : $typeId)
       (h₁ : i.toNat + (byteSize $typeId).toNat ≤ size.toNat)
-      (h₂ : ∀ m, ∃ n, align * m + i.toNat = (alignment $typeId) * n)
-      (value : $typeId) : ST σ Unit
+      (h₂ : ∀ m, ∃ n, align * m + i.toNat = (alignment $typeId) * n) :
+      ST σ Unit
   )
 
   let declStr := "writeBytesRefOffEl_" ++ typeStr
@@ -164,9 +166,10 @@ scoped elab "def_rwbytes_inst" typeName:str : command => do
   setEnv $ ← ofExcept $ externAttr.setParam (← getEnv) declName_rwa2 $
     ExternAttrData.mk none $ [ExternEntry.standard `all s!"lean_pod_{declStr}"]
   Lean.Elab.Command.elabCommand $ ← `(command|
-    opaque $(mkIdent declName) {σ size} (br : @& BytesRefMut σ size (alignment $typeId)) (i : USize)
-      (h : i.toNat * (byteSize $typeId).toNat + (byteSize $typeId).toNat ≤ size.toNat)
-      (value : $typeId) : ST σ Unit
+    opaque $(mkIdent declName) {σ size}
+      (br : @& BytesRefMut σ size (alignment $typeId)) (i : USize) (value : $typeId)
+      (h : i.toNat * (byteSize $typeId).toNat + (byteSize $typeId).toNat ≤ size.toNat) :
+      ST σ Unit
   )
 
   let declStr := "writeBytesRefUnal_" ++ typeStr
@@ -175,8 +178,9 @@ scoped elab "def_rwbytes_inst" typeName:str : command => do
   setEnv $ ← ofExcept $ externAttr.setParam (← getEnv) declName_rwu0 $
     ExternAttrData.mk none $ [ExternEntry.standard `all s!"lean_pod_{declStr}"]
   Lean.Elab.Command.elabCommand $ ← `(command|
-    opaque $(mkIdent declName) {σ} {align : @& Nat} (br : @& BytesRefMut σ (byteSize $typeId) align)
-      (value : $typeId) : ST σ Unit
+    opaque $(mkIdent declName) {σ} {align : @& Nat}
+      (br : @& BytesRefMut σ (byteSize $typeId) align) (value : $typeId) :
+      ST σ Unit
   )
 
   let declStr := "writeBytesRefOffUnal_" ++ typeStr
@@ -185,8 +189,10 @@ scoped elab "def_rwbytes_inst" typeName:str : command => do
   setEnv $ ← ofExcept $ externAttr.setParam (← getEnv) declName_rwu1 $
     ExternAttrData.mk none $ [ExternEntry.standard `all s!"lean_pod_{declStr}"]
   Lean.Elab.Command.elabCommand $ ← `(command|
-    opaque $(mkIdent declName) {σ size} {align : @& Nat} (br : @& BytesRefMut σ size align) (i : USize)
-      (h₁ : i.toNat + (byteSize $typeId).toNat ≤ size.toNat) (value : $typeId) : ST σ Unit
+    opaque $(mkIdent declName) {σ size} {align : @& Nat}
+      (br : @& BytesRefMut σ size align) (i : USize) (value : $typeId)
+      (h₁ : i.toNat + (byteSize $typeId).toNat ≤ size.toNat) :
+      ST σ Unit
   )
 
   let declStr := "writeBytesRefOffElUnal_" ++ typeStr
@@ -195,9 +201,10 @@ scoped elab "def_rwbytes_inst" typeName:str : command => do
   setEnv $ ← ofExcept $ externAttr.setParam (← getEnv) declName_rwu2 $
     ExternAttrData.mk none $ [ExternEntry.standard `all s!"lean_pod_{declStr}"]
   Lean.Elab.Command.elabCommand $ ← `(command|
-    opaque $(mkIdent declName) {σ size} {align : @& Nat} (br : @& BytesRefMut σ size align) (i : USize)
-      (h : i.toNat * (byteSize $typeId).toNat + (byteSize $typeId).toNat ≤ size.toNat)
-      (value : $typeId) : ST σ Unit
+    opaque $(mkIdent declName) {σ size} {align : @& Nat}
+      (br : @& BytesRefMut σ size align) (i : USize) (value : $typeId)
+      (h : i.toNat * (byteSize $typeId).toNat + (byteSize $typeId).toNat ≤ size.toNat) :
+      ST σ Unit
   )
 
 
