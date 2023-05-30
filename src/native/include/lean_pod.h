@@ -37,7 +37,11 @@ typedef struct {
 static void lean_pod_BytesView_finalize(void* bytesView) {
     lean_object* owner = ((lean_pod_BytesView*)bytesView)->owner;
     lean_dec(owner);
+#ifdef LEAN_POD_ALLOC_NATIVE
     free(bytesView);
+#else
+    lean_free_small_object((lean_object*)bytesView);
+#endif
 }
 
 static void lean_pod_BytesView_foreach(void* bytesView, b_lean_obj_arg f) {
@@ -52,7 +56,12 @@ static inline lean_obj_res lean_pod_BytesView_wrap (char* ptr, lean_obj_arg owne
     if (class_ == NULL) {
         class_ = lean_register_external_class(lean_pod_BytesView_finalize, lean_pod_BytesView_foreach);
     }
-    lean_pod_BytesView* bv = malloc(sizeof(lean_pod_BytesView));
+    lean_pod_BytesView* bv =
+#ifdef LEAN_POD_ALLOC_NATIVE
+        malloc(sizeof(lean_pod_BytesView));
+#else
+        (lean_pod_BytesView*)lean_alloc_small_object(sizeof(lean_pod_BytesView));
+#endif
     bv->owner = owner;
     bv->ptr = ptr;
     return lean_alloc_external(class_, (void*)bv);

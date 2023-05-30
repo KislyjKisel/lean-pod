@@ -21,6 +21,11 @@ extern_lib «lean-pod» (pkg : Package) := do
     #["-I", (← getLeanIncludeDir).toString, "-fPIC"].append $
       Array.mk $ ((get_config? cflags).getD "").splitOn.filter $ not ∘ String.isEmpty
 
+  match get_config? alloc with
+  | .none | .some "lean" => pure ()
+  | .some "native" => flags := flags.push "-DLEAN_POD_ALLOC_NATIVE"
+  | .some _ => error "Unknown `alloc` option"
+
   buildStaticLib (pkg.libDir / name) #[
     (← buildBindingsO pkg flags "endianness"),
     (← buildBindingsO pkg flags "storable"),
