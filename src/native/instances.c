@@ -32,19 +32,19 @@ LEAN_EXPORT lean_obj_res lean_pod_readBytesRefOffElUnal_##ltyp(size_t sz, b_lean
 }\
 LEAN_EXPORT lean_obj_res lean_pod_readBytesRef_##ltyp(b_lean_obj_arg br, lean_obj_arg st) {\
     ctyp value;\
-    char* p = lean_pod_BytesRef_unwrap(br);\
+    unsigned char* p = lean_pod_BytesRef_unwrap(br);\
     memcpy(&value, LEAN_POD_ASSUME_ALIGNED(p, ctyp), sizeof(ctyp));\
     return lean_io_result_mk_ok(lean_box(value));\
 }\
 LEAN_EXPORT lean_obj_res lean_pod_readBytesRefOff_##ltyp(size_t sz, b_lean_obj_arg a, b_lean_obj_arg br, size_t i, lean_obj_arg st) {\
     ctyp value;\
-    char* p = lean_pod_BytesRef_unwrap(br) + i;\
+    unsigned char* p = lean_pod_BytesRef_unwrap(br) + i;\
     memcpy(&value, LEAN_POD_ASSUME_ALIGNED(p, ctyp), sizeof(ctyp));\
     return lean_io_result_mk_ok(lean_box(value));\
 }\
 LEAN_EXPORT lean_obj_res lean_pod_readBytesRefOffEl_##ltyp(size_t sz, b_lean_obj_arg br, size_t i, lean_obj_arg st) {\
     ctyp value;\
-    char* p = lean_pod_BytesRef_unwrap(br) + i * sizeof(ctyp);\
+    unsigned char* p = lean_pod_BytesRef_unwrap(br) + i * sizeof(ctyp);\
     memcpy(&value, LEAN_POD_ASSUME_ALIGNED(p, ctyp), sizeof(ctyp));\
     return lean_io_result_mk_ok(lean_box(value));\
 }\
@@ -66,19 +66,19 @@ LEAN_EXPORT ctyp lean_pod_readBytesViewOffElUnal_##ltyp(size_t sz, b_lean_obj_ar
 }\
 LEAN_EXPORT ctyp lean_pod_readBytesView_##ltyp(b_lean_obj_arg bv) {\
     ctyp value;\
-    char* p = lean_pod_BytesView_unwrap(bv)->ptr;\
+    unsigned char* p = lean_pod_BytesView_unwrap(bv)->ptr;\
     memcpy(&value, LEAN_POD_ASSUME_ALIGNED(p, ctyp), sizeof(ctyp));\
     return value;\
 }\
 LEAN_EXPORT ctyp lean_pod_readBytesViewOff_##ltyp(size_t sz, b_lean_obj_arg a, b_lean_obj_arg bv, size_t i) {\
     ctyp value;\
-    char* p = lean_pod_BytesView_unwrap(bv)->ptr + i;\
+    unsigned char* p = lean_pod_BytesView_unwrap(bv)->ptr + i;\
     memcpy(&value, LEAN_POD_ASSUME_ALIGNED(p, ctyp), sizeof(ctyp));\
     return value;\
 }\
 LEAN_EXPORT ctyp lean_pod_readBytesViewOffEl_##ltyp(size_t sz, b_lean_obj_arg bv, size_t i) {\
     ctyp value;\
-    char* p = lean_pod_BytesView_unwrap(bv)->ptr + i * sizeof(ctyp);\
+    unsigned char* p = lean_pod_BytesView_unwrap(bv)->ptr + i * sizeof(ctyp);\
     memcpy(&value, LEAN_POD_ASSUME_ALIGNED(p, ctyp), sizeof(ctyp));\
     return value;\
 }\
@@ -100,12 +100,12 @@ LEAN_EXPORT lean_obj_res lean_pod_writeBytesRef_##ltyp(b_lean_obj_arg br, ctyp v
     return lean_io_result_mk_ok(lean_box(0));\
 }\
 LEAN_EXPORT lean_obj_res lean_pod_writeBytesRefOff_##ltyp(size_t sz, b_lean_obj_arg a, b_lean_obj_arg br, size_t i, ctyp value, lean_obj_arg st) {\
-    char* p = lean_pod_BytesRef_unwrap(br) + i;\
+    unsigned char* p = lean_pod_BytesRef_unwrap(br) + i;\
     memcpy(LEAN_POD_ASSUME_ALIGNED(p, ctyp), &value, sizeof(ctyp));\
     return lean_io_result_mk_ok(lean_box(0));\
 }\
 LEAN_EXPORT lean_obj_res lean_pod_writeBytesRefOffEl_##ltyp(size_t sz, b_lean_obj_arg br, size_t i, ctyp value, lean_obj_arg st) {\
-    char* p = lean_pod_BytesRef_unwrap(br) + i * sizeof(ctyp);\
+    unsigned char* p = lean_pod_BytesRef_unwrap(br) + i * sizeof(ctyp);\
     memcpy(LEAN_POD_ASSUME_ALIGNED(p, ctyp), &value, sizeof(ctyp));\
     return lean_io_result_mk_ok(lean_box(0));\
 }

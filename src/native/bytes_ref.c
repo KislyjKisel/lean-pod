@@ -12,7 +12,7 @@ LEAN_EXPORT lean_obj_res lean_pod_ByteArray_withRef(lean_obj_arg ba, lean_obj_ar
     lean_object* fres = lean_apply_3(
         f,
         lean_box(0),
-        lean_pod_BytesRef_wrap((char*)lean_sarray_cptr(resba)),
+        lean_pod_BytesRef_wrap(lean_sarray_cptr(resba)),
         lean_box(0)
     );
     lean_dec_ref(fres);
@@ -30,7 +30,7 @@ LEAN_EXPORT lean_obj_res lean_pod_ByteArray_withRefEx(lean_obj_arg ba, lean_obj_
     lean_object* fres = lean_apply_3(
         f,
         lean_box(0),
-        lean_pod_BytesRef_wrap((char*)lean_sarray_cptr(resba)),
+        lean_pod_BytesRef_wrap(lean_sarray_cptr(resba)),
         lean_box(0)
     );
     if(lean_ptr_tag(fres) == 1) {
