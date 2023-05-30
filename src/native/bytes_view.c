@@ -2,7 +2,7 @@
 #include "include/lean_pod.h"
 
 LEAN_EXPORT lean_obj_res lean_pod_ByteArray_view(lean_obj_arg ba) {
-    return lean_pod_BytesView_wrap(lean_sarray_cptr(ba), ba);
+    return lean_pod_BytesView_wrap((char*)lean_sarray_cptr(ba), ba);
 }
 
 LEAN_EXPORT lean_obj_res lean_pod_BytesView_weaken(size_t sz, b_lean_obj_arg a0, b_lean_obj_arg a1, lean_obj_arg bv) {
