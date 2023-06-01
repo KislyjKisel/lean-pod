@@ -27,7 +27,7 @@ LEAN_EXPORT lean_obj_res lean_pod_Buffer_withRef(size_t sz, b_lean_obj_arg align
     lean_object* fres = lean_apply_3(
         f,
         lean_box(0),
-        lean_pod_BytesRef_wrap(lean_sarray_cptr(buf_res)),
+        lean_pod_BytesRef_wrap(lean_pod_Buffer_unwrap(buf_res)->data),
         lean_box(0)
     );
     lean_dec_ref(fres);
