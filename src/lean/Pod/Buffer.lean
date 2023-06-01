@@ -4,7 +4,7 @@ import Pod.BytesRef
 namespace Pod
 
 opaque BufferPointed (size : USize) (align : Nat) : NonemptyType
-def Buffer (size : USize) (align : Nat) := (BufferPointed size align).type
+def Buffer (size : USize) (align : Nat) : Type := (BufferPointed size align).type
 instance : Nonempty (Buffer size align) := (BufferPointed size align).property
 
 namespace Buffer 
