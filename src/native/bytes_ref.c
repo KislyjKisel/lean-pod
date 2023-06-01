@@ -8,6 +8,7 @@ LEAN_EXPORT lean_obj_res lean_pod_ByteArray_withRef(lean_obj_arg ba, lean_obj_ar
     }
     else {
         resba = lean_copy_byte_array(ba);
+        lean_dec_ref(ba);
     }
     lean_object* fres = lean_apply_3(
         f,
@@ -26,6 +27,7 @@ LEAN_EXPORT lean_obj_res lean_pod_ByteArray_withRefEx(lean_obj_arg ba, lean_obj_
     }
     else {
         resba = lean_copy_byte_array(ba);
+        lean_dec_ref(ba);
     }
     lean_object* fres = lean_apply_3(
         f,
@@ -77,4 +79,12 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesRef_toByteArray(uint8_t mut, size_t sz, b
     lean_object* arr = lean_alloc_sarray(1, sz, sz);
     memcpy(lean_sarray_cptr(arr), lean_pod_BytesRef_unwrap(br), sz);
     return lean_io_result_mk_ok(arr);
+}
+
+LEAN_EXPORT lean_obj_res lean_pod_BytesRef_copyView(
+    size_t sz, b_lean_obj_arg a1, b_lean_obj_arg a2,
+    b_lean_obj_arg dst, b_lean_obj_arg src, lean_obj_arg token
+) {
+    memcpy(lean_pod_BytesRef_unwrap(dst), lean_pod_BytesView_unwrap(src)->ptr, sz);
+    return lean_io_result_mk_ok(lean_box(0));
 }

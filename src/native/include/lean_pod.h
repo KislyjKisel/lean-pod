@@ -3,6 +3,26 @@
 #include <stdint.h>
 #include <lean/lean.h>
 
+/// @param sz must be divisible by `LEAN_OBJECT_SIZE_DELTA`
+static inline void* lean_pod_alloc(size_t sz) {
+#ifdef LEAN_POD_ALLOC_NATIVE
+    return malloc(sz);
+#else
+    return (void*)lean_alloc_small_object(sz);
+#endif
+}
+
+static inline void lean_pod_free(void* p) {
+#ifdef LEAN_POD_ALLOC_NATIVE
+    free(p);
+#else
+    lean_free_small_object((lean_object*)p);
+#endif
+}
+
+static void lean_pod_default_finalize(void* br) {}
+static void lean_pod_default_foreach(void* br, b_lean_obj_arg f) {}
+
 static inline uint32_t lean_pod_Float32_toBits(float x) {
     union {
         float f32;
@@ -37,11 +57,7 @@ typedef struct {
 static void lean_pod_BytesView_finalize(void* bytesView) {
     lean_object* owner = ((lean_pod_BytesView*)bytesView)->owner;
     lean_dec(owner);
-#ifdef LEAN_POD_ALLOC_NATIVE
-    free(bytesView);
-#else
-    lean_free_small_object((lean_object*)bytesView);
-#endif
+    lean_pod_free(bytesView);
 }
 
 static void lean_pod_BytesView_foreach(void* bytesView, b_lean_obj_arg f) {
@@ -56,12 +72,7 @@ static inline lean_obj_res lean_pod_BytesView_wrap (unsigned char* ptr, lean_obj
     if (class_ == NULL) {
         class_ = lean_register_external_class(lean_pod_BytesView_finalize, lean_pod_BytesView_foreach);
     }
-    lean_pod_BytesView* bv =
-#ifdef LEAN_POD_ALLOC_NATIVE
-        malloc(sizeof(lean_pod_BytesView));
-#else
-        (lean_pod_BytesView*)lean_alloc_small_object(sizeof(lean_pod_BytesView));
-#endif
+    lean_pod_BytesView* bv = lean_pod_alloc(sizeof(lean_pod_BytesView));
     bv->owner = owner;
     bv->ptr = ptr;
     return lean_alloc_external(class_, (void*)bv);
@@ -73,19 +84,42 @@ static inline lean_pod_BytesView* lean_pod_BytesView_unwrap (b_lean_obj_arg obj)
 
 typedef unsigned char* lean_pod_BytesRef;
 
-static void lean_pod_BytesRef_finalize(void* br) {}
-static void lean_pod_BytesRef_foreach(void* br, b_lean_obj_arg f) {}
-
 static inline lean_obj_res lean_pod_BytesRef_wrap(lean_pod_BytesRef ptr) {
     static lean_external_class* class_ = NULL;
     if (class_ == NULL) {
-        class_ = lean_register_external_class(lean_pod_BytesRef_finalize, lean_pod_BytesRef_foreach);
+        class_ = lean_register_external_class(lean_pod_default_finalize, lean_pod_default_foreach);
     }
     return lean_alloc_external(class_, (void*)ptr);
 }
 
 static inline lean_pod_BytesRef lean_pod_BytesRef_unwrap(b_lean_obj_arg ref) {
     return (lean_pod_BytesRef)lean_get_external_data(ref);
+}
+
+typedef struct {
+    unsigned char* data;
+    void(*free)(void*);
+} lean_pod_Buffer;
+
+static void lean_pod_Buffer_finalize(void* obj) {
+    lean_pod_Buffer* buf = (lean_pod_Buffer*)obj;
+    buf->free(buf->data);
+    lean_pod_free(buf);
+}
+
+static inline lean_obj_res lean_pod_Buffer_wrap(unsigned char* data, void (*freeFn)(void*)) {
+    static lean_external_class* class_ = NULL;
+    if (class_ == NULL) {
+        class_ = lean_register_external_class(lean_pod_Buffer_finalize, lean_pod_default_foreach);
+    }
+    lean_pod_Buffer* buf = lean_pod_alloc(sizeof(lean_pod_Buffer));
+    buf->data = data;
+    buf->free = freeFn;
+    return lean_alloc_external(class_, (void*)buf);
+}
+
+static inline lean_pod_Buffer* lean_pod_Buffer_unwrap(b_lean_obj_arg buf) {
+    return (lean_pod_Buffer*)lean_get_external_data(buf);
 }
 
 static inline uint16_t lean_pod_bswap16(uint16_t value) {

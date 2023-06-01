@@ -1,11 +1,12 @@
 import Pod.Lemmas
 import Pod.UInt
+import Pod.BytesView
 
 namespace Pod
 
 inductive Mutability where
   | Mutable
-  -- can't mutate by itself, but content can be mutated through other ptrs
+  /-- The referenced data can still be mutated through other references -/
   | Immutable
 
 variable {σ : Type}
@@ -60,5 +61,8 @@ Read all bytes into a `ByteArray`.
 -/
 @[extern "lean_pod_BytesRef_toByteArray"]
 opaque toByteArray {mutab size} {align : @& Nat} (bv : @& BytesRef σ mutab size align) : ST σ ByteArray
+
+@[extern "lean_pod_BytesRef_copyView"]
+opaque copyView {size} {a1 a2 : @& Nat} (dst : @& BytesRefMut σ size a1) (src : @& BytesView size a2) : ST σ Unit
 
 end Pod.BytesRef
