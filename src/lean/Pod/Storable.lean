@@ -2,13 +2,16 @@ import Pod.Lemmas
 
 namespace Pod
 
-class Storable (α : Type) where
+class Storable (α : Type _) where
   byteSize : USize
-  byteSize_gt_zero : byteSize.toNat > 0
   alignment : Nat
+  byteSize_gt_zero : byteSize.toNat > 0
   alignment_dvd_byteSize : ∃ k, byteSize.toNat = alignment * k
 
 export Storable (byteSize byteSize_gt_zero alignment alignment_dvd_byteSize)
+
+@[reducible]
+def byteSizeArray (α : Type) [Storable α] (n : Nat) : USize := n.toUSize * byteSize α
 
 theorem not_alignment_eq_zero {α} [Storable α] : ¬ alignment α = 0 := by
     intro h

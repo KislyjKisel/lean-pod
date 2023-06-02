@@ -23,6 +23,11 @@ def main : IO Unit := do
   IO.println $ bb[3]!
   IO.println $ bb[4]!
 
+  let uv : Pod.UVector UInt64 3 := .replicate 42
+  IO.print s!"UV: {uv[0]}, {uv[1]}, {uv[2]!} --> "
+  let uv := ((uv.set! 2 (UInt64.complement 0)).set 0 0).set 1 ((UInt64.complement 0) / 3)
+  IO.println s!"{uv[0]}, {uv[1]!}, {uv[2]}"
+
   let mut count := 10
   repeat do
     IO.println "HI"

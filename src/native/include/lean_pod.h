@@ -23,6 +23,9 @@ static inline void lean_pod_free(void* p) {
 static void lean_pod_default_finalize(void* br) {}
 static void lean_pod_default_foreach(void* br, b_lean_obj_arg f) {}
 
+
+// # Float32
+
 static inline uint32_t lean_pod_Float32_toBits(float x) {
     union {
         float f32;
@@ -49,6 +52,62 @@ static inline float lean_pod_Float32_unbox(b_lean_obj_arg obj) {
     return lean_pod_Float32_fromBits(lean_unbox_uint32(obj));
 }
 
+
+// # Storable
+
+static inline size_t lean_pod_Storable_byteSize(b_lean_obj_arg storable) {
+    return lean_ctor_get_usize(storable, 1);
+}
+
+/// @returns @& Nat
+static inline b_lean_obj_res lean_pod_Storable_alignment(b_lean_obj_arg storable) {
+    return lean_ctor_get(storable, 0);
+}
+
+
+// # WriteBytes
+
+/// @returns @& Storable
+static inline b_lean_obj_res lean_pod_WriteBytes_storable(b_lean_obj_arg writeBytes) {
+    return lean_ctor_get(writeBytes, 0);
+}
+
+// Returns a function taking 4 boxed args:
+// 0, BytesRef, value : A, 0, and returning `ST.Result Unit`
+static inline b_lean_obj_res lean_pod_WriteBytes_writeBytesRef(b_lean_obj_arg writeBytes) {
+    return lean_ctor_get(writeBytes, 5);
+}
+
+// Returns a function taking 7 boxed args:
+// 0, size : USize, BytesRef, i : USize, value : A, 0, 0, and returning `ST.Result Unit`.
+static inline b_lean_obj_res lean_pod_WriteBytes_writeBytesRefOffEl(b_lean_obj_arg writeBytes) {
+    return lean_ctor_get(writeBytes, 6);
+}
+
+
+// # ReadBytes
+
+/// @returns @& Storable
+static inline b_lean_obj_res lean_pod_ReadBytes_storable(b_lean_obj_arg readBytes) {
+    return lean_ctor_get(readBytes, 0);
+}
+
+// Returns a function taking 3 boxed args:
+// 0, BytesRef, 0, and returning `ST.Result A`
+static inline b_lean_obj_res lean_pod_ReadBytes_readBytesRef(b_lean_obj_arg readBytes) {
+    return lean_ctor_get(readBytes, 5);
+}
+
+
+// Returns a function taking 6 boxed args:
+// 0, size : USize, BytesRef, i : USize, 0, 0, and returning `ST.Result A`
+static inline b_lean_obj_res lean_pod_ReadBytes_readBytesRefOffEl(b_lean_obj_arg readBytes) {
+    return lean_ctor_get(readBytes, 6);
+}
+
+
+// # BytesView
+
 typedef struct {
     lean_object* owner; // NOT NULLABLE
     unsigned char* ptr;
@@ -72,7 +131,7 @@ static inline lean_obj_res lean_pod_BytesView_wrap (unsigned char* ptr, lean_obj
     if (class_ == NULL) {
         class_ = lean_register_external_class(lean_pod_BytesView_finalize, lean_pod_BytesView_foreach);
     }
-    lean_pod_BytesView* bv = lean_pod_alloc(sizeof(lean_pod_BytesView));
+    lean_pod_BytesView* bv = (lean_pod_BytesView*)lean_pod_alloc(sizeof(lean_pod_BytesView));
     bv->owner = owner;
     bv->ptr = ptr;
     return lean_alloc_external(class_, (void*)bv);
@@ -81,6 +140,9 @@ static inline lean_obj_res lean_pod_BytesView_wrap (unsigned char* ptr, lean_obj
 static inline lean_pod_BytesView* lean_pod_BytesView_unwrap (b_lean_obj_arg obj) {
     return (lean_pod_BytesView*) lean_get_external_data(obj);
 }
+
+
+// # BytesRef
 
 typedef unsigned char* lean_pod_BytesRef;
 
@@ -95,6 +157,9 @@ static inline lean_obj_res lean_pod_BytesRef_wrap(lean_pod_BytesRef ptr) {
 static inline lean_pod_BytesRef lean_pod_BytesRef_unwrap(b_lean_obj_arg ref) {
     return (lean_pod_BytesRef)lean_get_external_data(ref);
 }
+
+
+// # Buffer
 
 typedef struct {
     unsigned char* data;
@@ -112,7 +177,7 @@ static inline lean_obj_res lean_pod_Buffer_wrap(unsigned char* data, void (*free
     if (class_ == NULL) {
         class_ = lean_register_external_class(lean_pod_Buffer_finalize, lean_pod_default_foreach);
     }
-    lean_pod_Buffer* buf = lean_pod_alloc(sizeof(lean_pod_Buffer));
+    lean_pod_Buffer* buf = (lean_pod_Buffer*)lean_pod_alloc(sizeof(lean_pod_Buffer));
     buf->data = data;
     buf->free = freeFn;
     return lean_alloc_external(class_, (void*)buf);
@@ -121,6 +186,28 @@ static inline lean_obj_res lean_pod_Buffer_wrap(unsigned char* data, void (*free
 static inline lean_pod_Buffer* lean_pod_Buffer_unwrap(b_lean_obj_arg buf) {
     return (lean_pod_Buffer*)lean_get_external_data(buf);
 }
+
+
+// # UVector
+
+// NULL for vectors of size 0.
+typedef unsigned char* lean_pod_UVector;
+
+static inline lean_obj_res lean_pod_UVector_wrap(lean_pod_UVector uv)
+{
+    static lean_external_class* class_ = NULL;
+    if (class_ == NULL) {
+        class_ = lean_register_external_class(lean_pod_free, lean_pod_default_foreach);
+    }
+    return lean_alloc_external(class_, (void*)uv);
+}
+
+static inline lean_pod_UVector lean_pod_UVector_unwrap(b_lean_obj_arg buf) {
+    return (lean_pod_UVector)lean_get_external_data(buf);
+}
+
+
+// # Byte swapping functions
 
 static inline uint16_t lean_pod_bswap16(uint16_t value) {
     return

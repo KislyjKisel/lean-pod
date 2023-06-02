@@ -37,5 +37,6 @@ extern_lib «lean-pod» (pkg : Package) := do
     (← buildBindingsO pkg flags "bytes_view"),
     (← buildBindingsO pkg flags "bytes_ref"),
     (← buildBindingsO pkg flags "buffer"),
-    (← buildBindingsO pkg flags "instances")
+    (← buildBindingsO pkg flags "instances"),
+    (← buildBindingsO pkg flags "uvector")
   ]
