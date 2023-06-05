@@ -12,6 +12,17 @@ static inline lean_obj_res lean_pod_UVector_clone(size_t sizeBytes, b_lean_obj_a
     return lean_pod_UVector_wrap(uv_cloned);
 }
 
+LEAN_EXPORT lean_obj_res lean_pod_UVector_zero(b_lean_obj_arg n, b_lean_obj_arg sb) {
+    size_t count = lean_usize_of_nat(n);
+    if (LEAN_UNLIKELY(count == 0)) {
+        lean_pod_UVector uv = NULL;
+        return lean_pod_UVector_wrap(uv);
+    }
+    size_t byteSize = lean_pod_Storable_byteSize(sb);
+    lean_pod_UVector uv = lean_pod_calloc(count * byteSize);
+    return lean_pod_UVector_wrap(uv);
+}
+
 LEAN_EXPORT lean_obj_res lean_pod_UVector_replicate(b_lean_obj_arg n, b_lean_obj_arg wb, b_lean_obj_arg v)
 {
     size_t count = lean_usize_of_nat(n);

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 #include <lean/lean.h>
 
 /// @param sz must be divisible by `LEAN_OBJECT_SIZE_DELTA`
@@ -9,6 +11,17 @@ static inline void* lean_pod_alloc(size_t sz) {
     return malloc(sz);
 #else
     return (void*)lean_alloc_small_object(sz);
+#endif
+}
+
+/// @param sz must be divisible by `LEAN_OBJECT_SIZE_DELTA`
+static inline void* lean_pod_calloc(size_t sz) {
+#ifdef LEAN_POD_ALLOC_NATIVE
+    return calloc(1, sz);
+#else
+    void* p = (void*)lean_alloc_small_object(sz);
+    memset(p, 0, sz);
+    return p;
 #endif
 }
 

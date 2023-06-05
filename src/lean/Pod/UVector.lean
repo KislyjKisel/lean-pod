@@ -13,6 +13,9 @@ instance {α size} : Nonempty (UVector α size) := (UVectorPointed α size).prop
 
 namespace UVector
 
+@[extern "lean_pod_UVector_zero"]
+opaque zero {n : @& Nat} [@& Storable α] : UVector α n
+
 @[extern "lean_pod_UVector_replicate"]
 opaque replicate {n : @& Nat} [@& WriteBytes α] (v : @& α) : UVector α n
 
@@ -30,6 +33,9 @@ abbrev getD {n : @& Nat} [Nonempty α] [@& ReadBytes α] (a : UVector α n) (i :
 
 @[extern "lean_pod_UVector_get_or_panic"]
 def get! {n : @& Nat} [@& Inhabited α] [@& ReadBytes α] (a : @& UVector α n) (i : @& Nat) : α := a.getD i default
+
+def get? {n} [Nonempty α] [ReadBytes α] (a : UVector α n) (i : Nat) : Option α :=
+  if h: i < n then some (a.get (Fin.mk i h)) else none
 
 @[extern "lean_pod_UVector_set"]
 opaque set {n : @& Nat} [@& WriteBytes α] (a : UVector α n) (i : @& Fin n) (v : α) : UVector α n
