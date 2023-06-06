@@ -3,40 +3,40 @@ import Pod.UInt
 
 namespace Pod
 
-opaque BytesViewPointed (size : USize) (alignment : Nat) : NonemptyType
-def BytesView (size : USize) (alignment : Nat) : Type := (BytesViewPointed size alignment).type
-instance {size alignment} : Nonempty (BytesView size alignment) := (BytesViewPointed size alignment).property
+opaque BytesViewPointed (size align : Nat) : NonemptyType
+def BytesView (size align : Nat) : Type := (BytesViewPointed size align).type
+instance {size align} : Nonempty (BytesView size align) := (BytesViewPointed size align).property
 
 @[extern "lean_pod_ByteArray_view"]
-opaque _root_.ByteArray.view (ba : ByteArray) : BytesView ba.size.toUSize 1
+opaque _root_.ByteArray.view (ba : ByteArray) : BytesView ba.size 1
 
 namespace BytesView
 
 @[extern "lean_pod_BytesView_weaken"]
-opaque weaken {size} {alignment0 alignment1 : @& Nat} (h : ∃ k, alignment1 * k = alignment0) : BytesView size alignment0 → BytesView size alignment1
+opaque weaken {size align0 align1 : @& Nat} (h : ∃ k, align1 * k = align0) :
+  BytesView size align0 → BytesView size align1
 
 @[extern "lean_pod_BytesView_take"]
-opaque take {size} {alignment : @& Nat} (bv : BytesView size alignment) (count : USize) (h : count ≤ size) : BytesView count alignment
+opaque take {size align : @& Nat} (bv : BytesView size align) (count : @& Nat) (h : count ≤ size) :
+  BytesView count align
 
 @[extern "lean_pod_BytesView_drop"]
-opaque drop {size} {alignment : @& Nat} (bv : BytesView size alignment) (count : USize) (h : count ≤ size) : BytesView (size - count) (alignment.gcd count.toNat)
+opaque drop {size align : @& Nat} (bv : BytesView size align) (count : @& Nat) (h : count ≤ size) :
+  BytesView (size - count) (align.gcd count)
 
 @[extern "lean_pod_BytesView_slice"]
-opaque slice {size} {alignment : @& Nat}
-  (bv : BytesView size alignment) (start length : USize)
-  (bounded : start.toNat + length.toNat ≤ size.toNat) : BytesView length (alignment.gcd start.toNat) :=
-  let «start≤size» : start ≤ size := by
-    apply Nat.le_trans $ Nat.le_sub_of_add_le bounded
-    exact Nat.sub_le size.toNat length.toNat
-  (bv.drop start «start≤size»).take length $ by
-    show length.val ≤ (size.val - start.val).val
-    rw [Fin.toNat_sub_distrib size.val start.val «start≤size»]
-    apply Nat.le_sub_of_add_le
-    rw [Nat.add_comm]
-    exact bounded
+opaque slice {size align : @& Nat}
+  (bv : BytesView size align) (start length : @& Nat)
+  (bounded : start + length ≤ size) : BytesView length (align.gcd start) := by
+    apply (bv.drop start _).take length
+    · apply Nat.le_sub_of_add_le
+      rw [Nat.add_comm]
+      exact bounded
+    · apply Nat.le_trans $ Nat.le_sub_of_add_le bounded
+      exact Nat.sub_le size length
 
 @[extern "lean_pod_BytesView_toByteArray"]
-opaque toByteArray {size} {align : @& Nat} (bv : @& BytesView size align) : ByteArray
+opaque toByteArray {size align : @& Nat} (bv : @& BytesView size align) : ByteArray
 
 end BytesView
 

@@ -18,7 +18,7 @@ LEAN_EXPORT lean_obj_res lean_pod_UVector_zero(b_lean_obj_arg n, b_lean_obj_arg 
         lean_pod_UVector uv = NULL;
         return lean_pod_UVector_wrap(uv);
     }
-    size_t byteSize = lean_pod_Storable_byteSize(sb);
+    size_t byteSize = lean_usize_of_nat(lean_pod_Storable_byteSize(sb));
     lean_pod_UVector uv = lean_pod_calloc(count * byteSize);
     return lean_pod_UVector_wrap(uv);
 }
@@ -30,13 +30,13 @@ LEAN_EXPORT lean_obj_res lean_pod_UVector_replicate(b_lean_obj_arg n, b_lean_obj
         lean_pod_UVector uv = NULL;
         return lean_pod_UVector_wrap(uv);
     }
-    size_t byteSize = lean_pod_Storable_byteSize(lean_pod_WriteBytes_storable(wb));
+    size_t byteSize = lean_usize_of_nat(lean_pod_Storable_byteSize(lean_pod_WriteBytes_storable(wb)));
     lean_pod_UVector uv = lean_pod_alloc(count * byteSize);
     lean_object* writeBytesRefOffEl = lean_pod_WriteBytes_writeBytesRefOffEl(wb);
-    lean_object* byteSizeArray_box = lean_box_usize(count * byteSize);
+    lean_object* byteSizeArray_box = lean_usize_to_nat(count * byteSize);
     lean_object* bytesRef = lean_pod_BytesRef_wrap(uv);
     lean_inc_ref_n(writeBytesRefOffEl, count);
-    lean_inc_ref_n(byteSizeArray_box, count - 1);
+    lean_inc_n(byteSizeArray_box, count - 1);
     lean_inc_ref_n(bytesRef, count - 1);
     lean_inc_n(v, count);
     for(size_t i = 0; i < count; ++i) {
@@ -45,7 +45,7 @@ LEAN_EXPORT lean_obj_res lean_pod_UVector_replicate(b_lean_obj_arg n, b_lean_obj
             lean_box(0),
             byteSizeArray_box,
             bytesRef,
-            lean_box_usize(i),
+            lean_usize_to_nat(i),
             v,
             lean_box(0),
             lean_box(0)
@@ -59,7 +59,7 @@ LEAN_EXPORT lean_obj_res lean_pod_UVector_raw(b_lean_obj_arg n, b_lean_obj_arg s
 }
 
 static inline lean_obj_res lean_pod_UVector_get_impl(b_lean_obj_arg rb, b_lean_obj_arg uv, size_t i) {
-    size_t byteSize = lean_pod_Storable_byteSize(lean_pod_ReadBytes_storable(rb));
+    size_t byteSize = lean_usize_of_nat(lean_pod_Storable_byteSize(lean_pod_ReadBytes_storable(rb)));
     lean_object* readBytesRef = lean_pod_ReadBytes_readBytesRef(rb);
     lean_inc_ref(readBytesRef);
     lean_object* res = lean_apply_3(
@@ -95,7 +95,7 @@ static inline lean_obj_res lean_pod_UVector_set_impl(
     size_t count, b_lean_obj_arg wb,
     lean_obj_arg uv_old, size_t i, lean_obj_arg v
 ) {
-    size_t byteSize = lean_pod_Storable_byteSize(lean_pod_WriteBytes_storable(wb));
+    size_t byteSize = lean_usize_of_nat(lean_pod_Storable_byteSize(lean_pod_WriteBytes_storable(wb)));
     lean_object* uv;
     if(LEAN_LIKELY(lean_is_exclusive(uv_old))) {
         uv = uv_old;

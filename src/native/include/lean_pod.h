@@ -68,13 +68,14 @@ static inline float lean_pod_Float32_unbox(b_lean_obj_arg obj) {
 
 // # Storable
 
-static inline size_t lean_pod_Storable_byteSize(b_lean_obj_arg storable) {
-    return lean_ctor_get_usize(storable, 1);
+/// @returns @& Nat
+static inline b_lean_obj_res lean_pod_Storable_byteSize(b_lean_obj_arg storable) {
+    return lean_ctor_get(storable, 0);
 }
 
 /// @returns @& Nat
 static inline b_lean_obj_res lean_pod_Storable_alignment(b_lean_obj_arg storable) {
-    return lean_ctor_get(storable, 0);
+    return lean_ctor_get(storable, 1);
 }
 
 

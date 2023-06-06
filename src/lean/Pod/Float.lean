@@ -252,9 +252,7 @@ instance : Max Pod.Float32 := ⟨Pod.Float32.max⟩
 
 instance : Storable Float32 where
   byteSize := byteSize UInt32
-  byteSize_gt_zero := Storable.byteSize_gt_zero
   alignment := alignment UInt32
-  alignment_dvd_byteSize := Storable.alignment_dvd_byteSize
 
 end Pod
 

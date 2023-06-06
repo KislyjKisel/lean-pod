@@ -3,14 +3,11 @@ import Pod
 def test : ByteArray :=
   let a := #[142, 142, 142, 142, 142]
   (ByteArray.mk a).withRef λ ref ↦ do
-    let mut i : USize := 0
+    let mut i : Nat := 0
     while h: i < 5 do
-      Pod.BytesRef.usetOffEl (Eq.ndrec (motive := Pod.BytesRefMut _ _) ref (by rfl)) i i.toUInt64.toUInt8 $ by
-        show i.val.val * (1 % USize.size) + (1 % USize.size) ≤ 5 % USize.size
-        rewrite [
-          Nat.mod_eq_of_lt (a := 1) (Nat.lt_of_lt_of_le (by decide) Pod.usize_size_ge_2_pow_32),
-          Nat.mul_one,
-        ]
+      Pod.BytesRef.setOffEl (Eq.ndrec (motive := Pod.BytesRefMut _ _) ref (by rfl)) i i.toUInt8 $ by
+        show i * 1 + 1 ≤ 5
+        rewrite [Nat.mul_one]
         apply Nat.succ_le_of_lt
         exact h
       i := i + 1
