@@ -10,12 +10,12 @@ lean_lib Pod
 @[default_target]
 lean_exe Main
 
-def buildBindingsO (pkg : Package) (flags : Array String) (stem : String) : IndexBuildM (BuildJob FilePath) := do
+def buildBindingsO (pkg : NPackage _package.name) (flags : Array String) (stem : String) : IndexBuildM (BuildJob FilePath) := do
   let oFile := pkg.irDir / "native" / (stem ++ ".o")
   let srcJob ← inputFile <| pkg.dir / "src" / "native" / (stem ++ ".c")
   buildO (stem ++ ".c") oFile srcJob flags ((get_config? cc).getD (← getLeanCc).toString)
 
-extern_lib «lean-pod» (pkg : Package) := do
+extern_lib «lean-pod» (pkg : NPackage _package.name) := do
   let name := nameToStaticLib "lean-pod"
   let mut flags :=
     #["-I", (← getLeanIncludeDir).toString, "-fPIC"].append $
@@ -29,7 +29,7 @@ extern_lib «lean-pod» (pkg : Package) := do
   if (get_config? cc).isNone then
     flags := flags ++ #["-I", ((← getLeanIncludeDir) / "clang").toString]
 
-  buildStaticLib (pkg.libDir / name) #[
+  buildStaticLib (pkg.nativeLibDir / name) #[
     (← buildBindingsO pkg flags "endianness"),
     (← buildBindingsO pkg flags "storable"),
     (← buildBindingsO pkg flags "uint"),
