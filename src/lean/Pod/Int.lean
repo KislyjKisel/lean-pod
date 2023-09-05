@@ -20,6 +20,7 @@ structure Int64 where
 deriving Inhabited, Repr
 
 def Int8.sign (x : Int8) : Bool := (x.val &&& ((1 : UInt8) <<< 7)) > 0
+def Int8.shr (x y : Int8) : Int8 := .mk (x.val >>> y.val)
 
 @[extern c inline "(int8_t)#1 * (int8_t)#2"]
 opaque Int8.mul (x y : Int8) : Int8
@@ -30,10 +31,8 @@ opaque Int8.div (x y : Int8) : Int8
 @[extern c inline "(int8_t)#1 % (int8_t)#2"]
 opaque Int8.mod (x y : Int8) : Int8
 
-@[extern c inline "(int8_t)#1 >> (int8_t)#2"]
+@[extern c inline "(int8_t)#1 >> (#2 & 7)"]
 opaque Int8.sar (x y : Int8) : Int8
-
-def Int8.shr (x y : Int8) : Int8 := .mk (x.val >>> y.val)
 
 instance : AndOp Int8 where
   and x y := .mk $ x.val &&& y.val
@@ -79,7 +78,7 @@ opaque Int16.div (x y : Int16) : Int16
 @[extern c inline "(int16_t)#1 % (int16_t)#2"]
 opaque Int16.mod (x y : Int16) : Int16
 
-@[extern c inline "(int16_t)#1 >> (int16_t)#2"]
+@[extern c inline "(int16_t)#1 >> (#2 & 15)"]
 opaque Int16.sar (x y : Int16) : Int16
 
 instance : AndOp Int16 where
@@ -126,7 +125,7 @@ opaque Int32.div (x y : Int32) : Int32
 @[extern c inline "(int32_t)#1 % (int32_t)#2"]
 opaque Int32.mod (x y : Int32) : Int32
 
-@[extern c inline "(int32_t)#1 >> (int32_t)#2"]
+@[extern c inline "(int32_t)#1 >> (#2 & 31)"]
 opaque Int32.sar (x y : Int32) : Int32
 
 instance : AndOp Int32 where
@@ -173,7 +172,7 @@ opaque Int64.div (x y : Int64) : Int64
 @[extern c inline "(int64_t)#1 % (int64_t)#2"]
 opaque Int64.mod (x y : Int64) : Int64
 
-@[extern c inline "(int64_t)#1 >> (int64_t)#2"]
+@[extern c inline "(int64_t)#1 >> (#2 & 63)"]
 opaque Int64.sar (x y : Int64) : Int64
 
 instance : AndOp Int64 where
