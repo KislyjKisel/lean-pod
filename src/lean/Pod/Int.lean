@@ -34,6 +34,9 @@ opaque Int8.mod (x y : Int8) : Int8
 @[extern c inline "(int8_t)#1 >> (#2 & 7)"]
 opaque Int8.sar (x y : Int8) : Int8
 
+@[extern c inline "(double)(int8_t)#1"]
+opaque Int8.toFloat (x : Int8) : Float
+
 instance : AndOp Int8 where
   and x y := .mk $ x.val &&& y.val
 instance : OrOp Int8 where
@@ -80,6 +83,9 @@ opaque Int16.mod (x y : Int16) : Int16
 
 @[extern c inline "(int16_t)#1 >> (#2 & 15)"]
 opaque Int16.sar (x y : Int16) : Int16
+
+@[extern c inline "(double)(int16_t)#1"]
+opaque Int16.toFloat (x : Int16) : Float
 
 instance : AndOp Int16 where
   and x y := .mk $ x.val &&& y.val
@@ -128,6 +134,9 @@ opaque Int32.mod (x y : Int32) : Int32
 @[extern c inline "(int32_t)#1 >> (#2 & 31)"]
 opaque Int32.sar (x y : Int32) : Int32
 
+@[extern c inline "(double)(int32_t)#1"]
+opaque Int32.toFloat (x : Int32) : Float
+
 instance : AndOp Int32 where
   and x y := .mk $ x.val &&& y.val
 instance : OrOp Int32 where
@@ -174,6 +183,9 @@ opaque Int64.mod (x y : Int64) : Int64
 
 @[extern c inline "(int64_t)#1 >> (#2 & 63)"]
 opaque Int64.sar (x y : Int64) : Int64
+
+@[extern c inline "(double)(int64_t)#1"]
+opaque Int64.toFloat (x : Int64) : Float
 
 instance : AndOp Int64 where
   and x y := .mk $ x.val &&& y.val
