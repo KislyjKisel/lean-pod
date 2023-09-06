@@ -46,6 +46,33 @@ opaque Int8.toInt32 (x : Int8) : Int32
 @[extern c inline "(int64_t)(int8_t)#1"]
 opaque Int8.toInt64 (x : Int8) : Int64
 
+@[extern c inline "(uint8_t)(int8_t)#1"]
+opaque Int8.toUInt8 (x : Int8) : UInt8
+
+@[extern c inline "(uint16_t)(int8_t)#1"]
+opaque Int8.toUInt16 (x : Int8) : UInt16
+
+@[extern c inline "(uint32_t)(int8_t)#1"]
+opaque Int8.toUInt32 (x : Int8) : UInt32
+
+@[extern c inline "(uint64_t)(int8_t)#1"]
+opaque Int8.toUInt64 (x : Int8) : UInt64
+
+@[extern c inline "(int8_t)#1"]
+opaque Int8.ofBool (x : Bool) : Int8
+
+@[extern c inline "(int8_t)#1"]
+opaque Int8.ofUInt8 (x : UInt8) : Int8
+
+@[extern c inline "(int8_t)#1"]
+opaque Int8.ofUInt16 (x : UInt16) : Int8
+
+@[extern c inline "(int8_t)#1"]
+opaque Int8.ofUInt32 (x : UInt32) : Int8
+
+@[extern c inline "(int8_t)#1"]
+opaque Int8.ofUInt64 (x : UInt64) : Int8
+
 @[extern c inline "(uint8_t)((int8_t)#1 < (int8_t)#2)"]
 opaque Int8.blt (x y : Int8) : Bool
 
@@ -141,6 +168,33 @@ opaque Int16.toInt32 (x : Int16) : Int32
 
 @[extern c inline "(int64_t)(int16_t)#1"]
 opaque Int16.toInt64 (x : Int16) : Int64
+
+@[extern c inline "(uint8_t)(int16_t)#1"]
+opaque Int16.toUInt8 (x : Int16) : UInt8
+
+@[extern c inline "(uint16_t)(int16_t)#1"]
+opaque Int16.toUInt16 (x : Int16) : UInt16
+
+@[extern c inline "(uint32_t)(int16_t)#1"]
+opaque Int16.toUInt32 (x : Int16) : UInt32
+
+@[extern c inline "(uint64_t)(int16_t)#1"]
+opaque Int16.toUInt64 (x : Int16) : UInt64
+
+@[extern c inline "(int16_t)#1"]
+opaque Int16.ofBool (x : Bool) : Int16
+
+@[extern c inline "(int16_t)#1"]
+opaque Int16.ofUInt8 (x : UInt8) : Int16
+
+@[extern c inline "(int16_t)#1"]
+opaque Int16.ofUInt16 (x : UInt16) : Int16
+
+@[extern c inline "(int16_t)#1"]
+opaque Int16.ofUInt32 (x : UInt32) : Int16
+
+@[extern c inline "(int16_t)#1"]
+opaque Int16.ofUInt64 (x : UInt64) : Int16
 
 @[extern c inline "(uint8_t)((int16_t)#1 < (int16_t)#2)"]
 opaque Int16.blt (x y : Int16) : Bool
@@ -238,6 +292,33 @@ opaque Int32.toInt16 (x : Int32) : Int16
 @[extern c inline "(int64_t)(int32_t)#1"]
 opaque Int32.toInt64 (x : Int32) : Int64
 
+@[extern c inline "(uint8_t)(int32_t)#1"]
+opaque Int32.toUInt8 (x : Int32) : UInt8
+
+@[extern c inline "(uint16_t)(int32_t)#1"]
+opaque Int32.toUInt16 (x : Int32) : UInt16
+
+@[extern c inline "(uint32_t)(int32_t)#1"]
+opaque Int32.toUInt32 (x : Int32) : UInt32
+
+@[extern c inline "(uint64_t)(int32_t)#1"]
+opaque Int32.toUInt64 (x : Int32) : UInt64
+
+@[extern c inline "(int32_t)#1"]
+opaque Int32.ofBool (x : Bool) : Int32
+
+@[extern c inline "(int32_t)#1"]
+opaque Int32.ofUInt8 (x : UInt8) : Int32
+
+@[extern c inline "(int32_t)#1"]
+opaque Int32.ofUInt16 (x : UInt16) : Int32
+
+@[extern c inline "(int32_t)#1"]
+opaque Int32.ofUInt32 (x : UInt32) : Int32
+
+@[extern c inline "(int32_t)#1"]
+opaque Int32.ofUInt64 (x : UInt64) : Int32
+
 @[extern c inline "(uint8_t)((int32_t)#1 < (int32_t)#2)"]
 opaque Int32.blt (x y : Int32) : Bool
 
@@ -333,6 +414,33 @@ opaque Int64.toInt16 (x : Int64) : Int16
 
 @[extern c inline "(int32_t)(int64_t)#1"]
 opaque Int64.toInt32 (x : Int64) : Int32
+
+@[extern c inline "(uint8_t)(int64_t)#1"]
+opaque Int64.toUInt8 (x : Int64) : UInt8
+
+@[extern c inline "(uint16_t)(int64_t)#1"]
+opaque Int64.toUInt16 (x : Int64) : UInt16
+
+@[extern c inline "(uint32_t)(int64_t)#1"]
+opaque Int64.toUInt32 (x : Int64) : UInt32
+
+@[extern c inline "(uint64_t)(int64_t)#1"]
+opaque Int64.toUInt64 (x : Int64) : UInt64
+
+@[extern c inline "(int64_t)#1"]
+opaque Int64.ofBool (x : Bool) : Int64
+
+@[extern c inline "(int64_t)#1"]
+opaque Int64.ofUInt8 (x : UInt8) : Int64
+
+@[extern c inline "(int64_t)#1"]
+opaque Int64.ofUInt16 (x : UInt16) : Int64
+
+@[extern c inline "(int64_t)#1"]
+opaque Int64.ofUInt32 (x : UInt32) : Int64
+
+@[extern c inline "(int64_t)#1"]
+opaque Int64.ofUInt64 (x : UInt64) : Int64
 
 @[extern c inline "(uint8_t)((int64_t)#1 < (int64_t)#2)"]
 opaque Int64.blt (x y : Int64) : Bool
