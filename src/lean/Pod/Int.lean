@@ -37,6 +37,15 @@ opaque Int8.sar (x y : Int8) : Int8
 @[extern c inline "(double)(int8_t)#1"]
 opaque Int8.toFloat (x : Int8) : Float
 
+@[extern c inline "(int16_t)(int8_t)#1"]
+opaque Int8.toInt16 (x : Int8) : Int16
+
+@[extern c inline "(int32_t)(int8_t)#1"]
+opaque Int8.toInt32 (x : Int8) : Int32
+
+@[extern c inline "(int64_t)(int8_t)#1"]
+opaque Int8.toInt64 (x : Int8) : Int64
+
 instance : AndOp Int8 where
   and x y := .mk $ x.val &&& y.val
 instance : OrOp Int8 where
@@ -86,6 +95,15 @@ opaque Int16.sar (x y : Int16) : Int16
 
 @[extern c inline "(double)(int16_t)#1"]
 opaque Int16.toFloat (x : Int16) : Float
+
+@[extern c inline "(int8_t)(int16_t)#1"]
+opaque Int16.toInt8 (x : Int16) : Int8
+
+@[extern c inline "(int32_t)(int16_t)#1"]
+opaque Int16.toInt32 (x : Int16) : Int32
+
+@[extern c inline "(int64_t)(int16_t)#1"]
+opaque Int16.toInt64 (x : Int16) : Int64
 
 instance : AndOp Int16 where
   and x y := .mk $ x.val &&& y.val
@@ -137,6 +155,15 @@ opaque Int32.sar (x y : Int32) : Int32
 @[extern c inline "(double)(int32_t)#1"]
 opaque Int32.toFloat (x : Int32) : Float
 
+@[extern c inline "(int8_t)(int32_t)#1"]
+opaque Int32.toInt8 (x : Int32) : Int8
+
+@[extern c inline "(int16_t)(int32_t)#1"]
+opaque Int32.toInt16 (x : Int32) : Int16
+
+@[extern c inline "(int64_t)(int32_t)#1"]
+opaque Int32.toInt64 (x : Int32) : Int64
+
 instance : AndOp Int32 where
   and x y := .mk $ x.val &&& y.val
 instance : OrOp Int32 where
@@ -186,6 +213,15 @@ opaque Int64.sar (x y : Int64) : Int64
 
 @[extern c inline "(double)(int64_t)#1"]
 opaque Int64.toFloat (x : Int64) : Float
+
+@[extern c inline "(int8_t)(int64_t)#1"]
+opaque Int64.toInt8 (x : Int64) : Int8
+
+@[extern c inline "(int16_t)(int64_t)#1"]
+opaque Int64.toInt16 (x : Int64) : Int16
+
+@[extern c inline "(int32_t)(int64_t)#1"]
+opaque Int64.toInt32 (x : Int64) : Int32
 
 instance : AndOp Int64 where
   and x y := .mk $ x.val &&& y.val
