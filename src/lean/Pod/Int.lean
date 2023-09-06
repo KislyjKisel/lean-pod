@@ -46,6 +46,12 @@ opaque Int8.toInt32 (x : Int8) : Int32
 @[extern c inline "(int64_t)(int8_t)#1"]
 opaque Int8.toInt64 (x : Int8) : Int64
 
+@[extern c inline "(uint8_t)((int8_t)#1 < (int8_t)#2)"]
+opaque Int8.blt (x y : Int8) : Bool
+
+@[extern c inline "(uint8_t)((int8_t)#1 <= (int8_t)#2)"]
+opaque Int8.ble (x y : Int8) : Bool
+
 instance : AndOp Int8 where
   and x y := .mk $ x.val &&& y.val
 instance : OrOp Int8 where
@@ -71,9 +77,40 @@ instance : ToString Int8 where
   toString x := ite x.sign s!"-{toString (-x).val}" (toString x.val)
 instance : BEq Int8 where
   beq x y := x.val == y.val
+instance : LT Int8 where
+  lt x y := x.blt y
+instance : LE Int8 where
+  le x y := x.ble y
 instance : Storable Int8 where
   byteSize := byteSize (α := UInt8)
   alignment := alignment (α := UInt8)
+instance : DecidableEq Int8 := λ x y ↦
+  if h: x.val = y.val
+    then by
+      apply isTrue
+      show ({ val := x.val } : Int8) = { val := y.val }
+      rw [h]
+    else by
+      apply isFalse
+      intro h'
+      rewrite [h'] at h
+      contradiction
+instance {x y : Int8} : Decidable (x < y) :=
+  match h: x.blt y with
+  | true => isTrue h
+  | false => by
+    apply isFalse
+    intro h'
+    rewrite [h'] at h
+    contradiction
+instance {x y : Int8} : Decidable (x ≤ y) :=
+  match h: x.ble y with
+  | true => isTrue h
+  | false => by
+    apply isFalse
+    intro h'
+    rewrite [h'] at h
+    contradiction
 
 def Int16.sign (x : Int16) : Bool := (x.val &&& ((1 : UInt16) <<< 15)) > 0
 def Int16.shr (x y : Int16) : Int16 := .mk (x.val >>> y.val)
@@ -105,6 +142,12 @@ opaque Int16.toInt32 (x : Int16) : Int32
 @[extern c inline "(int64_t)(int16_t)#1"]
 opaque Int16.toInt64 (x : Int16) : Int64
 
+@[extern c inline "(uint8_t)((int16_t)#1 < (int16_t)#2)"]
+opaque Int16.blt (x y : Int16) : Bool
+
+@[extern c inline "(uint8_t)((int16_t)#1 <= (int16_t)#2)"]
+opaque Int16.ble (x y : Int16) : Bool
+
 instance : AndOp Int16 where
   and x y := .mk $ x.val &&& y.val
 instance : OrOp Int16 where
@@ -130,9 +173,40 @@ instance : ToString Int16 where
   toString x := ite x.sign s!"-{toString (-x).val}" (toString x.val)
 instance : BEq Int16 where
   beq x y := x.val == y.val
+instance : LT Int16 where
+  lt x y := x.blt y
+instance : LE Int16 where
+  le x y := x.ble y
 instance : Storable Int16 where
   byteSize := byteSize (α := UInt16)
   alignment := alignment (α := UInt16)
+instance : DecidableEq Int16 := λ x y ↦
+  if h: x.val = y.val
+    then by
+      apply isTrue
+      show ({ val := x.val } : Int16) = { val := y.val }
+      rw [h]
+    else by
+      apply isFalse
+      intro h'
+      rewrite [h'] at h
+      contradiction
+instance {x y : Int16} : Decidable (x < y) :=
+  match h: x.blt y with
+  | true => isTrue h
+  | false => by
+    apply isFalse
+    intro h'
+    rewrite [h'] at h
+    contradiction
+instance {x y : Int16} : Decidable (x ≤ y) :=
+  match h: x.ble y with
+  | true => isTrue h
+  | false => by
+    apply isFalse
+    intro h'
+    rewrite [h'] at h
+    contradiction
 
 def Int32.sign (x : Int32) : Bool := (x.val &&& ((1 : UInt32) <<< 31)) > 0
 def Int32.shr (x y : Int32) : Int32 := .mk (x.val >>> y.val)
@@ -164,6 +238,12 @@ opaque Int32.toInt16 (x : Int32) : Int16
 @[extern c inline "(int64_t)(int32_t)#1"]
 opaque Int32.toInt64 (x : Int32) : Int64
 
+@[extern c inline "(uint8_t)((int32_t)#1 < (int32_t)#2)"]
+opaque Int32.blt (x y : Int32) : Bool
+
+@[extern c inline "(uint8_t)((int32_t)#1 <= (int32_t)#2)"]
+opaque Int32.ble (x y : Int32) : Bool
+
 instance : AndOp Int32 where
   and x y := .mk $ x.val &&& y.val
 instance : OrOp Int32 where
@@ -189,9 +269,40 @@ instance : ToString Int32 where
   toString x := ite x.sign s!"-{toString (-x).val}" (toString x.val)
 instance : BEq Int32 where
   beq x y := x.val == y.val
+instance : LT Int32 where
+  lt x y := x.blt y
+instance : LE Int32 where
+  le x y := x.ble y
 instance : Storable Int32 where
   byteSize := byteSize (α := UInt32)
   alignment := alignment (α := UInt32)
+instance : DecidableEq Int32 := λ x y ↦
+  if h: x.val = y.val
+    then by
+      apply isTrue
+      show ({ val := x.val } : Int32) = { val := y.val }
+      rw [h]
+    else by
+      apply isFalse
+      intro h'
+      rewrite [h'] at h
+      contradiction
+instance {x y : Int32} : Decidable (x < y) :=
+  match h: x.blt y with
+  | true => isTrue h
+  | false => by
+    apply isFalse
+    intro h'
+    rewrite [h'] at h
+    contradiction
+instance {x y : Int32} : Decidable (x ≤ y) :=
+  match h: x.ble y with
+  | true => isTrue h
+  | false => by
+    apply isFalse
+    intro h'
+    rewrite [h'] at h
+    contradiction
 
 def Int64.sign (x : Int64) : Bool := (x.val &&& ((1 : UInt64) <<< 63)) > 0
 def Int64.shr (x y : Int64) : Int64 := .mk (x.val >>> y.val)
@@ -223,6 +334,12 @@ opaque Int64.toInt16 (x : Int64) : Int16
 @[extern c inline "(int32_t)(int64_t)#1"]
 opaque Int64.toInt32 (x : Int64) : Int32
 
+@[extern c inline "(uint8_t)((int64_t)#1 < (int64_t)#2)"]
+opaque Int64.blt (x y : Int64) : Bool
+
+@[extern c inline "(uint8_t)((int64_t)#1 <= (int64_t)#2)"]
+opaque Int64.ble (x y : Int64) : Bool
+
 instance : AndOp Int64 where
   and x y := .mk $ x.val &&& y.val
 instance : OrOp Int64 where
@@ -248,7 +365,38 @@ instance : ToString Int64 where
   toString x := ite x.sign s!"-{toString (-x).val}" (toString x.val)
 instance : BEq Int64 where
   beq x y := x.val == y.val
+instance : LT Int64 where
+  lt x y := x.blt y
+instance : LE Int64 where
+  le x y := x.ble y
 instance : Storable Int64 where
   byteSize := byteSize (α := UInt64)
   alignment := alignment (α := UInt64)
   alignment_dvd_byteSize := alignment_dvd_byteSize (α := UInt64)
+instance : DecidableEq Int64 := λ x y ↦
+  if h: x.val = y.val
+    then by
+      apply isTrue
+      show ({ val := x.val } : Int64) = { val := y.val }
+      rw [h]
+    else by
+      apply isFalse
+      intro h'
+      rewrite [h'] at h
+      contradiction
+instance {x y : Int64} : Decidable (x < y) :=
+  match h: x.blt y with
+  | true => isTrue h
+  | false => by
+    apply isFalse
+    intro h'
+    rewrite [h'] at h
+    contradiction
+instance {x y : Int64} : Decidable (x ≤ y) :=
+  match h: x.ble y with
+  | true => isTrue h
+  | false => by
+    apply isFalse
+    intro h'
+    rewrite [h'] at h
+    contradiction
