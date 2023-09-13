@@ -1,7 +1,7 @@
 import Pod.Endianness
 
 @[extern c inline "#1"]
-opaque UInt8.ofBool (x : Bool) : UInt8
+def UInt8.ofBool (x : Bool) : UInt8 := cond x 1 0
 
 @[extern "lean_pod_UInt16_bswap"]
 def UInt16.bswap (value : UInt16) : UInt16 :=
@@ -20,7 +20,7 @@ def UInt16.toLittleEndian (value : UInt16) :=
     else value.bswap
 
 @[extern c inline "(uint16_t)#1"]
-opaque UInt16.ofBool (x : Bool) : UInt16
+def UInt16.ofBool (x : Bool) : UInt16 := cond x 1 0
 
 @[extern "lean_pod_UInt32_bswap"]
 def UInt32.bswap (value : UInt32) : UInt32 :=
@@ -42,7 +42,7 @@ def UInt32.toLittleEndian (value : UInt32) :=
     else value.bswap
 
 @[extern c inline "(uint32_t)#1"]
-opaque UInt32.ofBool (x : Bool) : UInt32
+def UInt32.ofBool (x : Bool) : UInt32 := cond x 1 0
 
 @[extern "lean_pod_UInt64_bswap"]
 def UInt64.bswap (value : UInt64) : UInt64 :=
@@ -68,7 +68,7 @@ def UInt64.toLittleEndian (value : UInt64) :=
     else value.bswap
 
 @[extern c inline "(uint64_t)#1"]
-opaque UInt64.ofBool (x : Bool) : UInt64
+def UInt64.ofBool (x : Bool) : UInt64 := cond x 1 0
 
 @[extern "lean_pod_USize_bswap"]
 opaque USize.bswap (value : USize) : USize
@@ -86,4 +86,4 @@ def USize.toLittleEndian (value : USize) :=
     else value.bswap
 
 @[extern c inline "(size_t)#1"]
-opaque USize.ofBool (x : Bool) : USize
+def USize.ofBool (x : Bool) : USize := cond x (USize.ofNat32 1 $ by decide) (USize.ofNat32 0 $ by decide)
