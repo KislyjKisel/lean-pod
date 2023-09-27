@@ -46,6 +46,9 @@ opaque UInt64.toFloat32 : UInt64 → Pod.Float32
 @[extern "lean_pod_USize_toFloat32"]
 opaque USize.toFloat32 : USize → Pod.Float32
 
+@[extern "lean_pod_String_toFloat32"]
+opaque String.toFloat32? : @& String → Option Pod.Float32
+
 namespace Pod.Float32
 
 @[extern "lean_pod_Float32_toString"]

@@ -16,6 +16,18 @@ LEAN_POD_CAST_FLOAT32_FROM(UInt32, uint32_t);
 LEAN_POD_CAST_FLOAT32_FROM(UInt64, uint64_t);
 LEAN_POD_CAST_FLOAT32_FROM(USize, size_t);
 
+LEAN_EXPORT lean_obj_arg lean_pod_String_toFloat32(b_lean_obj_arg s) {
+    char* end = NULL;
+    const char* cstr = lean_string_cstr(s);
+    float x = strtof(cstr, &end);
+    if (end == cstr) {
+        return lean_box(0);
+    }
+    lean_object* option = lean_alloc_ctor(1, 1, 0);
+    lean_ctor_set(option, 0, lean_pod_Float32_box(x));
+    return option;
+}
+
 #define LEAN_POD_CAST_FLOAT32_TO(ltyp, ctyp)\
 LEAN_EXPORT ctyp lean_pod_Float32_to##ltyp(uint32_t x) {\
     return (ctyp)lean_pod_Float32_fromBits(x);\
