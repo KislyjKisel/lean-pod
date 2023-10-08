@@ -7,7 +7,7 @@ opaque BufferPointed (size align : Nat) : NonemptyType
 def Buffer (size align : Nat) : Type := (BufferPointed size align).type
 instance : Nonempty (Buffer size align) := (BufferPointed size align).property
 
-namespace Buffer 
+namespace Buffer
 
 @[extern "lean_pod_Buffer_allocate"]
 opaque allocate (size : @& Nat) : Buffer size 8
