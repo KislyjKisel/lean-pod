@@ -314,37 +314,37 @@ LEAN_EXPORT lean_obj_res lean_pod_readBytesRefOffEl_##suffix(b_lean_obj_arg sz, 
     return lean_io_result_mk_ok(cToObj(value));\
 }\
 \
-LEAN_EXPORT cType lean_pod_readBytesViewUnal_##suffix(b_lean_obj_arg a, b_lean_obj_arg bv) {\
+LEAN_EXPORT abiType lean_pod_readBytesViewUnal_##suffix(b_lean_obj_arg a, b_lean_obj_arg bv) {\
     cType value;\
     memcpy(&value, lean_pod_BytesView_unwrap(bv)->ptr, sizeof(cType));\
     return cToAbi(value);\
 }\
-LEAN_EXPORT cType lean_pod_readBytesViewOffUnal_##suffix(b_lean_obj_arg sz, b_lean_obj_arg a, b_lean_obj_arg bv, b_lean_obj_arg i_nat) {\
+LEAN_EXPORT abiType lean_pod_readBytesViewOffUnal_##suffix(b_lean_obj_arg sz, b_lean_obj_arg a, b_lean_obj_arg bv, b_lean_obj_arg i_nat) {\
     size_t i = lean_usize_of_nat(i_nat);\
     cType value;\
     memcpy(&value, lean_pod_BytesView_unwrap(bv)->ptr + i, sizeof(cType));\
     return cToAbi(value);\
 }\
-LEAN_EXPORT cType lean_pod_readBytesViewOffElUnal_##suffix(b_lean_obj_arg sz, b_lean_obj_arg a, b_lean_obj_arg bv, b_lean_obj_arg i_nat) {\
+LEAN_EXPORT abiType lean_pod_readBytesViewOffElUnal_##suffix(b_lean_obj_arg sz, b_lean_obj_arg a, b_lean_obj_arg bv, b_lean_obj_arg i_nat) {\
     size_t i = lean_usize_of_nat(i_nat);\
     cType value;\
     memcpy(&value, lean_pod_BytesView_unwrap(bv)->ptr + i * sizeof(cType), sizeof(cType));\
     return cToAbi(value);\
 }\
-LEAN_EXPORT cType lean_pod_readBytesView_##suffix(b_lean_obj_arg bv) {\
+LEAN_EXPORT abiType lean_pod_readBytesView_##suffix(b_lean_obj_arg bv) {\
     cType value;\
     unsigned char* p = lean_pod_BytesView_unwrap(bv)->ptr;\
     memcpy(&value, LEAN_POD_ASSUME_ALIGNED(p, cType), sizeof(cType));\
     return cToAbi(value);\
 }\
-LEAN_EXPORT cType lean_pod_readBytesViewOff_##suffix(b_lean_obj_arg sz, b_lean_obj_arg a, b_lean_obj_arg bv, b_lean_obj_arg i_nat) {\
+LEAN_EXPORT abiType lean_pod_readBytesViewOff_##suffix(b_lean_obj_arg sz, b_lean_obj_arg a, b_lean_obj_arg bv, b_lean_obj_arg i_nat) {\
     size_t i = lean_usize_of_nat(i_nat);\
     cType value;\
     unsigned char* p = lean_pod_BytesView_unwrap(bv)->ptr + i;\
     memcpy(&value, LEAN_POD_ASSUME_ALIGNED(p, cType), sizeof(cType));\
     return cToAbi(value);\
 }\
-LEAN_EXPORT cType lean_pod_readBytesViewOffEl_##suffix(b_lean_obj_arg sz, b_lean_obj_arg bv, b_lean_obj_arg i_nat) {\
+LEAN_EXPORT abiType lean_pod_readBytesViewOffEl_##suffix(b_lean_obj_arg sz, b_lean_obj_arg bv, b_lean_obj_arg i_nat) {\
     size_t i = lean_usize_of_nat(i_nat);\
     cType value;\
     unsigned char* p = lean_pod_BytesView_unwrap(bv)->ptr + i * sizeof(cType);\
