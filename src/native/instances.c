@@ -1,10 +1,10 @@
 #include <string.h>
 #include "include/lean_pod.h"
 
-LEAN_POD_RWBYTES_INST(uint8_t, UInt8, lean_box)
-LEAN_POD_RWBYTES_INST(uint16_t, UInt16, lean_box)
-LEAN_POD_RWBYTES_INST(uint32_t, UInt32, lean_box_uint32)
-LEAN_POD_RWBYTES_INST(uint64_t, UInt64, lean_box_uint64)
-LEAN_POD_RWBYTES_INST(size_t, USize, lean_box_usize)
-LEAN_POD_RWBYTES_INST(double, Float, lean_box_float)
-LEAN_POD_RWBYTES_INST(uint32_t, Float32, lean_box_uint32)
+LEAN_POD_RWBYTES_INST(UInt8, uint8_t, uint8_t, lean_box, LEAN_POD_IDENTITY, LEAN_POD_IDENTITY)
+LEAN_POD_RWBYTES_INST(UInt16, uint16_t, uint16_t, lean_box, LEAN_POD_IDENTITY, LEAN_POD_IDENTITY)
+LEAN_POD_RWBYTES_INST(UInt32, uint32_t, uint32_t, lean_box_uint32, LEAN_POD_IDENTITY, LEAN_POD_IDENTITY)
+LEAN_POD_RWBYTES_INST(UInt64, uint64_t, uint64_t, lean_box_uint64, LEAN_POD_IDENTITY, LEAN_POD_IDENTITY)
+LEAN_POD_RWBYTES_INST(USize, size_t, size_t, lean_box_usize, LEAN_POD_IDENTITY, LEAN_POD_IDENTITY)
+LEAN_POD_RWBYTES_INST(Float, double, double, lean_box_float, LEAN_POD_IDENTITY, LEAN_POD_IDENTITY)
+LEAN_POD_RWBYTES_INST(Pod_Float32, float, uint32_t, lean_pod_Float32_box, lean_pod_Float32_toBits, lean_pod_Float32_fromBits)
