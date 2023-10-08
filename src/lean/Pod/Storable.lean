@@ -10,8 +10,7 @@ class Storable (α : Type _) where
 
 export Storable (byteSize byteSize_gt_zero alignment alignment_dvd_byteSize)
 
-@[reducible]
-def byteSizeArray (α : Type) [Storable α] (n : Nat) : Nat := n * byteSize α
+abbrev byteSizeArray (α : Type) [Storable α] (n : Nat) : Nat := n * byteSize α
 
 theorem not_alignment_eq_zero {α} [Storable α] : ¬ alignment α = 0 := by
     intro h
@@ -21,7 +20,7 @@ theorem not_alignment_eq_zero {α} [Storable α] : ¬ alignment α = 0 := by
     rw [b, h]
     exact Nat.zero_mul k
 
-def bitWidth {α} [Storable α] : Nat := byteSize α * 8
+abbrev bitWidth {α} [Storable α] : Nat := byteSize α * 8
 
 instance : Storable UInt8 where
   byteSize := 1
