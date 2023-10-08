@@ -120,13 +120,13 @@ macro "#pod_c_rwbytes_instance" typeId:ident : command => do
       @[extern $(mkStrLit $ "lean_pod_" ++ declName_rwa0):str]
       opaque $(mkIdent $ Name.mkSimple declName_rwa0)
         {σ} (br : @& BytesRefMut σ (byteSize $typeId) (alignment $typeId))
-        (value : $typeId) : ST σ Unit
+        (value : @& $typeId) : ST σ Unit
     ),
     ← `(command|
       @[extern $(mkStrLit $ "lean_pod_" ++ declName_rwa1):str]
       opaque $(mkIdent $ Name.mkSimple declName_rwa1)
         {σ} {size align : @& Nat}
-        (br : @& BytesRefMut σ size align) (i : @& Nat) (value : $typeId)
+        (br : @& BytesRefMut σ size align) (i : @& Nat) (value : @& $typeId)
         (h₁ : i + (byteSize $typeId) ≤ size)
         (h₂ : ∀ m, ∃ n, align * m + i = (alignment $typeId) * n) :
         ST σ Unit
@@ -135,24 +135,24 @@ macro "#pod_c_rwbytes_instance" typeId:ident : command => do
       @[extern $(mkStrLit $ "lean_pod_" ++ declName_rwa2):str]
       opaque $(mkIdent $ Name.mkSimple declName_rwa2)
         {σ} {size : @& Nat} (br : @& BytesRefMut σ size (alignment $typeId)) (i : @& Nat)
-        (value : $typeId) (h : i * (byteSize $typeId) + (byteSize $typeId) ≤ size) : ST σ Unit
+        (value : @& $typeId) (h : i * (byteSize $typeId) + (byteSize $typeId) ≤ size) : ST σ Unit
     ),
     ← `(command|
       @[extern $(mkStrLit $ "lean_pod_" ++ declName_rwu0):str]
       opaque $(mkIdent $ Name.mkSimple declName_rwu0)
         {σ} {align : @& Nat} (br : @& BytesRefMut σ (byteSize $typeId) align)
-        (value : $typeId) : ST σ Unit
+        (value : @& $typeId) : ST σ Unit
     ),
     ← `(command|
       @[extern $(mkStrLit $ "lean_pod_" ++ declName_rwu1):str]
       opaque $(mkIdent $ Name.mkSimple declName_rwu1)
         {σ} {size align : @& Nat} (br : @& BytesRefMut σ size align) (i : @& Nat)
-        (value : $typeId) (h₁ : i + (byteSize $typeId) ≤ size) : ST σ Unit
+        (value : @& $typeId) (h₁ : i + (byteSize $typeId) ≤ size) : ST σ Unit
     ),
     ← `(command|
       @[extern $(mkStrLit $ "lean_pod_" ++ declName_rwu2):str]
       opaque $(mkIdent $ Name.mkSimple declName_rwu2)
-        {σ} {size align : @& Nat} (br : @& BytesRefMut σ size align) (i : @& Nat) (value : $typeId)
+        {σ} {size align : @& Nat} (br : @& BytesRefMut σ size align) (i : @& Nat) (value : @& $typeId)
         (h : i * (byteSize $typeId) + (byteSize $typeId) ≤ size) : ST σ Unit
     ),
     ← `(command|
