@@ -1,3 +1,4 @@
+import Pod.UInt
 import Pod.Storable
 
 /-! # Float32 -/
@@ -103,7 +104,7 @@ opaque ble : Float32 → Float32 → Bool
 opaque min : Float32 → Float32 → Float32
 
 @[extern "lean_pod_Float32_max"]
-opaque max : Float32 → Float32 → Float32 
+opaque max : Float32 → Float32 → Float32
 
 @[extern "lean_pod_Float32_isNaN"]
 opaque isNaN : Float32 → Bool
@@ -219,6 +220,12 @@ def ofScientific (m : Nat) (s : Bool) (e : Nat) : Float32 :=
 
 def ofNat (n : Nat) : Float32 := ofScientific n false 0
 
+def toLittleEndian : Float32 → Float32 :=
+  Float32.mk ∘ UInt32.toLittleEndian ∘ Float32.bits
+
+def toBigEndian : Float32 → Float32 :=
+  Float32.mk ∘ UInt32.toBigEndian ∘ Float32.bits
+
 end Float32
 
 def _root_.Nat.toFloat32 (n : Nat) : Pod.Float32 := Pod.Float32.ofNat n
@@ -264,3 +271,12 @@ end Pod
 
 @[extern "lean_pod_Float_bits"]
 opaque Float.bits : Float → UInt64
+
+@[extern "lean_pod_Float_ofBits"]
+opaque Float.ofBits : UInt64 → Float
+
+@[extern "lean_pod_Float_toLittleEndian"]
+opaque Float.toLittleEndian : Float → Float
+
+@[extern "lean_pod_Float_toBigEndian"]
+opaque Float.toBigEndian : Float → Float

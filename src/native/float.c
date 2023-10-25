@@ -167,10 +167,33 @@ LEAN_EXPORT uint32_t lean_pod_Float32_scaleB(uint32_t x_w, b_lean_obj_arg i) {
 }
 
 LEAN_EXPORT uint64_t lean_pod_Float_bits(double x) {
-    union {
-        double d;
-        uint64_t b;
-    } u;
+    union { double d; uint64_t b; } u;
     u.d = x;
     return u.b;
 }
+
+LEAN_EXPORT double lean_pod_Float_ofBits(uint64_t bits) {
+    union { double d; uint64_t b; } u;
+    u.b = bits;
+    return u.d;
+}
+
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+LEAN_EXPORT double lean_pod_Float_toLittleEndian(double x) { return x; }
+LEAN_EXPORT double lean_pod_Float_toBigEndian(double x) {
+    union { double d; uint64_t b; } u;
+    u.d = x;
+    u.b = lean_pod_bswap64(u.b);
+    return u.d;
+}
+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+LEAN_EXPORT double lean_pod_Float_toLittleEndian(double x) {
+    union { double d; uint64_t b; } u;
+    u.d = x;
+    u.b = lean_pod_bswap64(u.b);
+    return u.d;
+}
+LEAN_EXPORT double lean_pod_Float_toBigEndian(double x) { return x; }
+#else
+#error unsupported
+#endif

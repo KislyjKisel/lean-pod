@@ -81,42 +81,32 @@ static inline b_lean_obj_res lean_pod_Storable_alignment(b_lean_obj_arg storable
 
 // # WriteBytes
 
-/// @returns @& Storable
-static inline b_lean_obj_res lean_pod_WriteBytes_storable(b_lean_obj_arg writeBytes) {
-    return lean_ctor_get(writeBytes, 0);
-}
-
 // Returns a function taking 4 boxed args:
 // 0, BytesRef, value : A, 0, and returning `ST.Result Unit`
 static inline b_lean_obj_res lean_pod_WriteBytes_writeBytesRef(b_lean_obj_arg writeBytes) {
-    return lean_ctor_get(writeBytes, 5);
+    return lean_ctor_get(writeBytes, 4);
 }
 
 // Returns a function taking 7 boxed args:
 // 0, size : USize, BytesRef, i : USize, value : A, 0, 0, and returning `ST.Result Unit`.
 static inline b_lean_obj_res lean_pod_WriteBytes_writeBytesRefOffEl(b_lean_obj_arg writeBytes) {
-    return lean_ctor_get(writeBytes, 6);
+    return lean_ctor_get(writeBytes, 5);
 }
 
 
 // # ReadBytes
 
-/// @returns @& Storable
-static inline b_lean_obj_res lean_pod_ReadBytes_storable(b_lean_obj_arg readBytes) {
-    return lean_ctor_get(readBytes, 0);
-}
-
 // Returns a function taking 3 boxed args:
 // 0, BytesRef, 0, and returning `ST.Result A`
 static inline b_lean_obj_res lean_pod_ReadBytes_readBytesRef(b_lean_obj_arg readBytes) {
-    return lean_ctor_get(readBytes, 5);
+    return lean_ctor_get(readBytes, 4);
 }
 
 
 // Returns a function taking 6 boxed args:
 // 0, size : USize, BytesRef, i : USize, 0, 0, and returning `ST.Result A`
 static inline b_lean_obj_res lean_pod_ReadBytes_readBytesRefOffEl(b_lean_obj_arg readBytes) {
-    return lean_ctor_get(readBytes, 6);
+    return lean_ctor_get(readBytes, 5);
 }
 
 

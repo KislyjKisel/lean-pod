@@ -8,5 +8,6 @@ import Pod.BytesRef
 import Pod.Buffer
 import Pod.ReadBytes
 import Pod.WriteBytes
+import Pod.Serializable
 import Pod.Instances
 import Pod.UVector
