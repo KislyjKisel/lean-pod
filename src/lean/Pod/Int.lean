@@ -34,6 +34,9 @@ opaque Int8.mod (x y : Int8) : Int8
 @[extern c inline "(int8_t)#1 >> (#2 & 7)"]
 opaque Int8.sar (x y : Int8) : Int8
 
+@[extern c inline "(int8_t)#1 != 0"]
+opaque Int8.toBool (x : Int8) : Bool
+
 @[extern c inline "(double)(int8_t)#1"]
 opaque Int8.toFloat (x : Int8) : Float
 
@@ -60,6 +63,9 @@ opaque Int8.toUInt64 (x : Int8) : UInt64
 
 @[extern c inline "(int8_t)#1"]
 opaque Int8.ofBool (x : Bool) : Int8
+
+@[extern c inline "(int8_t)#1"]
+opaque Int8.ofFloat (x : Float) : Int8
 
 @[extern c inline "(int8_t)#1"]
 opaque Int8.ofUInt8 (x : UInt8) : Int8
@@ -158,6 +164,9 @@ opaque Int16.mod (x y : Int16) : Int16
 @[extern c inline "(int16_t)#1 >> (#2 & 15)"]
 opaque Int16.sar (x y : Int16) : Int16
 
+@[extern c inline "(int16_t)#1 != 0"]
+opaque Int16.toBool (x : Int16) : Bool
+
 @[extern c inline "(double)(int16_t)#1"]
 opaque Int16.toFloat (x : Int16) : Float
 
@@ -184,6 +193,9 @@ opaque Int16.toUInt64 (x : Int16) : UInt64
 
 @[extern c inline "(int16_t)#1"]
 opaque Int16.ofBool (x : Bool) : Int16
+
+@[extern c inline "(int16_t)#1"]
+opaque Int16.ofFloat (x : Float) : Int16
 
 @[extern c inline "(int16_t)#1"]
 opaque Int16.ofUInt8 (x : UInt8) : Int16
@@ -282,6 +294,9 @@ opaque Int32.mod (x y : Int32) : Int32
 @[extern c inline "(int32_t)#1 >> (#2 & 31)"]
 opaque Int32.sar (x y : Int32) : Int32
 
+@[extern c inline "(int32_t)#1 != 0"]
+opaque Int32.toBool (x : Int32) : Bool
+
 @[extern c inline "(double)(int32_t)#1"]
 opaque Int32.toFloat (x : Int32) : Float
 
@@ -308,6 +323,9 @@ opaque Int32.toUInt64 (x : Int32) : UInt64
 
 @[extern c inline "(int32_t)#1"]
 opaque Int32.ofBool (x : Bool) : Int32
+
+@[extern c inline "(int32_t)#1"]
+opaque Int32.ofFloat (x : Float) : Int32
 
 @[extern c inline "(int32_t)#1"]
 opaque Int32.ofUInt8 (x : UInt8) : Int32
@@ -406,6 +424,9 @@ opaque Int64.mod (x y : Int64) : Int64
 @[extern c inline "(int64_t)#1 >> (#2 & 63)"]
 opaque Int64.sar (x y : Int64) : Int64
 
+@[extern c inline "(int64_t)#1 != 0"]
+opaque Int64.toBool (x : Int64) : Bool
+
 @[extern c inline "(double)(int64_t)#1"]
 opaque Int64.toFloat (x : Int64) : Float
 
@@ -432,6 +453,9 @@ opaque Int64.toUInt64 (x : Int64) : UInt64
 
 @[extern c inline "(int64_t)#1"]
 opaque Int64.ofBool (x : Bool) : Int64
+
+@[extern c inline "(int64_t)#1"]
+opaque Int64.ofFloat (x : Float) : Int64
 
 @[extern c inline "(int64_t)#1"]
 opaque Int64.ofUInt8 (x : UInt8) : Int64
