@@ -4,23 +4,28 @@
 #include <lean/lean.h>
 #include "include/lean_pod.h"
 
-#define LEAN_POD_CAST_FLOAT32_FROM(ltyp, ctyp)\
-LEAN_EXPORT uint32_t lean_pod_##ltyp##_toFloat32(ctyp x) {\
-    return lean_pod_Float32_toBits((float)x);\
+#define LEAN_POD_CAST_FLOAT32_FROM(ltyp, ctyp, abiatyp)\
+LEAN_EXPORT uint32_t lean_pod_##ltyp##_toFloat32(abiatyp x) {\
+    return lean_pod_Float32_toBits((float)((ctyp)x));\
 }
 
-LEAN_POD_CAST_FLOAT32_FROM(Float, double);
-LEAN_POD_CAST_FLOAT32_FROM(UInt8, uint8_t);
-LEAN_POD_CAST_FLOAT32_FROM(UInt16, uint16_t);
-LEAN_POD_CAST_FLOAT32_FROM(UInt32, uint32_t);
-LEAN_POD_CAST_FLOAT32_FROM(UInt64, uint64_t);
-LEAN_POD_CAST_FLOAT32_FROM(USize, size_t);
+LEAN_POD_CAST_FLOAT32_FROM(Float, double, double);
+LEAN_POD_CAST_FLOAT32_FROM(UInt8, uint8_t, uint8_t);
+LEAN_POD_CAST_FLOAT32_FROM(UInt16, uint16_t, uint16_t);
+LEAN_POD_CAST_FLOAT32_FROM(UInt32, uint32_t, uint32_t);
+LEAN_POD_CAST_FLOAT32_FROM(UInt64, uint64_t, uint64_t);
+LEAN_POD_CAST_FLOAT32_FROM(USize, size_t, size_t);
+LEAN_POD_CAST_FLOAT32_FROM(Int8, int8_t, uint8_t);
+LEAN_POD_CAST_FLOAT32_FROM(Int16, int16_t, uint16_t);
+LEAN_POD_CAST_FLOAT32_FROM(Int32, int32_t, uint32_t);
+LEAN_POD_CAST_FLOAT32_FROM(Int64, int64_t, uint64_t);
 
 LEAN_EXPORT lean_obj_arg lean_pod_String_toFloat32(b_lean_obj_arg s) {
-    char* end = NULL;
+    char* retEnd = NULL;
     const char* cstr = lean_string_cstr(s);
-    float x = strtof(cstr, &end);
-    if (end == cstr) {
+    const char* end = cstr + lean_string_size(s) - 1;
+    float x = strtof(cstr, &retEnd);
+    if (retEnd != end) {
         return lean_box(0);
     }
     lean_object* option = lean_alloc_ctor(1, 1, 0);
@@ -28,17 +33,38 @@ LEAN_EXPORT lean_obj_arg lean_pod_String_toFloat32(b_lean_obj_arg s) {
     return option;
 }
 
-#define LEAN_POD_CAST_FLOAT32_TO(ltyp, ctyp)\
-LEAN_EXPORT ctyp lean_pod_Float32_to##ltyp(uint32_t x) {\
+LEAN_EXPORT lean_obj_arg lean_pod_Substring_toFloat32(b_lean_obj_arg s) {
+    const char* data = lean_string_cstr(lean_ctor_get(s, 0));
+    size_t start = lean_usize_of_nat(lean_ctor_get(s, 1));
+    size_t stop = lean_usize_of_nat(lean_ctor_get(s, 2));
+    char* cpy = malloc(stop - start + 1);
+    memcpy(cpy, data + start, stop - start);
+    cpy[stop - start] = '\0';
+    char* end = NULL;
+    float x = strtof(cpy, &end);
+    if (end != cpy + (stop - start)) {
+        return lean_box(0);
+    }
+    lean_object* option = lean_alloc_ctor(1, 1, 0);
+    lean_ctor_set(option, 0, lean_pod_Float32_box(x));
+    return option;
+}
+
+#define LEAN_POD_CAST_FLOAT32_TO(ltyp, ctyp, abirtyp)\
+LEAN_EXPORT abirtyp lean_pod_Float32_to##ltyp(uint32_t x) {\
     return (ctyp)lean_pod_Float32_fromBits(x);\
 }
 
-LEAN_POD_CAST_FLOAT32_TO(Float, double);
-LEAN_POD_CAST_FLOAT32_TO(UInt8, uint8_t);
-LEAN_POD_CAST_FLOAT32_TO(UInt16, uint16_t);
-LEAN_POD_CAST_FLOAT32_TO(UInt32, uint32_t);
-LEAN_POD_CAST_FLOAT32_TO(UInt64, uint64_t);
-LEAN_POD_CAST_FLOAT32_TO(USize, size_t);
+LEAN_POD_CAST_FLOAT32_TO(Float, double, double);
+LEAN_POD_CAST_FLOAT32_TO(UInt8, uint8_t, uint8_t);
+LEAN_POD_CAST_FLOAT32_TO(UInt16, uint16_t, uint16_t);
+LEAN_POD_CAST_FLOAT32_TO(UInt32, uint32_t, uint32_t);
+LEAN_POD_CAST_FLOAT32_TO(UInt64, uint64_t, uint64_t);
+LEAN_POD_CAST_FLOAT32_TO(USize, size_t, size_t);
+LEAN_POD_CAST_FLOAT32_TO(Int8, int8_t, uint8_t);
+LEAN_POD_CAST_FLOAT32_TO(Int16, int16_t, uint16_t);
+LEAN_POD_CAST_FLOAT32_TO(Int32, int32_t, uint32_t);
+LEAN_POD_CAST_FLOAT32_TO(Int64, int64_t, uint64_t);
 
 LEAN_EXPORT lean_obj_res lean_pod_Float32_toString(uint32_t x) {
     static char buf[64];

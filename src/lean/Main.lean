@@ -20,6 +20,11 @@ def main : IO Unit := do
   IO.println $ bb[3]!
   IO.println $ bb[4]!
 
+  IO.println $ "\"3.14d\" toFloat32 " ++ toString "3.14d".toFloat32?
+  IO.println $ "\"3.14\" toFloat32 " ++ toString "3.14".toFloat32?
+  IO.println $ "&\"3.14d\" toFloat32 " ++ toString "3.14d".toSubstring.toFloat32?
+  IO.println $ "&\"3.14\" toFloat32 " ++ toString "3.14".toSubstring.toFloat32?
+
   let uv : Pod.UVector UInt64 3 := .replicate 42
   IO.print s!"UV: {uv[0]}, {uv[1]}, {uv[2]!} --> "
   let uv := ((uv.set! 2 (UInt64.complement 0)).set 0 0).set 1 ((UInt64.complement 0) / 3)
