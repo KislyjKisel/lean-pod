@@ -42,6 +42,7 @@ LEAN_EXPORT lean_obj_arg lean_pod_Substring_toFloat32(b_lean_obj_arg s) {
     cpy[stop - start] = '\0';
     char* end = NULL;
     float x = strtof(cpy, &end);
+    free(cpy);
     if (end != cpy + (stop - start)) {
         return lean_box(0);
     }
