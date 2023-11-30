@@ -1,1 +1,5 @@
-{"version": 6, "packagesDir": "lake-packages", "packages": [], "name": "pod"}
+{"version": 7,
+ "packagesDir": ".lake/packages",
+ "packages": [],
+ "name": "pod",
+ "lakeDir": ".lake"}
