@@ -8,7 +8,9 @@ package «pod» {
 lean_lib Pod
 
 @[default_target]
-lean_exe Main
+lean_exe «pod-test» {
+  root := `Main
+}
 
 def buildBindingsO
   (pkg : NPackage _package.name) (weakArgs traceArgs : Array String) (stem : String) :
