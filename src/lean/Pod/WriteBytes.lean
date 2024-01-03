@@ -26,7 +26,7 @@ class WriteBytes (α : Type) [Storable α] where
     (h : i * byteSize α + byteSize α ≤ size) : ST σ Unit :=
       writeBytesRefOff br (i * byteSize α) value h (offEl_aligned i)
 
-variable {α σ : Type} {align : Nat} [Storable α] [WriteBytes α]
+variable {α σ : Type} {size align : Nat} [Storable α] [WriteBytes α]
 
 def BytesRef.setUnal (br : BytesRefMut σ (byteSize α) align) (value : α) : ST σ Unit :=
   WriteBytes.writeBytesRefUnal br value

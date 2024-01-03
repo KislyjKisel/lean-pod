@@ -50,7 +50,7 @@ class ReadBytes (α : Type) [Storable α] where
     (i : Nat) (h : i * byteSize α + byteSize α ≤ size) : α :=
       readBytesViewOff bv (i * byteSize α) h (offEl_aligned i)
 
-variable {α σ : Type} {align : Nat} [Storable α] [ReadBytes α]
+variable {α σ : Type} {size align : Nat} [Storable α] [ReadBytes α]
 
 def BytesRef.getUnal (br : BytesRefImm σ (byteSize α) align) : ST σ α :=
   ReadBytes.readBytesRefUnal br

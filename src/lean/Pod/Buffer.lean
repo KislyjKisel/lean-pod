@@ -5,7 +5,7 @@ namespace Pod
 
 opaque BufferPointed (size align : Nat) : NonemptyType
 def Buffer (size align : Nat) : Type := (BufferPointed size align).type
-instance : Nonempty (Buffer size align) := (BufferPointed size align).property
+instance {size align} : Nonempty (Buffer size align) := (BufferPointed size align).property
 
 namespace Buffer
 

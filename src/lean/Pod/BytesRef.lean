@@ -24,7 +24,7 @@ opaque _root_.ByteArray.withRef (ba : ByteArray) (f : ∀{σ}, BytesRefMut σ ba
 
 /-- Clones array if it is shared. -/
 @[extern "lean_pod_ByteArray_withRefEx"]
-opaque _root_.ByteArray.withRefEx (ba : ByteArray) (f : ∀{σ}, BytesRefMut σ ba.size 1 → EST ε σ Unit) : Except ε ByteArray
+opaque _root_.ByteArray.withRefEx {ε} (ba : ByteArray) (f : ∀{σ}, BytesRefMut σ ba.size 1 → EST ε σ Unit) : Except ε ByteArray
 
 namespace BytesRef
 
@@ -46,7 +46,7 @@ opaque drop {mutab size} {align : @& Nat} (bv : BytesRef σ mutab size align)
 @[extern "lean_pod_BytesRef_slice"]
 opaque slice {mutab} {size align : @& Nat} (bv : BytesRef σ mutab size align) (start length : @& Nat)
   (bounded : start + length ≤ size) : BytesRef σ mutab length (align.gcd start) := by
-    apply (bv.drop start _).take length 
+    apply (bv.drop start _).take length
     · apply Nat.le_sub_of_add_le
       rw [Nat.add_comm]
       exact bounded

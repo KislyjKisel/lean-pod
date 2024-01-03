@@ -3,6 +3,7 @@ open Lake DSL
 
 package «pod» {
   srcDir := "src/lean"
+  leanOptions := #[⟨`autoImplicit, false⟩]
 }
 
 lean_lib Pod

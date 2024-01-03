@@ -61,7 +61,7 @@ export Serializable (serialize)
 def deserialize (α : Type u) [ser : Serializable α] : DeserializationM α :=
   ser.deserialize
 
-instance [Storable α] [ReadBytes α] [WriteBytes α] : Serializable α where
+instance {α} [Storable α] [ReadBytes α] [WriteBytes α] : Serializable α where
   size := .inl (byteSize α)
   serialize := λ {_ offset _} val br h ↦ br.setOffUnal offset val h
   deserialize := .mk λ {size} bv offset _ ↦
