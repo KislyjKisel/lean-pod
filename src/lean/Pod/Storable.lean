@@ -13,12 +13,12 @@ export Storable (byteSize byteSize_gt_zero alignment alignment_dvd_byteSize)
 abbrev byteSizeArray (α : Type) [Storable α] (n : Nat) : Nat := n * byteSize α
 
 theorem not_alignment_eq_zero {α} [Storable α] : ¬ alignment α = 0 := by
-    intro h
-    apply Nat.not_eq_zero_of_lt $ byteSize_gt_zero (α := α)
-    apply (@alignment_dvd_byteSize α).elim
-    intro k b
-    rw [b, h]
-    exact Nat.zero_mul k
+  intro h
+  apply Nat.not_eq_zero_of_lt $ byteSize_gt_zero (α := α)
+  apply (@alignment_dvd_byteSize α).elim
+  intro k b
+  rw [b, h]
+  exact Nat.zero_mul k
 
 abbrev bitWidth {α} [Storable α] : Nat := byteSize α * 8
 
@@ -41,7 +41,8 @@ opaque UInt64.getAlignment : @& Unit → { n : Nat // n = 4 ∨ n = 8 } := λ _ 
 instance : Storable UInt64 where
   byteSize := 8
   alignment := (UInt64.getAlignment ()).val
-  alignment_dvd_byteSize := match (UInt64.getAlignment ()).property with
+  alignment_dvd_byteSize :=
+    match (UInt64.getAlignment ()).property with
     | Or.inl h => Exists.intro 2 $ by rw [h]
     | Or.inr h => Exists.intro 1 $ by rw [h]
 
