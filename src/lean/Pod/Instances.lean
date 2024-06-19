@@ -104,18 +104,18 @@ macro "#pod_c_rwbytes_instance" typeId:ident : command => do
     ),
     ← `(command|
       instance : ReadBytes $typeId where
-        readBytesRef := $(mkIdent declName_rra0)
-        readBytesRefOff := $(mkIdent declName_rra1)
-        readBytesRefOffEl := $(mkIdent declName_rra2)
-        readBytesRefUnal := $(mkIdent declName_rru0)
-        readBytesRefOffUnal := $(mkIdent declName_rru1)
-        readBytesRefOffElUnal := $(mkIdent declName_rru2)
-        readBytesView := $(mkIdent declName_va0)
-        readBytesViewOff := $(mkIdent declName_va1)
-        readBytesViewOffEl := $(mkIdent declName_va2)
-        readBytesViewUnal := $(mkIdent declName_vu0)
-        readBytesViewOffUnal := $(mkIdent declName_vu1)
-        readBytesViewOffElUnal := $(mkIdent declName_vu2)
+        readBytesRef := $(mkIdent $ .mkSimple declName_rra0)
+        readBytesRefOff := $(mkIdent $ .mkSimple declName_rra1)
+        readBytesRefOffEl := $(mkIdent $ .mkSimple declName_rra2)
+        readBytesRefUnal := $(mkIdent $ .mkSimple declName_rru0)
+        readBytesRefOffUnal := $(mkIdent $ .mkSimple declName_rru1)
+        readBytesRefOffElUnal := $(mkIdent $ .mkSimple declName_rru2)
+        readBytesView := $(mkIdent $ .mkSimple declName_va0)
+        readBytesViewOff := $(mkIdent $ .mkSimple declName_va1)
+        readBytesViewOffEl := $(mkIdent $ .mkSimple declName_va2)
+        readBytesViewUnal := $(mkIdent $ .mkSimple declName_vu0)
+        readBytesViewOffUnal := $(mkIdent $ .mkSimple declName_vu1)
+        readBytesViewOffElUnal := $(mkIdent $ .mkSimple declName_vu2)
     ),
     ← `(command|
       @[extern $(mkStrLit $ "lean_pod_" ++ declName_rwa0):str]
@@ -158,12 +158,12 @@ macro "#pod_c_rwbytes_instance" typeId:ident : command => do
     ),
     ← `(command|
       instance : WriteBytes $typeId where
-        writeBytesRef := $(mkIdent declName_rwa0)
-        writeBytesRefOff := $(mkIdent declName_rwa1)
-        writeBytesRefOffEl := $(mkIdent declName_rwa2)
-        writeBytesRefUnal := $(mkIdent declName_rwu0)
-        writeBytesRefOffUnal := $(mkIdent declName_rwu1)
-        writeBytesRefOffElUnal := $(mkIdent declName_rwu2)
+        writeBytesRef := $(mkIdent $ .mkSimple declName_rwa0)
+        writeBytesRefOff := $(mkIdent $ .mkSimple declName_rwa1)
+        writeBytesRefOffEl := $(mkIdent $ .mkSimple declName_rwa2)
+        writeBytesRefUnal := $(mkIdent $ .mkSimple declName_rwu0)
+        writeBytesRefOffUnal := $(mkIdent $ .mkSimple declName_rwu1)
+        writeBytesRefOffElUnal := $(mkIdent $ .mkSimple declName_rwu2)
     )
   ]
 

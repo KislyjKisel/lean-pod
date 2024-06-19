@@ -15,10 +15,10 @@ lean_exe «pod-test» {
 
 def buildBindingsO
   (pkg : NPackage _package.name) (weakArgs traceArgs : Array String) (stem : String) :
-    IndexBuildM (BuildJob FilePath) := do
+    FetchM (BuildJob FilePath) := do
       let oFile := pkg.irDir / "native" / (stem ++ ".o")
       let srcJob ← inputFile <| pkg.dir / "src" / "native" / (stem ++ ".c")
-      buildO (stem ++ ".c") oFile srcJob weakArgs traceArgs
+      buildO oFile srcJob weakArgs traceArgs
         ((get_config? cc).getD (← getLeanCc).toString)
 
 extern_lib «lean-pod» pkg := do
