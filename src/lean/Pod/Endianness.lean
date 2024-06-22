@@ -1,3 +1,5 @@
+import Pod.Meta
+
 namespace Pod
 
 inductive Endianness where
@@ -11,7 +13,4 @@ instance : DecidableEq Endianness
 | .big, .little => isFalse $ by intro; contradiction
 | .big, .big => isTrue rfl
 
-@[extern "lean_pod_getEndianness"]
-private opaque getEndianness : Unit → Endianness
-
-def endianness : Endianness := getEndianness ()
+define_foreign_constant endianness : Endianness := "lean_pod_getEndianness"
