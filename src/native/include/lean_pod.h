@@ -36,6 +36,78 @@ static inline void lean_pod_free(void* p) {
 static void lean_pod_default_finalize(void* br) {}
 static void lean_pod_default_foreach(void* br, b_lean_obj_arg f) {}
 
+static inline lean_object* lean_mk_tuple2(lean_object* fst, lean_object* snd) {
+    lean_object* result = lean_alloc_ctor(0, 2, 0);
+    lean_ctor_set(result, 0, fst);
+    lean_ctor_set(result, 1, snd);
+    return result;
+}
+
+static inline lean_object* lean_mk_tuple3(lean_object* first, lean_object* second, lean_object* third) {
+    lean_object* pair1 = lean_alloc_ctor(0, 2, 0);
+    lean_object* pair2 = lean_alloc_ctor(0, 2, 0);
+    lean_ctor_set(pair1, 0, first);
+    lean_ctor_set(pair1, 1, pair2);
+    lean_ctor_set(pair2, 0, second);
+    lean_ctor_set(pair2, 1, third);
+    return pair1;
+}
+
+static inline lean_object* lean_mk_tuple4(lean_object* first, lean_object* second, lean_object* third, lean_object* fourth) {
+    lean_object* pair1 = lean_alloc_ctor(0, 2, 0);
+    lean_object* pair2 = lean_alloc_ctor(0, 2, 0);
+    lean_object* pair3 = lean_alloc_ctor(0, 2, 0);
+    lean_ctor_set(pair1, 0, first);
+    lean_ctor_set(pair1, 1, pair2);
+    lean_ctor_set(pair2, 0, second);
+    lean_ctor_set(pair2, 1, pair3);
+    lean_ctor_set(pair3, 0, third);
+    lean_ctor_set(pair3, 1, fourth);
+    return pair1;
+}
+
+static inline lean_object* lean_mk_option_none() {
+    return lean_box(0);
+}
+
+static inline lean_object* lean_mk_option_some(lean_object* value) {
+    lean_object* result = lean_alloc_ctor(1, 1, 0);
+    lean_ctor_set(result, 0, value);
+    return result;
+}
+
+static inline int lean_option_is_some(b_lean_obj_arg opt) {
+    return !lean_is_scalar(opt);
+}
+
+#define LEAN_POD_CTOR_GET_BOX_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get(obj, i)
+#define LEAN_POD_CTOR_GET_USIZE_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_usize(obj, ty_box + i)
+#define LEAN_POD_CTOR_GET_U64_D_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, tyn) lean_ctor_get_##tyn(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8)
+#define LEAN_POD_CTOR_GET_U32_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4)
+#define LEAN_POD_CTOR_GET_U16_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2)
+#define LEAN_POD_CTOR_GET_U8_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i)
+
+#define LEAN_POD_CTOR_SET_BOX_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set(obj, i, val)
+#define LEAN_POD_CTOR_SET_USIZE_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_usize(obj, ty_box + i, val)
+#define LEAN_POD_CTOR_SET_U64_D_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, tyn, val) lean_ctor_get_##tyn(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
+#define LEAN_POD_CTOR_SET_U32_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4, val)
+#define LEAN_POD_CTOR_SET_U16_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2, val)
+#define LEAN_POD_CTOR_SET_U8_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i, val)
+
+#define LEAN_POD_CTOR_GET_BOX(...) LEAN_POD_CTOR_GET_BOX_(__VA_ARGS__)
+#define LEAN_POD_CTOR_GET_USIZE(...) LEAN_POD_CTOR_GET_USIZE_(__VA_ARGS__)
+#define LEAN_POD_CTOR_GET_U64_D(...) LEAN_POD_CTOR_GET_U64_D_(__VA_ARGS__)
+#define LEAN_POD_CTOR_GET_U32(...) LEAN_POD_CTOR_GET_U32_(__VA_ARGS__)
+#define LEAN_POD_CTOR_GET_U16(...) LEAN_POD_CTOR_GET_U16_(__VA_ARGS__)
+#define LEAN_POD_CTOR_GET_U8(...) LEAN_POD_CTOR_GET_U8_(__VA_ARGS__)
+
+#define LEAN_POD_CTOR_SET_BOX(...) LEAN_POD_CTOR_SET_BOX_(__VA_ARGS__)
+#define LEAN_POD_CTOR_SET_USIZE(...) LEAN_POD_CTOR_SET_USIZE_(__VA_ARGS__)
+#define LEAN_POD_CTOR_SET_U64_D(...) LEAN_POD_CTOR_SET_U64_D_(__VA_ARGS__)
+#define LEAN_POD_CTOR_SET_U32(...) LEAN_POD_CTOR_SET_U32_(__VA_ARGS__)
+#define LEAN_POD_CTOR_SET_U16(...) LEAN_POD_CTOR_SET_U16_(__VA_ARGS__)
+#define LEAN_POD_CTOR_SET_U8(...) LEAN_POD_CTOR_SET_U8_(__VA_ARGS__)
+
 
 // # Float32
 
