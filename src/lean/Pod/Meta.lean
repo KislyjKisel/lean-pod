@@ -17,14 +17,11 @@ scoped macro doc:(docComment)? "define_foreign_constant" name:ident &" : " type:
 /-- Defines a type that can be used to pass opaque foreign objects. -/
 scoped macro doc:(docComment)? "define_foreign_type" name:ident binders:bracketedBinder* : command => do
   let pairIdent := Lean.mkIdent (Lean.Name.appendAfter name.getId "Pointed")
-  let argNames : Array Lean.Syntax := binders.filterMap λ x ↦
+  let argNames : Array Lean.Syntax := binders.concatMap λ x ↦
     match x.raw with
-    | Lean.Syntax.node _ `Lean.Parser.Term.explicitBinder args => do
-      let name := (← args.get? 1).getArg 0
-      if name.isMissing
-        then none
-        else some name
-    | _ => none
+    | Lean.Syntax.node _ `Lean.Parser.Term.explicitBinder args =>
+      Lean.Syntax.getArgs <$> (args.get? 1) |>.getD #[]
+    | _ => #[]
   let applied := Lean.TSyntaxArray.mk argNames
   -- let instanceArgs : Lean.TSyntaxArray `Lean.Parser.Term.implicitBinder :=
   --   Lean.TSyntaxArray.mk $ argNames.map λ n ↦
