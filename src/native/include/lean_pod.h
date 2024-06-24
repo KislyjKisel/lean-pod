@@ -272,27 +272,15 @@ static inline lean_pod_BytesRef lean_pod_BytesRef_unwrap(b_lean_obj_arg ref) {
 typedef struct {
     unsigned char* data;
     void(*free)(void*);
-} lean_pod_Buffer;
+} lean_pod_Buffer_data;
 
-static void lean_pod_Buffer_finalize(void* obj) {
-    lean_pod_Buffer* buf = (lean_pod_Buffer*)obj;
-    buf->free(buf->data);
-    lean_pod_free(buf);
-}
+LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_Buffer, lean_pod_Buffer_data*)
 
-static inline lean_obj_res lean_pod_Buffer_wrap(unsigned char* data, void (*freeFn)(void*)) {
-    static lean_external_class* class_ = NULL;
-    if (class_ == NULL) {
-        class_ = lean_register_external_class(lean_pod_Buffer_finalize, lean_pod_default_foreach);
-    }
-    lean_pod_Buffer* buf = (lean_pod_Buffer*)lean_pod_alloc(sizeof(lean_pod_Buffer));
+static inline lean_obj_res lean_pod_Buffer_box(unsigned char* data, void (*freeFn)(void*)) {
+    lean_pod_Buffer_data* buf = (lean_pod_Buffer_data*)lean_pod_alloc(sizeof(lean_pod_Buffer_data));
     buf->data = data;
     buf->free = freeFn;
-    return lean_alloc_external(class_, (void*)buf);
-}
-
-static inline lean_pod_Buffer* lean_pod_Buffer_unwrap(b_lean_obj_arg buf) {
-    return (lean_pod_Buffer*)lean_get_external_data(buf);
+    return lean_alloc_external(lean_pod_Buffer_class, (void*)buf);
 }
 
 

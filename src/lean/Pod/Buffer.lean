@@ -1,11 +1,11 @@
+import Pod.Meta
+import Pod.Initialization
 import Pod.BytesView
 import Pod.BytesRef
 
 namespace Pod
 
-opaque BufferPointed (size align : Nat) : NonemptyType
-def Buffer (size align : Nat) : Type := (BufferPointed size align).type
-instance {size align} : Nonempty (Buffer size align) := (BufferPointed size align).property
+define_foreign_type Buffer (size align : Nat)
 
 namespace Buffer
 
