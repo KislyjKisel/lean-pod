@@ -35,20 +35,21 @@ instance : Storable UInt32 where
   byteSize := 4
   alignment := 4
 
-@[extern "lean_pod_UInt64_getAlignment"]
+local instance : Inhabited (Unit → { n : Nat // n = 4 ∨ n = 8 }) := ⟨λ _ ↦ ⟨8, Or.inr rfl⟩⟩
+
 private
-opaque UInt64.getAlignment : @& Unit → { n : Nat // n = 4 ∨ n = 8 } := λ _ ↦ ⟨8, Or.inr rfl⟩
+define_foreign_constant uint64Alignment : { n : Nat // n = 4 ∨ n = 8 } := "lean_pod_UInt64_getAlignment"
 
 instance : Storable UInt64 where
   byteSize := 8
-  alignment := (UInt64.getAlignment ()).val
+  alignment := uint64Alignment.val
   alignment_dvd_byteSize :=
-    match (UInt64.getAlignment ()).property with
+    match uint64Alignment.property with
     | Or.inl h => Exists.intro 2 $ by rw [h]
     | Or.inr h => Exists.intro 1 $ by rw [h]
 
 theorem alignment_UInt64_eq : alignment UInt64 = 4 ∨ alignment UInt64 = 8 :=
-  (UInt64.getAlignment ()).property
+  uint64Alignment.property
 
 instance : Storable USize where
   byteSize := if System.Platform.numBits = 32 then byteSize UInt32 else byteSize UInt64
@@ -60,20 +61,18 @@ instance : Storable USize where
     | 32, Or.inl _ => alignment_dvd_byteSize
     | 64, Or.inr _ => alignment_dvd_byteSize
 
--- define_foreign_constant floatAlignment := "lean_pod_Float_getAlignment" -- TODO: private + default value + @&
-@[extern "lean_pod_Float_getAlignment"]
 private
-opaque Float.getAlignment : @& Unit → { n : Nat // n = 4 ∨ n = 8 } := λ _ ↦ ⟨8, Or.inr rfl⟩
+define_foreign_constant floatAlignment : { n : Nat // n = 4 ∨ n = 8 } := "lean_pod_Float_getAlignment"
 
 instance : Storable Float where
   byteSize := 8
-  alignment := (Float.getAlignment ()).val
-  alignment_dvd_byteSize := match (Float.getAlignment ()).property with
+  alignment := floatAlignment.val
+  alignment_dvd_byteSize := match floatAlignment.property with
     | Or.inl h => Exists.intro 2 $ by rw [h]
     | Or.inr h => Exists.intro 1 $ by rw [h]
 
 theorem alignment_Float_eq : alignment Float = 4 ∨ alignment Float = 8 :=
-  (Float.getAlignment ()).property
+  floatAlignment.property
 
 theorem offEl_aligned {α} [Storable α] (i : Nat) :
   ∀ m, ∃ n, alignment α * m + i * byteSize α = (alignment α) * n := λ m ↦
