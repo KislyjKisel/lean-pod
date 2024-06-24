@@ -109,6 +109,38 @@ static inline int lean_option_is_some(b_lean_obj_arg opt) {
 #define LEAN_POD_CTOR_SET_U8(...) LEAN_POD_CTOR_SET_U8_(__VA_ARGS__)
 
 
+#define LEAN_POD_DECLARE_EXTERNAL_CLASS(name, cty)\
+typedef lean_object* lean_##name;\
+extern lean_external_class* lean_##name##_class;\
+static inline cty lean_##name##_unbox(b_lean_obj_arg lean_value) {\
+    return (cty) lean_get_external_data(lean_value);\
+}\
+static inline cty lean_##name##_fromRepr(b_lean_obj_arg lean_value) {\
+    return (cty) lean_##name##_unbox(lean_value);\
+}
+
+#define LEAN_POD_DEFINE_EXTERNAL_CLASS(name)\
+lean_external_class* lean_##name##_class;
+
+#define LEAN_POD_INITIALIZE_EXTERNAL_CLASS(name, finalize, foreach)\
+lean_##name##_class = lean_register_external_class(finalize, foreach);
+
+#define LEAN_POD_TYPE_ALIAS(cReprType, cType, cReprType2, cType2)\
+typedef lean_##cReprType2 lean_##cReprType;\
+static inline lean_object* lean_##cReprType##_box(cType cvalue) { return lean_##cReprType2##_box((cType2)cvalue); }\
+static inline cType lean_##cReprType##_unbox(b_lean_obj_arg lvalue) { return (cType)lean_##cReprType2##_unbox(lvalue); }\
+static inline cType lean_##cReprType##_fromRepr(cReprType rvalue) { return (cType)lean_##cReprType2##_fromRepr((cReprType2)rvalue); }\
+static inline cReprType lean_##cReprType##_toRepr(cType cvalue) { return (cReprType)lean_##cReprType2##_toRepr((cType2)cvalue); }
+
+
+LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_Ptr, void*) // TODO: represent as USize instead of external class (how?)
+
+#define lean_pod_Ptr_toRepr lean_pod_Ptr_box
+static inline lean_object* lean_pod_Ptr_box(void* cvalue) {\
+    return lean_alloc_external(lean_pod_Ptr_class, cvalue);\
+}
+
+
 // # Float32
 
 static inline uint32_t lean_pod_Float32_toBits(float x) {
