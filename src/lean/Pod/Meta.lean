@@ -2,8 +2,6 @@ import Lean.Parser.Command
 
 namespace Pod
 
--- private def x := modifie
-
 /-- Defines a constant whose value is defined externally in foreign code. -/
 scoped macro mods:declModifiers "define_foreign_constant" name:ident &" : " type:term &" := " ext:str : command => do
   `(@[extern $ext:str] private
