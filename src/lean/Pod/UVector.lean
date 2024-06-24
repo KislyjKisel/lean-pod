@@ -1,3 +1,5 @@
+import Pod.Meta
+import Pod.Initialization
 import Pod.Storable
 import Pod.ReadBytes
 import Pod.WriteBytes
@@ -6,10 +8,8 @@ namespace Pod
 
 variable {α : Type}
 
-opaque UVectorPointed (α : Type) (size : Nat) : NonemptyType
 /-- Static array with elements stored unboxed. -/
-def UVector (α : Type) (size : Nat) : Type := (UVectorPointed α size).type
-instance {α size} : Nonempty (UVector α size) := (UVectorPointed α size).property
+define_foreign_type UVector (α : Type) (size : Nat)
 
 namespace UVector
 

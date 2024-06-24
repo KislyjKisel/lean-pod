@@ -5,6 +5,8 @@
 #include <string.h>
 #include <lean/lean.h>
 
+typedef unsigned char* lean_pod_byte_ptr;
+
 /// @param sz must be divisible by `LEAN_OBJECT_SIZE_DELTA`
 static inline void* lean_pod_alloc(size_t sz) {
 #ifdef LEAN_POD_ALLOC_NATIVE
@@ -270,37 +272,31 @@ static inline lean_pod_BytesRef lean_pod_BytesRef_unwrap(b_lean_obj_arg ref) {
 // # Buffer
 
 typedef struct {
-    unsigned char* data;
+    lean_pod_byte_ptr data;
     void(*free)(void*);
 } lean_pod_Buffer_data;
 
 LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_Buffer, lean_pod_Buffer_data*)
 
-static inline lean_obj_res lean_pod_Buffer_box(unsigned char* data, void (*freeFn)(void*)) {
+static inline lean_obj_res lean_pod_Buffer_box(lean_pod_byte_ptr data, void (*freeFn)(void*)) {
     lean_pod_Buffer_data* buf = (lean_pod_Buffer_data*)lean_pod_alloc(sizeof(lean_pod_Buffer_data));
     buf->data = data;
     buf->free = freeFn;
     return lean_alloc_external(lean_pod_Buffer_class, (void*)buf);
 }
 
+#define lean_pod_Buffer_toRepr lean_pod_Buffer_box
+
 
 // # UVector
 
-// NULL for vectors of size 0.
-typedef unsigned char* lean_pod_UVector;
+LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_UVector, lean_pod_byte_ptr)
 
-static inline lean_obj_res lean_pod_UVector_wrap(lean_pod_UVector uv)
-{
-    static lean_external_class* class_ = NULL;
-    if (class_ == NULL) {
-        class_ = lean_register_external_class(lean_pod_free, lean_pod_default_foreach);
-    }
-    return lean_alloc_external(class_, (void*)uv);
+static inline lean_obj_res lean_pod_UVector_box(lean_pod_byte_ptr data) {
+    return lean_alloc_external(lean_pod_UVector_class, (void*)data);
 }
 
-static inline lean_pod_UVector lean_pod_UVector_unwrap(b_lean_obj_arg buf) {
-    return (lean_pod_UVector)lean_get_external_data(buf);
-}
+#define lean_pod_UVector_toRepr lean_pod_UVector_box
 
 
 // # Byte swapping functions
