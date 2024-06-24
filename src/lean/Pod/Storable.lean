@@ -1,3 +1,4 @@
+import Pod.Meta
 import Pod.Lemmas
 
 namespace Pod
@@ -59,6 +60,7 @@ instance : Storable USize where
     | 32, Or.inl _ => alignment_dvd_byteSize
     | 64, Or.inr _ => alignment_dvd_byteSize
 
+-- define_foreign_constant floatAlignment := "lean_pod_Float_getAlignment" -- TODO: private + default value + @&
 @[extern "lean_pod_Float_getAlignment"]
 private
 opaque Float.getAlignment : @& Unit → { n : Nat // n = 4 ∨ n = 8 } := λ _ ↦ ⟨8, Or.inr rfl⟩

@@ -34,7 +34,7 @@ LEAN_EXPORT lean_obj_res lean_pod_UVector_replicate(b_lean_obj_arg n, b_lean_obj
     lean_pod_byte_ptr uv = lean_pod_alloc(count * byteSize);
     lean_object* writeBytesRefOffEl = lean_pod_WriteBytes_writeBytesRefOffEl(wb);
     lean_object* byteSizeArray_box = lean_usize_to_nat(count * byteSize);
-    lean_object* bytesRef = lean_pod_BytesRef_wrap(uv);
+    lean_object* bytesRef = lean_pod_BytesRef_box(uv);
     lean_inc_ref_n(writeBytesRefOffEl, count);
     lean_inc_n(byteSizeArray_box, count - 1);
     lean_inc_ref_n(bytesRef, count - 1);
@@ -55,7 +55,7 @@ LEAN_EXPORT lean_obj_res lean_pod_UVector_replicate(b_lean_obj_arg n, b_lean_obj
 }
 
 LEAN_EXPORT lean_obj_res lean_pod_UVector_raw(b_lean_obj_arg n, b_lean_obj_arg sb, lean_obj_arg uv) {
-    return lean_pod_BytesView_wrap(lean_pod_UVector_fromRepr(uv), uv);
+    return lean_pod_BytesView_toRepr(lean_pod_UVector_fromRepr(uv), uv);
 }
 
 static inline lean_obj_res lean_pod_UVector_get_impl(b_lean_obj_arg sb, b_lean_obj_arg rb, b_lean_obj_arg uv, size_t i) {
@@ -65,7 +65,7 @@ static inline lean_obj_res lean_pod_UVector_get_impl(b_lean_obj_arg sb, b_lean_o
     lean_object* res = lean_apply_3(
         readBytesRef,
         lean_box(0),
-        lean_pod_BytesRef_wrap(lean_pod_UVector_fromRepr(uv) + i * byteSize),
+        lean_pod_BytesRef_box(lean_pod_UVector_fromRepr(uv) + i * byteSize),
         lean_box(0)
     );
     lean_object* val = lean_ctor_get(res, 0);
@@ -111,7 +111,7 @@ static inline lean_obj_res lean_pod_UVector_set_impl(
     lean_dec_ref(lean_apply_4(
         writeBytesRef,
         lean_box(0),
-        lean_pod_BytesRef_wrap(lean_pod_UVector_fromRepr(uv) + i * byteSize),
+        lean_pod_BytesRef_box(lean_pod_UVector_fromRepr(uv) + i * byteSize),
         v,
         lean_box(0)
     ));

@@ -1,11 +1,12 @@
+import Pod.Meta
+import Pod.Initialization
 import Pod.Lemmas
 import Pod.UInt
 
 namespace Pod
 
-opaque BytesViewPointed (size align : Nat) : NonemptyType
-def BytesView (size align : Nat) : Type := (BytesViewPointed size align).type
-instance {size align} : Nonempty (BytesView size align) := (BytesViewPointed size align).property
+/-- Pointer to immutable foreign memory. Keeps it alive. -/
+define_foreign_type BytesView (size align : Nat)
 
 @[extern "lean_pod_ByteArray_view"]
 opaque _root_.ByteArray.view (ba : ByteArray) : BytesView ba.size 1

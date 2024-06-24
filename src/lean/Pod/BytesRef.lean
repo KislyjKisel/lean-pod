@@ -1,3 +1,5 @@
+import Pod.Meta
+import Pod.Initialization
 import Pod.Lemmas
 import Pod.UInt
 import Pod.BytesView
@@ -11,9 +13,7 @@ inductive Mutability where
 
 variable {σ : Type}
 
-opaque BytesRefPointed (σ : Type) (mutab : Mutability) (size align : Nat) : NonemptyType
-def BytesRef (σ : Type) (mutab : Mutability) (size align : Nat) : Type := (BytesRefPointed σ mutab size align).type
-instance {σ mutab size align} : Nonempty (BytesRef σ mutab size align) := (BytesRefPointed σ mutab size align).property
+define_foreign_type BytesRef (σ : Type) (mutab : Mutability) (size align : Nat)
 
 abbrev BytesRefMut (σ : Type) := BytesRef σ .Mutable
 abbrev BytesRefImm (σ : Type) := BytesRef σ .Immutable
