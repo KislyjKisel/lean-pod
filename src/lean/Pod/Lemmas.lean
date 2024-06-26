@@ -6,8 +6,9 @@ theorem _root_.Fin.toNat_sub_distrib {n} (a b : Fin n) (h : b ≤ a) :
   let a := a.val
   let bLt := b.isLt
   let b := b.val
-  show (a + (n - b)) % n = a - b
+  rewrite [Fin.sub_def, Fin.val_mk]
   rw [
+    Nat.add_comm,
     ← Nat.add_sub_assoc (k := b) (Nat.le_of_lt bLt) a,
     Nat.add_comm,
     Nat.add_sub_assoc (m := a) (k := b) h n,

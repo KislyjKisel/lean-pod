@@ -50,5 +50,5 @@ extern_lib «lean-pod» pkg := do
   buildStaticLib (pkg.nativeLibDir / name)
     (← bindingsSources.mapM λ stem ↦ do
       let oFile := pkg.irDir / "native" / (stem ++ ".o")
-      let srcJob ← inputFile <| pkg.dir / bindingsSourceDirectory / (stem ++ ".c")
+      let srcJob ← inputTextFile <| pkg.dir / bindingsSourceDirectory / (stem ++ ".c")
       buildO oFile srcJob weakArgs traceArgs optionBindingsCompiler (pure extraTrace))
