@@ -6,7 +6,7 @@
 
 #define LEAN_POD_CAST_FLOAT32_FROM(ltyp, ctyp, abiatyp)\
 LEAN_EXPORT uint32_t lean_pod_##ltyp##_toFloat32(abiatyp x) {\
-    return lean_pod_Float32_toBits((float)((ctyp)x));\
+    return lean_pod_Float32_toRepr((float)((ctyp)x));\
 }
 
 LEAN_POD_CAST_FLOAT32_FROM(Float, double, double);
@@ -53,7 +53,7 @@ LEAN_EXPORT lean_obj_arg lean_pod_Substring_toFloat32(b_lean_obj_arg s) {
 
 #define LEAN_POD_CAST_FLOAT32_TO(ltyp, ctyp, abirtyp)\
 LEAN_EXPORT abirtyp lean_pod_Float32_to##ltyp(uint32_t x) {\
-    return (ctyp)lean_pod_Float32_fromBits(x);\
+    return (ctyp)lean_pod_Float32_fromRepr(x);\
 }
 
 LEAN_POD_CAST_FLOAT32_TO(Float, double, double);
@@ -69,14 +69,14 @@ LEAN_POD_CAST_FLOAT32_TO(Int64, int64_t, uint64_t);
 
 LEAN_EXPORT lean_obj_res lean_pod_Float32_toString(uint32_t x) {
     static char buf[64];
-    snprintf(buf, sizeof(buf), "%g", lean_pod_Float32_fromBits(x));
+    snprintf(buf, sizeof(buf), "%g", lean_pod_Float32_fromRepr(x));
     return lean_mk_string(buf);
 }
 
 #define LEAN_POD_FLOAT32_OP2(lop, cop)\
 LEAN_EXPORT uint32_t lean_pod_Float32_##lop(uint32_t x, uint32_t y) {\
-    return lean_pod_Float32_toBits(\
-        lean_pod_Float32_fromBits(x) cop lean_pod_Float32_fromBits(y)\
+    return lean_pod_Float32_toRepr(\
+        lean_pod_Float32_fromRepr(x) cop lean_pod_Float32_fromRepr(y)\
     );\
 }
 
@@ -86,38 +86,38 @@ LEAN_POD_FLOAT32_OP2(mul, *);
 LEAN_POD_FLOAT32_OP2(div, /);
 
 LEAN_EXPORT uint32_t lean_pod_Float32_neg(uint32_t x) {
-    return lean_pod_Float32_toBits(
-        -lean_pod_Float32_fromBits(x)
+    return lean_pod_Float32_toRepr(
+        -lean_pod_Float32_fromRepr(x)
     );
 }
 
 LEAN_EXPORT uint8_t lean_pod_Float32_beq(uint32_t x, uint32_t y) {
-    return lean_pod_Float32_fromBits(x) == lean_pod_Float32_fromBits(y);
+    return lean_pod_Float32_fromRepr(x) == lean_pod_Float32_fromRepr(y);
 }
 
 LEAN_EXPORT uint8_t lean_pod_Float32_blt(uint32_t x, uint32_t y) {
-    return lean_pod_Float32_fromBits(x) < lean_pod_Float32_fromBits(y);
+    return lean_pod_Float32_fromRepr(x) < lean_pod_Float32_fromRepr(y);
 }
 
 LEAN_EXPORT uint8_t lean_pod_Float32_ble(uint32_t x, uint32_t y) {
-    return lean_pod_Float32_fromBits(x) <= lean_pod_Float32_fromBits(y);
+    return lean_pod_Float32_fromRepr(x) <= lean_pod_Float32_fromRepr(y);
 }
 
 LEAN_EXPORT uint32_t lean_pod_Float32_min(uint32_t x, uint32_t y) {
-    return lean_pod_Float32_toBits(
-        fminf(lean_pod_Float32_fromBits(x), lean_pod_Float32_fromBits(y))
+    return lean_pod_Float32_toRepr(
+        fminf(lean_pod_Float32_fromRepr(x), lean_pod_Float32_fromRepr(y))
     );
 }
 
 LEAN_EXPORT uint32_t lean_pod_Float32_max(uint32_t x, uint32_t y) {
-    return lean_pod_Float32_toBits(
-        fmaxf(lean_pod_Float32_fromBits(x), lean_pod_Float32_fromBits(y))
+    return lean_pod_Float32_toRepr(
+        fmaxf(lean_pod_Float32_fromRepr(x), lean_pod_Float32_fromRepr(y))
     );
 }
 
 #define LEAN_POD_FLOAT32_IS(ln, cn)\
 LEAN_EXPORT uint8_t lean_pod_Float32_is##ln(uint32_t x) {\
-    return (bool)is##cn(lean_pod_Float32_fromBits(x));\
+    return (bool)is##cn(lean_pod_Float32_fromRepr(x));\
 }
 
 LEAN_POD_FLOAT32_IS(NaN, nan);
@@ -127,13 +127,13 @@ LEAN_POD_FLOAT32_IS(Normal, normal);
 
 LEAN_EXPORT uint8_t lean_pod_Float32_isUnordered(uint32_t x, uint32_t y) {
     return (bool)isunordered(
-        lean_pod_Float32_fromBits(x),
-        lean_pod_Float32_fromBits(y)
+        lean_pod_Float32_fromRepr(x),
+        lean_pod_Float32_fromRepr(y)
     );
 }
 
 LEAN_EXPORT lean_obj_res lean_pod_Float32_frExp(uint32_t x_w) {
-    float x = lean_pod_Float32_fromBits(x_w);
+    float x = lean_pod_Float32_fromRepr(x_w);
     lean_object* result = lean_alloc_ctor(0, 2, 0);
     int exp;
     lean_ctor_set(result, 0, lean_pod_Float32_box(frexpf(x, &exp)));
@@ -143,7 +143,7 @@ LEAN_EXPORT lean_obj_res lean_pod_Float32_frExp(uint32_t x_w) {
 
 #define LEAN_POD_FLOAT32_F1(fn)\
 LEAN_EXPORT uint32_t lean_pod_Float32_##fn(uint32_t x) {\
-    return lean_pod_Float32_toBits(fn##f(lean_pod_Float32_fromBits(x)));\
+    return lean_pod_Float32_toRepr(fn##f(lean_pod_Float32_fromRepr(x)));\
 }
 
 LEAN_POD_FLOAT32_F1(sin);
@@ -170,26 +170,26 @@ LEAN_POD_FLOAT32_F1(floor);
 LEAN_POD_FLOAT32_F1(round);
 
 LEAN_EXPORT uint32_t lean_pod_Float32_abs(uint32_t x) {
-    return lean_pod_Float32_toBits(fabsf(lean_pod_Float32_fromBits(x)));
+    return lean_pod_Float32_toRepr(fabsf(lean_pod_Float32_fromRepr(x)));
 }
 
 LEAN_EXPORT uint32_t lean_pod_Float32_atan2(uint32_t y, uint32_t x) {
-    return lean_pod_Float32_toBits(atan2f(lean_pod_Float32_fromBits(y), lean_pod_Float32_fromBits(x)));
+    return lean_pod_Float32_toRepr(atan2f(lean_pod_Float32_fromRepr(y), lean_pod_Float32_fromRepr(x)));
 }
 
 LEAN_EXPORT uint32_t lean_pod_Float32_pow(uint32_t x, uint32_t y) {
-    return lean_pod_Float32_toBits(powf(lean_pod_Float32_fromBits(x), lean_pod_Float32_fromBits(y)));
+    return lean_pod_Float32_toRepr(powf(lean_pod_Float32_fromRepr(x), lean_pod_Float32_fromRepr(y)));
 }
 
 LEAN_EXPORT uint32_t lean_pod_Float32_scaleB(uint32_t x_w, b_lean_obj_arg i) {
-    float x = lean_pod_Float32_fromBits(x_w);
+    float x = lean_pod_Float32_fromRepr(x_w);
     if (lean_is_scalar(i)) {
-        return lean_pod_Float32_toBits(scalbnf(x, lean_scalar_to_int(i)));
+        return lean_pod_Float32_toRepr(scalbnf(x, lean_scalar_to_int(i)));
     } else if (x == 0.0 || lean_int_big_lt(i, lean_int_to_int(0))) {
         // ^ todo: use mpz_value(i).is_neg() (req cpp?)
-        return lean_pod_Float32_toBits(0.0);
+        return lean_pod_Float32_toRepr(0.0);
     } else {
-        return lean_pod_Float32_toBits(x * (1.0f / 0.0f));
+        return lean_pod_Float32_toRepr(x * (1.0f / 0.0f));
     }
 }
 

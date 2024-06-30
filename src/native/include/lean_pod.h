@@ -156,7 +156,7 @@ static inline lean_object* lean_pod_Ptr_box(void* cvalue) {\
 
 // # Float32
 
-static inline uint32_t lean_pod_Float32_toBits(float x) {
+static inline uint32_t lean_pod_Float32_toRepr(float x) {
     union {
         float f32;
         uint32_t u32;
@@ -166,10 +166,10 @@ static inline uint32_t lean_pod_Float32_toBits(float x) {
 }
 
 static inline lean_obj_res lean_pod_Float32_box(float x) {
-    return lean_box_uint32(lean_pod_Float32_toBits(x));
+    return lean_box_uint32(lean_pod_Float32_toRepr(x));
 }
 
-static inline float lean_pod_Float32_fromBits(uint32_t x) {
+static inline float lean_pod_Float32_fromRepr(uint32_t x) {
     union {
         uint32_t u32;
         float f32;
@@ -179,7 +179,7 @@ static inline float lean_pod_Float32_fromBits(uint32_t x) {
 }
 
 static inline float lean_pod_Float32_unbox(b_lean_obj_arg obj) {
-    return lean_pod_Float32_fromBits(lean_unbox_uint32(obj));
+    return lean_pod_Float32_fromRepr(lean_unbox_uint32(obj));
 }
 
 
