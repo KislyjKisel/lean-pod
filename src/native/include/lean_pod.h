@@ -7,7 +7,7 @@
 
 typedef unsigned char* lean_pod_byte_ptr;
 
-/// @param sz must be divisible by `LEAN_OBJECT_SIZE_DELTA`
+/// @param sz must be less than `LEAN_MAX_SMALL_OBJECT_SIZE`
 static inline void* lean_pod_alloc(size_t sz) {
 #ifdef LEAN_POD_ALLOC_NATIVE
     return malloc(sz);
@@ -16,7 +16,7 @@ static inline void* lean_pod_alloc(size_t sz) {
 #endif
 }
 
-/// @param sz must be divisible by `LEAN_OBJECT_SIZE_DELTA`
+/// @param sz must be less than `LEAN_MAX_SMALL_OBJECT_SIZE`
 static inline void* lean_pod_calloc(size_t sz) {
 #ifdef LEAN_POD_ALLOC_NATIVE
     return calloc(1, sz);
