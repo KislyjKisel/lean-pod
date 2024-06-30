@@ -156,6 +156,8 @@ static inline lean_object* lean_pod_Ptr_box(void* cvalue) {\
 
 // # Float32
 
+typedef uint32_t lean_pod_Float32;
+
 static inline uint32_t lean_pod_Float32_toRepr(float x) {
     union {
         float f32;
