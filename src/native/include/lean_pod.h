@@ -136,15 +136,15 @@ lean_external_class* lean_##name##_class;
 #define LEAN_POD_INITIALIZE_EXTERNAL_CLASS(name, finalize, foreach)\
 lean_##name##_class = lean_register_external_class(finalize, foreach);
 
-#define LEAN_POD_TYPE_ALIAS(name, cReprType, cType, name2, cReprType2, cType2)\
+#define LEAN_POD_TYPE_ALIAS(name, cType, name2, cType2)\
 typedef lean_##name2 lean_##name;\
 static inline lean_object* lean_##name##_box(cType cvalue) { return lean_##name2##_box((cType2)cvalue); }\
 static inline cType lean_##name##_unbox(b_lean_obj_arg lvalue) { return (cType)lean_##name2##_unbox(lvalue); }\
-static inline cType lean_##name##_fromRepr(cReprType rvalue) { return (cType)lean_##name2##_fromRepr((cReprType2)rvalue); }\
-static inline cReprType lean_##name##_toRepr(cType cvalue) { return (cReprType)lean_##name2##_toRepr((cType2)cvalue); }
+static inline cType lean_##name##_fromRepr(lean_##name rvalue) { return (cType)lean_##name2##_fromRepr((lean_##name2)rvalue); }\
+static inline lean_##name lean_##name##_toRepr(cType cvalue) { return (lean_##name)lean_##name2##_toRepr((cType2)cvalue); }
 
 #define LEAN_POD_PTR_ALIAS(name, cType)\
-LEAN_POD_TYPE_ALIAS(name, lean_object*, cType, pod_Ptr, lean_object*, void*)
+LEAN_POD_TYPE_ALIAS(name, cType, pod_Ptr, void*)
 
 LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_Ptr, void*) // TODO: represent as USize instead of external class (how?)
 
