@@ -107,8 +107,8 @@ static inline size_t lean_pod_Substring_utf8_byte_size(b_lean_obj_arg ss) {
 #define LEAN_POD_CTOR_SET_U16(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2, val)
 #define LEAN_POD_CTOR_SET_U8(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i, val)
 
-#define LEAN_POD_CTOR_GET(typ, obj, i, ...) LEAN_POD_CTOR_GET_##typ(__VA_ARGS__, obj, i)
-#define LEAN_POD_CTOR_SET(typ, obj, i, val, ...) LEAN_POD_CTOR_SET_##typ(__VA_ARGS__, obj, i, val)
+#define LEAN_POD_CTOR_GET(obj, typ, i, ...) LEAN_POD_CTOR_GET_##typ(__VA_ARGS__, obj, i)
+#define LEAN_POD_CTOR_SET(obj, val, typ, i, ...) LEAN_POD_CTOR_SET_##typ(__VA_ARGS__, obj, i, val)
 
 #define LEAN_POD_DECLARE_EXTERNAL_CLASS(name, cty)\
 typedef lean_object* lean_##name;\
