@@ -91,34 +91,24 @@ static inline size_t lean_pod_Substring_utf8_byte_size(b_lean_obj_arg ss) {
     return lean_usize_of_nat(lean_ctor_get(ss, 2)) - lean_usize_of_nat(lean_ctor_get(ss, 1));
 }
 
-#define LEAN_POD_CTOR_GET_BOX_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get(obj, i)
-#define LEAN_POD_CTOR_GET_USIZE_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_usize(obj, ty_box + i)
-#define LEAN_POD_CTOR_GET_U64_D_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, tyn) lean_ctor_get_##tyn(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8)
-#define LEAN_POD_CTOR_GET_U32_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4)
-#define LEAN_POD_CTOR_GET_U16_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2)
-#define LEAN_POD_CTOR_GET_U8_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i)
+#define LEAN_POD_CTOR_GET_BOX(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get(obj, i)
+#define LEAN_POD_CTOR_GET_USIZE(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_usize(obj, ty_box + i)
+#define LEAN_POD_CTOR_GET_U64(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint64(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8)
+#define LEAN_POD_CTOR_GET_F64(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_float(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8)
+#define LEAN_POD_CTOR_GET_U32(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4)
+#define LEAN_POD_CTOR_GET_U16(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2)
+#define LEAN_POD_CTOR_GET_U8(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i) lean_ctor_get_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i)
 
-#define LEAN_POD_CTOR_SET_BOX_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set(obj, i, val)
-#define LEAN_POD_CTOR_SET_USIZE_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_usize(obj, ty_box + i, val)
-#define LEAN_POD_CTOR_SET_U64_D_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, tyn, val) lean_ctor_get_##tyn(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
-#define LEAN_POD_CTOR_SET_U32_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4, val)
-#define LEAN_POD_CTOR_SET_U16_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2, val)
-#define LEAN_POD_CTOR_SET_U8_(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i, val)
+#define LEAN_POD_CTOR_SET_BOX(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set(obj, i, val)
+#define LEAN_POD_CTOR_SET_USIZE(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_usize(obj, ty_box + i, val)
+#define LEAN_POD_CTOR_SET_U64(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_get_uint64(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
+#define LEAN_POD_CTOR_SET_F64(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_get_float(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
+#define LEAN_POD_CTOR_SET_U32(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4, val)
+#define LEAN_POD_CTOR_SET_U16(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2, val)
+#define LEAN_POD_CTOR_SET_U8(ty_box, ty_usize, ty_8, ty_4, ty_2, obj, i, val) lean_ctor_set_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i, val)
 
-#define LEAN_POD_CTOR_GET_BOX(...) LEAN_POD_CTOR_GET_BOX_(__VA_ARGS__)
-#define LEAN_POD_CTOR_GET_USIZE(...) LEAN_POD_CTOR_GET_USIZE_(__VA_ARGS__)
-#define LEAN_POD_CTOR_GET_U64_D(...) LEAN_POD_CTOR_GET_U64_D_(__VA_ARGS__)
-#define LEAN_POD_CTOR_GET_U32(...) LEAN_POD_CTOR_GET_U32_(__VA_ARGS__)
-#define LEAN_POD_CTOR_GET_U16(...) LEAN_POD_CTOR_GET_U16_(__VA_ARGS__)
-#define LEAN_POD_CTOR_GET_U8(...) LEAN_POD_CTOR_GET_U8_(__VA_ARGS__)
-
-#define LEAN_POD_CTOR_SET_BOX(...) LEAN_POD_CTOR_SET_BOX_(__VA_ARGS__)
-#define LEAN_POD_CTOR_SET_USIZE(...) LEAN_POD_CTOR_SET_USIZE_(__VA_ARGS__)
-#define LEAN_POD_CTOR_SET_U64_D(...) LEAN_POD_CTOR_SET_U64_D_(__VA_ARGS__)
-#define LEAN_POD_CTOR_SET_U32(...) LEAN_POD_CTOR_SET_U32_(__VA_ARGS__)
-#define LEAN_POD_CTOR_SET_U16(...) LEAN_POD_CTOR_SET_U16_(__VA_ARGS__)
-#define LEAN_POD_CTOR_SET_U8(...) LEAN_POD_CTOR_SET_U8_(__VA_ARGS__)
-
+#define LEAN_POD_CTOR_GET(typ, obj, i, ...) LEAN_POD_CTOR_GET_##typ(__VA_ARGS__, obj, i)
+#define LEAN_POD_CTOR_SET(typ, obj, i, val, ...) LEAN_POD_CTOR_SET_##typ(__VA_ARGS__, obj, i, val)
 
 #define LEAN_POD_DECLARE_EXTERNAL_CLASS(name, cty)\
 typedef lean_object* lean_##name;\
@@ -152,6 +142,24 @@ LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_Ptr, void*) // TODO: represent as USize inst
 static inline lean_object* lean_pod_Ptr_box(void* cvalue) {\
     return lean_alloc_external(lean_pod_Ptr_class, cvalue);\
 }
+
+// # Signed integers
+
+typedef uint16_t lean_pod_Int16;
+typedef uint32_t lean_pod_Int32;
+typedef uint64_t lean_pod_Int64;
+
+#define LEAN_POD_STATIC_INTEGER(bits, lfnsuffix)\
+typedef uint##bits##_t lean_pod_Int##bits;\
+static inline int##bits##_t lean_pod_Int##bits##_fromRepr(lean_pod_Int##bits x) { int##bits##_t y; memcpy(&y, &x, sizeof(y)); return y; }\
+static inline int##bits##_t lean_pod_Int##bits##_unbox(b_lean_obj_arg obj) { return lean_pod_Int##bits##_fromRepr(lean_unbox##lfnsuffix(obj)); }\
+static inline uint##bits##_t lean_pod_Int##bits##_toRepr(int##bits##_t x) { uint##bits##_t y; memcpy(&y, &x, sizeof(y)); return y; }\
+static inline lean_object* lean_pod_Int##bits##_box(int##bits##_t x) { return lean_box##lfnsuffix(lean_pod_Int##bits##_toRepr(x)); }
+
+LEAN_POD_STATIC_INTEGER(8, )
+LEAN_POD_STATIC_INTEGER(16, )
+LEAN_POD_STATIC_INTEGER(32, _uint32)
+LEAN_POD_STATIC_INTEGER(64, _uint64)
 
 
 // # Float32
