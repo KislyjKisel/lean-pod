@@ -5,17 +5,16 @@ def optionBindingsCompiler := (get_config? cc).getD "cc"
 def optionBindingsFlags := Array.mk $ ((get_config? cflags).getD "").splitOn.filter $ not ∘ String.isEmpty
 def optionAllocator := get_config? alloc
 
-package «pod» {
+package «pod» where
   srcDir := "src/lean"
   leanOptions := #[⟨`autoImplicit, false⟩]
-}
 
-lean_lib Pod
+lean_lib Pod where
+  precompileModules := true
 
 @[default_target]
-lean_exe «pod-test» {
+lean_exe «pod-test» where
   root := `Main
-}
 
 def bindingsSources : Array String := #[
   "classes",
