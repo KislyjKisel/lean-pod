@@ -91,57 +91,57 @@ static inline size_t lean_pod_Substring_utf8_byte_size(b_lean_obj_arg ss) {
     return lean_usize_of_nat(lean_ctor_get(ss, 2)) - lean_usize_of_nat(lean_ctor_get(ss, 1));
 }
 
-#define LEAN_POD_EStateM_Result_ok_LAYOUT 2, 0, 0, 0, 0, 0
-#define LEAN_POD_EStateM_Result_ok_TAG 0
+#define LEAN_POD_EStateM_Result_ok_LAYOUT 0, 2, 0, 0, 0, 0, 0
 #define LEAN_POD_EStateM_Result_ok_value BOX, 0, LEAN_POD_EStateM_Result_ok_LAYOUT
 #define LEAN_POD_EStateM_Result_ok_state BOX, 1, LEAN_POD_EStateM_Result_ok_LAYOUT
-#define LEAN_POD_EStateM_Result_error_LAYOUT 2, 0, 0, 0, 0, 0
-#define LEAN_POD_EStateM_Result_error_TAG 1
+#define LEAN_POD_EStateM_Result_error_LAYOUT 1, 2, 0, 0, 0, 0, 0
 #define LEAN_POD_EStateM_Result_error_error BOX, 0, LEAN_POD_EStateM_Result_error_LAYOUT
 #define LEAN_POD_EStateM_Result_error_state BOX, 1, LEAN_POD_EStateM_Result_error_LAYOUT
 
-#define LEAN_POD_CTOR_GET_BOX(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get(obj, i)
-#define LEAN_POD_CTOR_GET_USIZE(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_usize(obj, ty_box + i)
-#define LEAN_POD_CTOR_GET_U64(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_uint64(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8)
-#define LEAN_POD_CTOR_GET_F64(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_float(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8)
-#define LEAN_POD_CTOR_GET_U32(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4)
-#define LEAN_POD_CTOR_GET_U16(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2)
-#define LEAN_POD_CTOR_GET_U8(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i)
+#define LEAN_POD_CTOR_GET_BOX(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get(obj, i)
+#define LEAN_POD_CTOR_GET_USIZE(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_usize(obj, ty_box + i)
+#define LEAN_POD_CTOR_GET_U64(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_uint64(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8)
+#define LEAN_POD_CTOR_GET_F64(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_float(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8)
+#define LEAN_POD_CTOR_GET_U32(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4)
+#define LEAN_POD_CTOR_GET_U16(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2)
+#define LEAN_POD_CTOR_GET_U8(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i)
 
-#define LEAN_POD_CTOR_SET_BOX(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set(obj, i, val)
-#define LEAN_POD_CTOR_SET_USIZE(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_usize(obj, ty_box + i, val)
-#define LEAN_POD_CTOR_SET_U64(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_get_uint64(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
-#define LEAN_POD_CTOR_SET_F64(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_get_float(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
-#define LEAN_POD_CTOR_SET_U32(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4, val)
-#define LEAN_POD_CTOR_SET_U16(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2, val)
-#define LEAN_POD_CTOR_SET_U8(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i, val)
+#define LEAN_POD_CTOR_SET_BOX(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set(obj, i, val)
+#define LEAN_POD_CTOR_SET_USIZE(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_usize(obj, ty_box + i, val)
+#define LEAN_POD_CTOR_SET_U64(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_get_uint64(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
+#define LEAN_POD_CTOR_SET_F64(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_get_float(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
+#define LEAN_POD_CTOR_SET_U32(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4, val)
+#define LEAN_POD_CTOR_SET_U16(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2, val)
+#define LEAN_POD_CTOR_SET_U8(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i, val)
 
 #define LEAN_POD_CTOR_GET_(obj, typ, i, ...) LEAN_POD_CTOR_GET_##typ(__VA_ARGS__, (obj), (i))
 #define LEAN_POD_CTOR_SET_(obj, val, typ, i, ...) LEAN_POD_CTOR_SET_##typ(__VA_ARGS__, (obj), (i), (val))
 
-// `(obj, typ, idx, nbox, nusize, n8, n4, n2, n1)`:
+// `(obj, typ, idx, tag, nbox, nusize, n8, n4, n2, n1)`:
 // * `obj`: lean ctor object;
 // * `typ`: field's type, one of `BOX` `USIZE` `U8` `U16` `U32` `U64` `F64`;
 // * `idx`: field's index among fields of the same type (`F64` and `U64` share indices);
+// * `tag`: ctor tag
 // * `n..`: number of ctor fields of corresponding type.
 // Can be used with a macro defining type's and field's layouts:
 // ```
-// #define T 1, 2, 3, 4, 5, 6
+// #define T 0, 1, 2, 3, 4, 5, 6
 // #define T_a U32, 2, T
 // ...
 // LEAN_POD_CTOR_GET(obj, T_a)
 // ```
 #define LEAN_POD_CTOR_GET(...) LEAN_POD_CTOR_GET_(__VA_ARGS__)
 
-// `(obj, val, typ, idx, nbox, nusize, n8, n4, n2, n1)`:
+// `(obj, val, typ, idx, tag, nbox, nusize, n8, n4, n2, n1)`:
 // * `obj`: lean ctor object;
 // * `val`: c value to be set;
 // * `typ`: field's type, one of `BOX` `USIZE` `U8` `U16` `U32` `U64` `F64`;
 // * `idx`: field's index among fields of the same type (`F64` and `U64` share indices);
+// * `tag`: ctor tag
 // * `n..`: number of ctor fields of corresponding type.
 // Can be used with a macro defining type's and field's layouts:
 // ```
-// #define T 1, 2, 3, 4, 5, 6
+// #define T 0, 1, 2, 3, 4, 5, 6
 // #define T_a U32, 2, T
 // ...
 // LEAN_POD_CTOR_SET(obj, 42, T_a)
@@ -251,7 +251,7 @@ static inline b_lean_obj_res lean_pod_Storable_alignment(b_lean_obj_arg storable
 
 // # WriteBytes
 
-#define LEAN_POD_WriteBytes_LAYOUT 6, 0, 0, 0, 0, 0
+#define LEAN_POD_WriteBytes_LAYOUT 0, 6, 0, 0, 0, 0, 0
 
 // Function taking 8 boxed arguments: `0`, `size : Nat`, `align : Nat`, `BytesRef`, `offset : Nat`, `value : α`, `0`, `0`, and returning `EStateM.Result Empty σ Unit`
 #define LEAN_POD_WriteBytes_writeBytesRefOffUnal BOX, 0, LEAN_POD_WriteBytes_LAYOUT
@@ -269,7 +269,7 @@ static inline b_lean_obj_res lean_pod_Storable_alignment(b_lean_obj_arg storable
 
 // # ReadBytes
 
-#define LEAN_POD_ReadBytes_LAYOUT 12, 0, 0, 0, 0, 0
+#define LEAN_POD_ReadBytes_LAYOUT 0, 12, 0, 0, 0, 0, 0
 
 // Function taking 7 boxed arguments: `0`, `size : Nat`, `align : Nat`, `BytesRef`, `offset : Nat`, `0`, `0`, and returning `EStateM.Result Empty σ α`
 #define LEAN_POD_ReadBytes_readBytesRefOffUnal BOX, 0, LEAN_POD_ReadBytes_LAYOUT
