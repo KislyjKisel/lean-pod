@@ -97,3 +97,9 @@ def BytesView.getOff (bv : BytesView size align) (i : Nat)
 def BytesView.getOffEl (bv : BytesView size (alignment α))
   (i : Nat) (h : i * (byteSize α) + (byteSize α) ≤ size) : α :=
     ReadBytes.readBytesViewOffEl bv i h
+
+@[specialize]
+def ReadBytes.zero : α :=
+  let ba := ByteArray.mk (Array.mkArray (byteSize α) 0)
+  have : ba.size = (byteSize α) := Array.size_mkArray _ _
+  this ▸ (ba |>.view) |>.getUnal
