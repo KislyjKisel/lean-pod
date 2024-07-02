@@ -91,6 +91,15 @@ static inline size_t lean_pod_Substring_utf8_byte_size(b_lean_obj_arg ss) {
     return lean_usize_of_nat(lean_ctor_get(ss, 2)) - lean_usize_of_nat(lean_ctor_get(ss, 1));
 }
 
+#define LEAN_POD_EStateM_Result_ok_LAYOUT 2, 0, 0, 0, 0, 0
+#define LEAN_POD_EStateM_Result_ok_TAG 0
+#define LEAN_POD_EStateM_Result_ok_value BOX, 0, LEAN_POD_EStateM_Result_ok_LAYOUT
+#define LEAN_POD_EStateM_Result_ok_state BOX, 1, LEAN_POD_EStateM_Result_ok_LAYOUT
+#define LEAN_POD_EStateM_Result_error_LAYOUT 2, 0, 0, 0, 0, 0
+#define LEAN_POD_EStateM_Result_error_TAG 1
+#define LEAN_POD_EStateM_Result_error_error BOX, 0, LEAN_POD_EStateM_Result_error_LAYOUT
+#define LEAN_POD_EStateM_Result_error_state BOX, 1, LEAN_POD_EStateM_Result_error_LAYOUT
+
 #define LEAN_POD_CTOR_GET_BOX(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get(obj, i)
 #define LEAN_POD_CTOR_GET_USIZE(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_usize(obj, ty_box + i)
 #define LEAN_POD_CTOR_GET_U64(ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i) lean_ctor_get_uint64(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8)
@@ -242,33 +251,44 @@ static inline b_lean_obj_res lean_pod_Storable_alignment(b_lean_obj_arg storable
 
 // # WriteBytes
 
-// Returns a function taking 4 boxed args:
-// 0, BytesRef, value : A, 0, and returning `ST.Result Unit`
-static inline b_lean_obj_res lean_pod_WriteBytes_writeBytesRef(b_lean_obj_arg writeBytes) {
-    return lean_ctor_get(writeBytes, 4);
-}
+#define LEAN_POD_WriteBytes_LAYOUT 6, 0, 0, 0, 0, 0
 
-// Returns a function taking 7 boxed args:
-// 0, size : USize, BytesRef, i : USize, value : A, 0, 0, and returning `ST.Result Unit`.
-static inline b_lean_obj_res lean_pod_WriteBytes_writeBytesRefOffEl(b_lean_obj_arg writeBytes) {
-    return lean_ctor_get(writeBytes, 5);
-}
+// Function taking 8 boxed arguments: `0`, `size : Nat`, `align : Nat`, `BytesRef`, `offset : Nat`, `value : α`, `0`, `0`, and returning `EStateM.Result Empty σ Unit`
+#define LEAN_POD_WriteBytes_writeBytesRefOffUnal BOX, 0, LEAN_POD_WriteBytes_LAYOUT
+// Function taking 5 boxed arguments: `0`, `align : Nat`, `BytesRef`, `value : α`, `0`, and returning `EStateM.Result Empty σ Unit`
+#define LEAN_POD_WriteBytes_writeBytesRefUnal BOX, 1, LEAN_POD_WriteBytes_LAYOUT
+// Function taking 8 boxed arguments: `0`, `size : Nat`, `align : Nat`, `BytesRef`, `i : Nat`, `value : α`, `0`, `0`, and returning `EStateM.Result Empty σ Unit`
+#define LEAN_POD_WriteBytes_writeBytesRefOffElUnal BOX, 2, LEAN_POD_WriteBytes_LAYOUT
+// Function taking 9 boxed arguments: `0`, `size : Nat`, `align : Nat`, `BytesRef`, `offset : Nat`, `value : α`, `0`, `0`, `0`, and returning `EStateM.Result Empty σ Unit`
+#define LEAN_POD_WriteBytes_writeBytesRefOff BOX, 3, LEAN_POD_WriteBytes_LAYOUT
+// Function taking 4 boxed arguments: `0`, `BytesRef`, `value : α`, `0`, and returning `EStateM.Result Empty σ Unit`
+#define LEAN_POD_WriteBytes_writeBytesRef BOX, 4, LEAN_POD_WriteBytes_LAYOUT
+// Function taking 7 boxed arguments: `0`, `size : Nat`, `BytesRef`, `i : Nat`, `value : α`, `0`, `0`, and returning `EStateM.Result Empty σ Unit`
+#define LEAN_POD_WriteBytes_writeBytesRefOffEl BOX, 5, LEAN_POD_WriteBytes_LAYOUT
 
 
 // # ReadBytes
 
-// Returns a function taking 3 boxed args:
-// 0, BytesRef, 0, and returning `ST.Result A`
-static inline b_lean_obj_res lean_pod_ReadBytes_readBytesRef(b_lean_obj_arg readBytes) {
-    return lean_ctor_get(readBytes, 4);
-}
+#define LEAN_POD_ReadBytes_LAYOUT 12, 0, 0, 0, 0, 0
 
-
-// Returns a function taking 6 boxed args:
-// 0, size : USize, BytesRef, i : USize, 0, 0, and returning `ST.Result A`
-static inline b_lean_obj_res lean_pod_ReadBytes_readBytesRefOffEl(b_lean_obj_arg readBytes) {
-    return lean_ctor_get(readBytes, 5);
-}
+// Function taking 7 boxed arguments: `0`, `size : Nat`, `align : Nat`, `BytesRef`, `offset : Nat`, `0`, `0`, and returning `EStateM.Result Empty σ α`
+#define LEAN_POD_ReadBytes_readBytesRefOffUnal BOX, 0, LEAN_POD_ReadBytes_LAYOUT
+// Function taking 4 boxed arguments: `0`, `align : Nat`, `BytesRef`, `0`, and returning `EStateM.Result Empty σ α`
+#define LEAN_POD_ReadBytes_readBytesRefUnal BOX, 1, LEAN_POD_ReadBytes_LAYOUT
+// Function taking 7 boxed arguments: `0`, `size : Nat`, `align : Nat`, `BytesRef`, `i : Nat`, `0`, `0`, and returning `EStateM.Result Empty σ α`
+#define LEAN_POD_ReadBytes_readBytesRefOffElUnal BOX, 2, LEAN_POD_ReadBytes_LAYOUT
+// Function taking 8 boxed arguments: `0`, `size : Nat`, `align : Nat`, `BytesRef`, `offset : Nat`, `0`, `0`, `0`, and returning `EStateM.Result Empty σ α`
+#define LEAN_POD_ReadBytes_readBytesRefOff BOX, 3, LEAN_POD_ReadBytes_LAYOUT
+// Function taking 3 boxed arguments: `0`, `BytesRef`, `0`, and returning `EStateM.Result Empty σ α`
+#define LEAN_POD_ReadBytes_readBytesRef BOX, 4, LEAN_POD_ReadBytes_LAYOUT
+// Function taking 6 boxed arguments: `0`, `size : Nat`, `BytesRef`, `i : Nat`, `0`, `0`, and returning `EStateM.Result Empty σ α`
+#define LEAN_POD_ReadBytes_readBytesRefOffEl BOX, 5, LEAN_POD_ReadBytes_LAYOUT
+#define LEAN_POD_ReadBytes_readBytesViewOffUnal BOX, 6, LEAN_POD_ReadBytes_LAYOUT
+#define LEAN_POD_ReadBytes_readBytesViewUnal BOX, 7, LEAN_POD_ReadBytes_LAYOUT
+#define LEAN_POD_ReadBytes_readBytesViewOffElUnal BOX, 8, LEAN_POD_ReadBytes_LAYOUT
+#define LEAN_POD_ReadBytes_readBytesViewOff BOX, 9, LEAN_POD_ReadBytes_LAYOUT
+#define LEAN_POD_ReadBytes_readBytesView BOX, 10, LEAN_POD_ReadBytes_LAYOUT
+#define LEAN_POD_ReadBytes_readBytesViewOffEl BOX, 11, LEAN_POD_ReadBytes_LAYOUT
 
 
 // # BytesView
