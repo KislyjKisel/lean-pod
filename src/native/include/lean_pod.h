@@ -108,8 +108,8 @@ static inline size_t lean_pod_Substring_utf8_byte_size(b_lean_obj_arg ss) {
 
 #define LEAN_POD_CTOR_SET_BOX(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set(obj, i, val)
 #define LEAN_POD_CTOR_SET_USIZE(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_usize(obj, ty_box + i, val)
-#define LEAN_POD_CTOR_SET_U64(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_get_uint64(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
-#define LEAN_POD_CTOR_SET_F64(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_get_float(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
+#define LEAN_POD_CTOR_SET_U64(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint64(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
+#define LEAN_POD_CTOR_SET_F64(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_float(obj, (ty_box + ty_usize) * sizeof(void*) + i * 8, val)
 #define LEAN_POD_CTOR_SET_U32(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint32(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + i * 4, val)
 #define LEAN_POD_CTOR_SET_U16(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint16(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + i * 2, val)
 #define LEAN_POD_CTOR_SET_U8(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1, obj, i, val) lean_ctor_set_uint8(obj, (ty_box + ty_usize) * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + i, val)
