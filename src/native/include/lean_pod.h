@@ -151,7 +151,14 @@ static inline size_t lean_pod_Substring_utf8_byte_size(b_lean_obj_arg ss) {
 #define LEAN_POD_ALLOC_CTOR_(tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1)\
 lean_alloc_ctor(tag, ty_box, ty_usize * sizeof(void*) + ty_8 * 8 + ty_4 * 4 + ty_2 * 2 + ty_1)
 
+// `LEAN_POD_ALLOC_CTOR(LAYOUT)`
 #define LEAN_POD_ALLOC_CTOR(...) LEAN_POD_ALLOC_CTOR_(__VA_ARGS__)
+
+#define LEAN_POD_IS_(obj, tag, ty_box, ty_usize, ty_8, ty_4, ty_2, ty_1)\
+(lean_obj_tag(obj) == tag)
+
+// `LEAN_POD_IS(obj, LAYOUT)`
+#define LEAN_POD_IS(...) LEAN_POD_IS(__VA_ARGS__)
 
 #define LEAN_POD_DECLARE_EXTERNAL_CLASS(name, cty)\
 typedef lean_object* lean_##name;\
