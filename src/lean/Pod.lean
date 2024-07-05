@@ -3,6 +3,7 @@ import Pod.Initialization
 import Pod.Lemmas
 import Pod.Endianness
 import Pod.UInt
+import Pod.Fixnum
 import Pod.Int
 import Pod.Float
 import Pod.BytesView

@@ -205,6 +205,16 @@ LEAN_POD_STATIC_INTEGER(32, _uint32)
 LEAN_POD_STATIC_INTEGER(64, _uint64)
 
 
+// # UFixnum
+
+typedef lean_object* lean_pod_UFixnum;
+
+#define lean_pod_UFixnum_toRepr lean_box
+#define lean_pod_UFixnum_box lean_box
+#define lean_pod_UFixnum_fromRepr lean_unbox
+#define lean_pod_UFixnum_unbox lean_unbox
+
+
 // # Float32
 
 typedef uint32_t lean_pod_Float32;
