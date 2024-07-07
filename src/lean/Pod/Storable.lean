@@ -82,4 +82,14 @@ theorem offEl_aligned {α} [Storable α] (i : Nat) :
         apply congrArg (alignment α * m + ·)
         rw [Nat.mul_comm _ aib, ← Nat.mul_assoc, ← h₁, Nat.mul_comm]
 
+theorem offEl {α} [Storable α] (size i : Nat) (h : i < size) :
+  i * byteSize α + byteSize α ≤ size * byteSize α := by
+    rewrite [
+      Nat.mul_comm,
+      ← Nat.mul_add_one,
+      Nat.mul_comm,
+    ]
+    apply Nat.mul_le_mul_right
+    exact h
+
 end Pod
