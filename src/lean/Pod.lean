@@ -6,6 +6,7 @@ import Pod.UInt
 import Pod.Fixnum
 import Pod.Int
 import Pod.Float
+import Pod.OnFinalize
 import Pod.BytesView
 import Pod.BytesRef
 import Pod.Buffer

@@ -22,6 +22,7 @@ def bindingsSources : Array String := #[
   "storable",
   "uint",
   "float",
+  "on_finalize",
   "bytes_view",
   "bytes_ref",
   "buffer",

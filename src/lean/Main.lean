@@ -12,7 +12,18 @@ def test : ByteArray :=
         exact h
       i := i + 1
 
+/-- Wraps `onFinalize` in IO to avoid it getting marked as persistent. -/
+def makeOnFinalize (s : String) : IO Pod.OnFinalize :=
+  pure (Pod.onFinalize <| (IO.println s).catchExceptions λ _ ↦ pure ())
+
+def onFinalizeMutCb (s : String) : BaseIO Unit :=
+  (IO.println s).catchExceptions λ _ ↦ pure ()
+
 def main : IO Unit := do
+  let ofImm1 ← makeOnFinalize "OnFinalize 1"
+  let ofImm2 ← makeOnFinalize "OnFinalize 2"
+  let ofMut1 ← Pod.onFinalizeMut <| onFinalizeMutCb "OnFinalizeMut 1 (unset)"
+  let ofMut2 ← Pod.onFinalizeMut <| onFinalizeMutCb "OnFinalizeMut 2 (unsuppressed)"
   let bb := test.view
   IO.println $ bb[0]!
   IO.println $ bb[1]!
@@ -30,9 +41,12 @@ def main : IO Unit := do
   let uv := ((uv.set! 2 (UInt64.complement 0)).set 0 0).set 1 ((UInt64.complement 0) / 3)
   IO.println s!"{uv[0]}, {uv[1]!}, {uv[2]}"
 
+  ofMut2.suppress
   let mut count := 10
   repeat do
     IO.println "HI"
     IO.sleep 100
     count := count - 1
     if count = 0 then break
+  ofMut1.set (onFinalizeMutCb "OnFinalizeMut 1 (set)")
+  Pod.touch ofImm2 (pure ())

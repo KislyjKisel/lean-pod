@@ -176,6 +176,9 @@ lean_external_class* lean_##name##_class;
 #define LEAN_POD_INITIALIZE_EXTERNAL_CLASS(name, finalize, foreach)\
 lean_##name##_class = lean_register_external_class(finalize, foreach);
 
+#define LEAN_POD_INITIALIZE_EXTERNAL_CLASS_S(name)\
+LEAN_POD_INITIALIZE_EXTERNAL_CLASS(name, lean_##name##_finalize, lean_##name##_foreach)
+
 #define LEAN_POD_TYPE_ALIAS(name, cType, name2, cType2)\
 typedef lean_##name2 lean_##name;\
 static inline lean_object* lean_##name##_box(cType cvalue) { return lean_##name2##_box((cType2)cvalue); }\
@@ -306,6 +309,12 @@ static inline b_lean_obj_res lean_pod_Storable_alignment(b_lean_obj_arg storable
 #define LEAN_POD_ReadBytes_readBytesViewOff BOX, 9, LEAN_POD_ReadBytes_LAYOUT
 #define LEAN_POD_ReadBytes_readBytesView BOX, 10, LEAN_POD_ReadBytes_LAYOUT
 #define LEAN_POD_ReadBytes_readBytesViewOffEl BOX, 11, LEAN_POD_ReadBytes_LAYOUT
+
+
+// # OnFinalize
+
+LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_OnFinalize, lean_object*)
+LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_OnFinalizeMut, lean_object*)
 
 
 // # BytesView
