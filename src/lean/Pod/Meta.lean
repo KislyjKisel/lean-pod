@@ -17,7 +17,12 @@ scoped macro mods:declModifiers "define_foreign_constant" name:ident &" : " type
     def $name : $type := getValue ())
 
 /-- Defines a type that can be used to pass opaque foreign objects. -/
-scoped macro mods:declModifiers "define_foreign_type" name:ident binders:bracketedBinder* : command => do
+scoped macro mods:declModifiers "define_foreign_type" id:declId binders:bracketedBinder* : command => do
+  let name := Lean.TSyntax.mk (id.raw.getArg 0)
+  let univs := (id.raw.getArg 1).getArgs
+  let univs := univs[1:univs.size - 1]
+  let univs := Lean.Syntax.TSepArray.ofElems <| (univs.get! 0).getArgs.filterMap λ a ↦
+    if a.getKind == `ident then some (Lean.TSyntax.mk a) else none
   let pairIdent := Lean.mkIdent (Lean.Name.appendAfter name.getId "Pointed")
   let argNames : Array Lean.Syntax := binders.concatMap λ x ↦
     match x.raw with
@@ -29,9 +34,9 @@ scoped macro mods:declModifiers "define_foreign_type" name:ident binders:bracket
   --   Lean.TSyntaxArray.mk $ argNames.map λ n ↦
   --     dbg_trace n;
   --     Lean.Syntax.node .none `Lean.Parser.Term.implicitBinder #[.atom .none "{", n, .atom .none "}"]
-  `(private opaque $pairIdent $binders* : NonemptyType
+  `(private opaque $pairIdent.{$univs,*} $binders* : NonemptyType
     $mods:declModifiers
-    def $name $binders* : Type := ($(pairIdent) $applied*).type
+    def $name.{$univs,*} $binders* : Type := ($(pairIdent) $applied*).type
     set_option autoImplicit true in
     instance : Nonempty ($name $applied*) := ($(pairIdent) $applied*).property)
 
