@@ -37,7 +37,7 @@ def UFixnum.ofNatCore' (x : Nat) (h : x < 2147483648) : UFixnum :=
 
 private unsafe
 def UFixnum.ofNatImpl (x : Nat) : UFixnum :=
-  ⟨(x &&& ((1 <<< (System.Platform.numBits - 1)) - 1)), unsafeCast ()⟩
+  ⟨(x &&& ((1 <<< (System.Platform.numBits - 1)) - 1)), lcProof⟩
 
 @[implemented_by ofNatImpl]
 def UFixnum.ofNat (x : Nat) : UFixnum :=
