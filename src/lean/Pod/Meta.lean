@@ -50,10 +50,8 @@ scoped macro "extern_initialize" &" => " cFn:str : command =>
     opaque initializeFn : BaseIO Unit
     initialize initializeFn)
 
-scoped macro "static_assert " name:ident &" : " type:term : command =>
+scoped macro "assert " name:ident &" : " type:term : command =>
   let errorMessage : Lean.TSyntax `term :=
-    Lean.TSyntax.mk $ Lean.Syntax.mkStrLit s!"`static_assert` {name} failed"
-  `(
-    initialize if $type then pure () else throw (IO.userError $errorMessage)
-    axiom $name : $type
-  )
+    Lean.TSyntax.mk $ Lean.Syntax.mkStrLit s!"Assertion command failed. `{name} : {type}`"
+  `(initialize if $type then pure () else throw (IO.userError $errorMessage)
+    axiom $name : $type)
