@@ -19,6 +19,12 @@ theorem UFixnum.size_ge : UFixnum.size ≥ 2147483648 :=
   | .inl h => Nat.le_of_eq h.symm
   | .inr h => Nat.le_trans (by decide) (Nat.le_of_eq h.symm)
 
+theorem UFixnum.bitWidth_ge : UFixnum.bitWidth ≥ 31 := by
+  unfold bitWidth
+  cases System.Platform.numBits_eq
+  case inl h => rewrite [h]; decide
+  case inr h => rewrite [h]; decide
+
 /--
 A `UFixnum` is the largest unsigned integer type stored unboxed.
 
@@ -28,6 +34,9 @@ Or on a 64-bit machine, UInt63.
 structure UFixnum where
   val : Fin UFixnum.size
 deriving Repr, Inhabited, DecidableEq
+
+def UFixnum.maximum : UFixnum :=
+  ⟨(2 ^ bitWidth - 1), Nat.lt_succ_self _⟩
 
 def UFixnum.ofNatCore (x : Nat) (h : x < size) : UFixnum :=
   ⟨x, h⟩

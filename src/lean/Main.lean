@@ -19,6 +19,30 @@ def makeOnFinalize (s : String) : IO Pod.OnFinalize :=
 def onFinalizeMutCb (s : String) : BaseIO Unit :=
   (IO.println s).catchExceptions λ _ ↦ pure ()
 
+def fixnumSlotMapForEach {α iW gW} [Nonempty α] (m : Pod.FixnumSlotMap iW gW α) (f : α → IO Unit) : IO Unit := do
+  if let some k0 := m.firstValid
+    then do
+      f (m.get k0.1 k0.2)
+      let mut k := k0.1
+      repeat
+        let k' := m.nextValid k
+        if let some k' := k'
+          then
+            f (m.get k'.1 k'.2)
+            k := k'.1
+          else
+            break
+    else pure ()
+
+def testFixnumSlotMap : IO Unit := do
+  let map := Pod.FixnumSlotMap.empty (α := Nat) 22 9
+  let (_, map) := map.insert 1
+  let (k2, map) := map.insert 2
+  let (_, map) := map.insert 3
+  let map := map.erase k2
+  let (_, map) := map.insert 4
+  fixnumSlotMapForEach map λ x ↦ IO.println x
+
 def main : IO Unit := do
   let ofImm1 ← makeOnFinalize "OnFinalize 1"
   let ofImm2 ← makeOnFinalize "OnFinalize 2"
@@ -40,6 +64,8 @@ def main : IO Unit := do
   IO.print s!"UV: {uv[0]}, {uv[1]}, {uv[2]!} --> "
   let uv := ((uv.set! 2 (UInt64.complement 0)).set 0 0).set 1 ((UInt64.complement 0) / 3)
   IO.println s!"{uv[0]}, {uv[1]!}, {uv[2]}"
+
+  testFixnumSlotMap
 
   ofMut2.suppress
   let mut count := 10

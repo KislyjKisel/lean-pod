@@ -27,13 +27,15 @@ def bindingsSources : Array String := #[
   "bytes_ref",
   "buffer",
   "instances",
-  "uvector"
+  "uvector",
+  "slot_map"
 ]
 
 def bindingsSourceDirectory : FilePath := .mk "src" / "native"
 
 def bindingsExtraTrace : Array FilePath := #[
-  bindingsSourceDirectory / "include" / "lean_pod.h"
+  bindingsSourceDirectory / "include" / "lean_pod.h",
+  bindingsSourceDirectory / "internal.h"
 ]
 
 extern_lib «lean-pod» pkg := do

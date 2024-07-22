@@ -15,3 +15,4 @@ import Pod.WriteBytes
 import Pod.Serializable
 import Pod.Instances
 import Pod.UVector
+import Pod.SlotMap

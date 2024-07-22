@@ -371,6 +371,11 @@ static inline lean_obj_res lean_pod_UVector_box(lean_pod_byte_ptr data) {
 #define lean_pod_UVector_toRepr lean_pod_UVector_box
 
 
+// # FixnumSlotMap
+
+LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_FixnumSlotMap, struct lean_pod_FixnumSlotMap_data*);
+
+
 // # Byte swapping functions
 
 static inline uint16_t lean_pod_bswap16(uint16_t value) {

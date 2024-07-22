@@ -1,0 +1,21 @@
+#pragma once
+
+#include <lean/lean.h>
+
+typedef struct {
+    size_t generation; // 63 (31) bits generation, 1 bit (1 << 0) "occupied" flag
+    union {
+        lean_object* value;
+        size_t next;
+    };
+} lean_pod_SlotMap_entry;
+
+typedef struct lean_pod_FixnumSlotMap_data {
+    size_t size;
+    size_t capacity;
+    size_t firstEmpty;
+    lean_pod_SlotMap_entry values[];
+} lean_pod_FixnumSlotMap_data;
+
+void lean_pod_FixnumSlotMap_finalize(void* obj);
+void lean_pod_FixnumSlotMap_foreach(void* obj, b_lean_obj_arg f);
