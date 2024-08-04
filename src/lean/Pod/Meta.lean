@@ -48,7 +48,7 @@ scoped macro mods:declModifiers "define_foreign_type " id:declId binders:bracket
 scoped macro "extern_initialize" &" => " cFn:str : command =>
   `(@[extern $cFn:str] private
     opaque initializeFn : BaseIO Unit
-    initialize initializeFn)
+    builtin_initialize initializeFn)
 
 scoped macro "assert " name:ident &" : " type:term : command =>
   let errorMessage : Lean.TSyntax `term :=
