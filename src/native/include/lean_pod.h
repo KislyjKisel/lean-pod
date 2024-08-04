@@ -376,6 +376,11 @@ static inline lean_obj_res lean_pod_UVector_box(lean_pod_byte_ptr data) {
 LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_FixnumSlotMap, struct lean_pod_FixnumSlotMap_data*);
 
 
+// # Deque
+
+LEAN_POD_DECLARE_EXTERNAL_CLASS(pod_Deque, struct lean_pod_Deque_data*);
+
+
 // # Byte swapping functions
 
 static inline uint16_t lean_pod_bswap16(uint16_t value) {

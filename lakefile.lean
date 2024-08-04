@@ -9,8 +9,11 @@ package «pod» where
   srcDir := "src/lean"
   leanOptions := #[⟨`autoImplicit, false⟩]
 
-lean_lib Pod where
+lean_lib PodPrecompiled where
   precompileModules := true
+
+lean_lib Pod where
+  precompileModules := false
 
 @[default_target]
 lean_exe «pod-test» where
@@ -28,7 +31,8 @@ def bindingsSources : Array String := #[
   "buffer",
   "instances",
   "uvector",
-  "slot_map"
+  "slot_map",
+  "deque"
 ]
 
 def bindingsSourceDirectory : FilePath := .mk "src" / "native"

@@ -8,6 +8,7 @@ LEAN_POD_DEFINE_EXTERNAL_CLASS(pod_BytesView)
 LEAN_POD_DEFINE_EXTERNAL_CLASS(pod_Buffer)
 LEAN_POD_DEFINE_EXTERNAL_CLASS(pod_UVector)
 LEAN_POD_DEFINE_EXTERNAL_CLASS(pod_FixnumSlotMap)
+LEAN_POD_DEFINE_EXTERNAL_CLASS(pod_Deque)
 
 static void lean_pod_OnFinalize_finalize(void* onFinalize) {
     lean_dec_ref(lean_apply_1(onFinalize, lean_box(0)));
@@ -50,6 +51,7 @@ LEAN_EXPORT lean_obj_res lean_pod_initialize_types(lean_obj_arg io_) {
     LEAN_POD_INITIALIZE_EXTERNAL_CLASS_S(pod_BytesView)
     LEAN_POD_INITIALIZE_EXTERNAL_CLASS(pod_Buffer, lean_pod_Buffer_finalize, lean_pod_default_foreach)
     LEAN_POD_INITIALIZE_EXTERNAL_CLASS(pod_UVector, lean_pod_free, lean_pod_default_foreach)
-    LEAN_POD_INITIALIZE_EXTERNAL_CLASS(pod_FixnumSlotMap, lean_pod_FixnumSlotMap_finalize, lean_pod_FixnumSlotMap_foreach)
+    LEAN_POD_INITIALIZE_EXTERNAL_CLASS_S(pod_FixnumSlotMap)
+    LEAN_POD_INITIALIZE_EXTERNAL_CLASS_S(pod_Deque)
     return lean_io_result_mk_ok(lean_box(0));
 }

@@ -19,3 +19,16 @@ typedef struct lean_pod_FixnumSlotMap_data {
 
 void lean_pod_FixnumSlotMap_finalize(void* obj);
 void lean_pod_FixnumSlotMap_foreach(void* obj, b_lean_obj_arg f);
+
+
+typedef struct lean_pod_Deque_data {
+    // Can never be 0.
+    size_t capacity;
+    size_t front;
+    size_t back;
+    bool empty;
+    lean_object* data[];
+} lean_pod_Deque_data;
+
+void lean_pod_Deque_finalize(void* deque);
+void lean_pod_Deque_foreach(void* deque, b_lean_obj_arg f);
