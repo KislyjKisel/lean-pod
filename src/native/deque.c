@@ -155,7 +155,9 @@ LEAN_EXPORT lean_obj_res lean_pod_Deque_toArray(b_lean_obj_arg deque) {
 LEAN_EXPORT lean_obj_res lean_pod_Deque_ofArray(b_lean_obj_arg arr) {
     size_t size = lean_array_size(arr);
     lean_object* deque = lean_pod_Deque_alloc(size);
-    lean_pod_Deque_data* deque_c = (lean_pod_Deque_data*)lean_get_external_data(deque);
+    lean_pod_Deque_data* deque_c = lean_pod_Deque_fromRepr(deque);
+    deque_c->front = 0;
+    deque_c->back = size;
     deque_c->empty = size == 0;
     for (size_t i = 0; i < size; ++i) {
         lean_object* value = lean_array_get_core(arr, i);
@@ -178,6 +180,8 @@ LEAN_EXPORT lean_obj_res lean_pod_Deque_ofList(b_lean_obj_arg lst) {
     while (!lean_is_scalar(lst_it));
     lean_object* deque = lean_pod_Deque_alloc(size);
     lean_pod_Deque_data* deque_c = (lean_pod_Deque_data*)lean_get_external_data(deque);
+    deque_c->front = 0;
+    deque_c->back = size;
     deque_c->empty = false;
     size_t i = 0;
     lst_it = lst;

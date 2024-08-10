@@ -5,6 +5,9 @@ def optionBindingsCompiler := (get_config? cc).getD "cc"
 def optionBindingsFlags := Array.mk $ ((get_config? cflags).getD "").splitOn.filter $ not ∘ String.isEmpty
 def optionAllocator := get_config? alloc
 
+require Specs from git
+  "https://github.com/axiomed/Specs.lean" @ "ab52219"
+
 package «pod» where
   srcDir := "src/lean"
   leanOptions := #[⟨`autoImplicit, false⟩]
@@ -16,8 +19,9 @@ lean_lib Pod where
   precompileModules := false
 
 @[default_target]
-lean_exe «pod-test» where
-  root := `Main
+lean_exe "pod-tests" where
+  root := `Tests
+
 
 def bindingsSources : Array String := #[
   "classes",
