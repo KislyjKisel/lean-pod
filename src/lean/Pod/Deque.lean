@@ -1,5 +1,4 @@
 import Pod.Meta
-import Pod.Initialization
 
 namespace Pod
 
@@ -21,7 +20,7 @@ def mkEmpty (capacity : @& Nat) : Deque α :=
   .ofList .nil
 
 def empty : Deque α :=
-  dummy (mkEmpty 0)
+  mkEmpty 0
 
 instance : Inhabited (Deque α) := ⟨empty⟩
 
@@ -104,9 +103,9 @@ def popBack (deque : Deque α) (h : ¬ deque.isEmpty) : Deque α :=
 def popFront (deque : Deque α) (h : ¬ deque.isEmpty) : Deque α :=
   .ofList (deque.toList.tailD [])
 
--- @[extern "lean_pod_Deque_clear"]
--- def clear (deque : Deque α) : Deque α :=
---   .empty
+@[extern "lean_pod_Deque_clear"]
+def clear (deque : Deque α) : Deque α :=
+  .empty
 
 @[extern "lean_pod_Deque_get"]
 def get (deque : @& Deque α) (i : @& Fin deque.size) : α :=
@@ -136,10 +135,10 @@ def setD (deque : Deque α) (i : Nat) (x : α) : Deque α :=
     then deque.set (Fin.mk i h) x
     else deque
 
--- def set! (deque : Deque α) (i : Nat) (x : α) : Deque α :=
---   if h: i < deque.size
---     then deque.set (Fin.mk i h) x
---     else panic! "Index out of bounds"
+def set! (deque : Deque α) (i : Nat) (x : α) : Deque α :=
+  if h: i < deque.size
+    then deque.set (Fin.mk i h) x
+    else panic! "Index out of bounds"
 
 instance [Repr α] : Repr (Deque α) where
   reprPrec deque _ := s!"\{ toList := {repr deque.toList}}"
