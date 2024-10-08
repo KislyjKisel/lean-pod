@@ -19,9 +19,11 @@ opaque toList (deque : @& Deque α) : List α
 def mkEmpty (capacity : @& Nat) : Deque α :=
   .ofList .nil
 
+set_option compiler.extract_closed false in
 def empty : Deque α :=
   mkEmpty 0
 
+set_option compiler.extract_closed false in
 instance : Inhabited (Deque α) := ⟨empty⟩
 
 @[extern "lean_pod_Deque_singleton"]
@@ -135,6 +137,7 @@ def setD (deque : Deque α) (i : Nat) (x : α) : Deque α :=
     then deque.set (Fin.mk i h) x
     else deque
 
+set_option compiler.extract_closed false in
 def set! (deque : Deque α) (i : Nat) (x : α) : Deque α :=
   if h: i < deque.size
     then deque.set (Fin.mk i h) x

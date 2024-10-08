@@ -12,11 +12,8 @@ package «pod» where
   srcDir := "src/lean"
   leanOptions := #[⟨`autoImplicit, false⟩]
 
-lean_lib PodPrecompiled where
-  precompileModules := true
-
 lean_lib Pod where
-  precompileModules := false
+  precompileModules := true
 
 @[default_target]
 lean_exe "pod-tests" where
