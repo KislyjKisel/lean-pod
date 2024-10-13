@@ -5,6 +5,33 @@ open Specs Matchers
 
 namespace Pod.Tests
 
+instance : Repr ByteArray where
+  reprPrec x _ := "#" ++ repr x.data
+
+instance : BEq ByteArray where
+  beq x y := x.data == y.data
+
+def bytesView :=
+  let ba1 := ByteArray.mk #[1, 2, 3, 4, 5]
+  describe "BytesView" do
+    it "view toByteArray" do
+      isEqual ba1 <| ba1.view.toByteArray
+    it "getElem = view drop take get" do
+      isEqual ba1[1] <| ba1.view.drop 1 (by decide) |>.take 1 (by decide) |>.get
+
+def bytesRef :=
+  let ba1 := ByteArray.mk #[1, 2, 3, 4, 5]
+  describe "BytesRef" do
+    it "set = withRef setOffElUnal" do
+      let i : Fin ba1.size := ⟨4, by decide⟩
+      let y : UInt8 := 42
+      isEqual (ba1.set i y) <| Prod.snd <| runST <| λ _ ↦ ba1.withRef λ br ↦ br.setOffElUnal i.val y i.isLt
+    it "getElem = view asRef drop take get" do
+      let i : Fin ba1.size := ⟨2, by decide⟩
+      isEqual ba1[i] <| runST λ _ ↦
+        ba1.view.asRef λ br ↦
+          Nat.gcd_one_left _ ▸ br.drop i (Nat.le_of_lt i.isLt) |>.take 1 (by decide) |>.get
+
 def deque :=
   describe "Deque" do
     it "size empty = 0" do
@@ -52,8 +79,10 @@ def deque :=
 
 def all :=
   describe "Pod" do
+    bytesView
+    bytesRef
     deque
 
 end Pod.Tests
 
-def main := runCli Pod.Tests.deque
+def main := runCli Pod.Tests.all

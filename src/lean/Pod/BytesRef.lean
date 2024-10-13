@@ -20,11 +20,19 @@ abbrev BytesRefImm (σ : Type) := BytesRef σ .Immutable
 
 /-- Clones array if it is shared. -/
 @[extern "lean_pod_ByteArray_withRef"]
-opaque _root_.ByteArray.withRef (ba : ByteArray) (f : ∀{σ}, BytesRefMut σ ba.size 1 → ST σ Unit) : ByteArray
+opaque _root_.ByteArray.withRef
+  {σ α} {m : Type → Type → Type} [Nonempty (m σ (α × ByteArray))] [@& Functor (m σ)]
+  (ba : ByteArray) (f : ∀{σ}, BytesRefMut σ ba.size 1 → m σ α) : m σ (α × ByteArray)
 
-/-- Clones array if it is shared. -/
-@[extern "lean_pod_ByteArray_withRefEx"]
-opaque _root_.ByteArray.withRefEx {ε} (ba : ByteArray) (f : ∀{σ}, BytesRefMut σ ba.size 1 → EST ε σ Unit) : Except ε ByteArray
+@[extern "lean_pod_ByteArray_withRefImm"]
+opaque _root_.ByteArray.withRefImm
+  {σ α} {m : Type → Type → Type} [Nonempty (m σ α)]
+  (ba : @& ByteArray) (f : ∀{σ}, BytesRefImm σ ba.size 1 → m σ α) : m σ α
+
+@[extern "lean_pod_BytesView_asRef"]
+opaque BytesView.asRef
+  {σ α} {m : Type → Type → Type} [Nonempty (m σ α)]
+  {sz align : @& Nat} (bv : @& BytesView sz align) (f : ∀{σ}, BytesRefImm σ sz align → m σ α) : m σ α
 
 namespace BytesRef
 
@@ -59,7 +67,7 @@ Read all bytes into a `ByteArray`.
 @[extern "lean_pod_BytesRef_toByteArray"]
 opaque toByteArray {mutab} {size align : @& Nat} (bv : @& BytesRef σ mutab size align) : ST σ ByteArray
 
-@[extern "lean_pod_BytesRef_copyView"]
-opaque copyView {size a1 a2 : @& Nat} (dst : @& BytesRefMut σ size a1) (src : @& BytesView size a2) : ST σ Unit
+@[extern "lean_pod_BytesRef_copy"]
+opaque copy {mutab} {size a1 a2 : @& Nat} (dst : @& BytesRefMut σ size a1) (src : @& BytesRef σ mutab size a2) : ST σ Unit
 
 end Pod.BytesRef
