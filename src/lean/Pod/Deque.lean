@@ -112,6 +112,11 @@ def popBack? (deque : Deque α) : Option (Deque α) :=
     then none
     else deque.popBack h
 
+def popBackD (deque : Deque α) : Deque α :=
+  if h: deque.isEmpty
+    then deque
+    else deque.popBack h
+
 @[extern "lean_pod_Deque_popFront"]
 def popFront (deque : Deque α) (h : ¬ deque.isEmpty) : Deque α :=
   .ofList (deque.toList.tailD [])
@@ -125,6 +130,11 @@ def popFront! (deque : Deque α) : Deque α :=
 def popFront? (deque : Deque α) : Option (Deque α) :=
   if h: deque.isEmpty
     then none
+    else deque.popFront h
+
+def popFrontD (deque : Deque α) : Deque α :=
+  if h: deque.isEmpty
+    then deque
     else deque.popFront h
 
 @[extern "lean_pod_Deque_clear"]
