@@ -101,9 +101,31 @@ def peekFront? (deque : Deque α) : Option α :=
 def popBack (deque : Deque α) (h : ¬ deque.isEmpty) : Deque α :=
   .ofList deque.toList.dropLast
 
+set_option compiler.extract_closed false in
+def popBack! (deque : Deque α) : Deque α :=
+  if h: deque.isEmpty
+    then panic! "Deque is empty"
+    else deque.popBack h
+
+def popBack? (deque : Deque α) : Option (Deque α) :=
+  if h: deque.isEmpty
+    then none
+    else deque.popBack h
+
 @[extern "lean_pod_Deque_popFront"]
 def popFront (deque : Deque α) (h : ¬ deque.isEmpty) : Deque α :=
   .ofList (deque.toList.tailD [])
+
+set_option compiler.extract_closed false in
+def popFront! (deque : Deque α) : Deque α :=
+  if h: deque.isEmpty
+    then panic! "Deque is empty"
+    else deque.popFront h
+
+def popFront? (deque : Deque α) : Option (Deque α) :=
+  if h: deque.isEmpty
+    then none
+    else deque.popFront h
 
 @[extern "lean_pod_Deque_clear"]
 def clear (deque : Deque α) : Deque α :=
@@ -145,5 +167,12 @@ def set! (deque : Deque α) (i : Nat) (x : α) : Deque α :=
 
 instance [Repr α] : Repr (Deque α) where
   reprPrec deque _ := s!"\{ toList := {repr deque.toList}}"
+
+set_option compiler.extract_closed false in
+instance : EmptyCollection (Deque α) where
+  emptyCollection := empty
+
+instance : Singleton α (Deque α) where
+  singleton := singleton
 
 end Deque
