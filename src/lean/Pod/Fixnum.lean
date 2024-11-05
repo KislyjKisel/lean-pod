@@ -4,20 +4,25 @@ import Pod.UInt
 
 namespace Pod
 
-def UFixnum.bitWidth := (System.Platform.numBits - 1)
+def UFixnum.bitWidth := System.Platform.numBits - 1
 
-abbrev UFixnum.size : Nat := (2 ^ UFixnum.bitWidth) - 1 + 1
+def UFixnum.size : Nat := 2 ^ UFixnum.bitWidth
 
-theorem UFixnum.size_eq : Or (UFixnum.size = 2147483648) (UFixnum.size = 9223372036854775808) :=
-  show Or ((Nat.succ (Nat.sub (2 ^ (System.Platform.numBits - 1)) 1)) = 2147483648) (Eq (Nat.succ (Nat.sub (2 ^ (System.Platform.numBits - 1)) 1)) 9223372036854775808) from
-  match System.Platform.numBits, System.Platform.numBits_eq with
-  | _, Or.inl rfl => Or.inl (by decide)
-  | _, Or.inr rfl => Or.inr (by decide)
+theorem UFixnum.size_eq : Or (UFixnum.size = 2147483648) (UFixnum.size = 9223372036854775808) := by
+  unfold size
+  unfold bitWidth
+  apply System.Platform.numBits_eq.elim <;> (intro h; rewrite [h]; decide)
 
 theorem UFixnum.size_ge : UFixnum.size ≥ 2147483648 :=
   match UFixnum.size_eq with
   | .inl h => Nat.le_of_eq h.symm
   | .inr h => Nat.le_trans (by decide) (Nat.le_of_eq h.symm)
+
+instance : NeZero UFixnum.size where
+  out := by
+    apply Nat.ne_of_gt
+    apply Nat.lt_of_lt_of_le _ UFixnum.size_ge
+    decide
 
 theorem UFixnum.bitWidth_ge : UFixnum.bitWidth ≥ 31 := by
   unfold bitWidth
@@ -33,10 +38,17 @@ Or on a 64-bit machine, UInt63.
 -/
 structure UFixnum where
   val : Fin UFixnum.size
-deriving Repr, Inhabited, DecidableEq
+deriving Repr, DecidableEq
+
+instance : Inhabited UFixnum where
+  default := ⟨0, Nat.lt_of_lt_of_le (by decide) UFixnum.size_ge⟩
 
 def UFixnum.maximum : UFixnum :=
-  ⟨(2 ^ bitWidth - 1), Nat.lt_succ_self _⟩
+  ⟨(2 ^ bitWidth - 1), by
+    apply Nat.sub_one_lt
+    apply Nat.ne_of_gt
+    apply Nat.one_le_two_pow
+  ⟩
 
 def UFixnum.ofNatCore (x : Nat) (h : x < size) : UFixnum :=
   ⟨x, h⟩
@@ -46,11 +58,11 @@ def UFixnum.ofNatCore' (x : Nat) (h : x < 2147483648) : UFixnum :=
 
 private unsafe
 def UFixnum.ofNatImpl (x : Nat) : UFixnum :=
-  ⟨(x &&& ((1 <<< (System.Platform.numBits - 1)) - 1)), lcProof⟩
+  ⟨(x &&& ((1 <<< bitWidth) - 1)), lcProof⟩
 
 @[implemented_by ofNatImpl]
 def UFixnum.ofNat (x : Nat) : UFixnum :=
-  .mk $ Fin.ofNat' x (Nat.lt_of_lt_of_le (by decide) size_ge)
+  .mk $ Fin.ofNat' size x
 
 instance UFixnum.instOfNat {n} : OfNat UFixnum n := ⟨.ofNat n⟩
 
