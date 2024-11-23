@@ -37,9 +37,9 @@ def bindingsSources : Array String := #[
   "deque"
 ]
 
-def bindingsSourceDirectory : FilePath := .mk "src" / "native"
+def bindingsSourceDirectory : System.FilePath := .mk "src" / "native"
 
-def bindingsExtraTrace : Array FilePath := #[
+def bindingsExtraTrace : Array System.FilePath := #[
   bindingsSourceDirectory / "include" / "lean_pod.h",
   bindingsSourceDirectory / "internal.h"
 ]
