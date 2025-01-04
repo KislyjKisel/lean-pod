@@ -26,7 +26,7 @@ scoped macro mods:declModifiers "define_foreign_type " id:declId binders:bracket
   let univs := Lean.Syntax.TSepArray.ofElems <| (univs.get! 0).getArgs.filterMap λ a ↦
     if a.getKind == `ident then some (Lean.TSyntax.mk a) else none
   let pairIdent := Lean.mkIdent (Lean.Name.appendAfter name.getId "Pointed")
-  let argNames : Array Lean.Syntax := binders.concatMap λ x ↦
+  let argNames : Array Lean.Syntax := binders.flatMap λ x ↦
     match x.raw with
     | Lean.Syntax.node _ `Lean.Parser.Term.explicitBinder args =>
       Lean.Syntax.getArgs <$> (args.get? 1) |>.getD #[]
