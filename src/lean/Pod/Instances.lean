@@ -175,10 +175,10 @@ macro "#pod_c_rwbytes_instance" typeId:ident : command => do
 #pod_c_rwbytes_instance USize
 #pod_c_rwbytes_instance Float
 #pod_c_rwbytes_instance Pod.UFixnum
-#pod_c_rwbytes_instance Pod.Int8
-#pod_c_rwbytes_instance Pod.Int16
-#pod_c_rwbytes_instance Pod.Int32
-#pod_c_rwbytes_instance Pod.Int64
+#pod_c_rwbytes_instance Int8
+#pod_c_rwbytes_instance Int16
+#pod_c_rwbytes_instance Int32
+#pod_c_rwbytes_instance Int64
 #pod_c_rwbytes_instance Pod.Float32
 
 instance {size alignment} : GetElem (Pod.BytesView size alignment) Nat UInt8 λ _ i ↦ i < size where

@@ -49,16 +49,16 @@ opaque UInt64.toFloat32 : UInt64 → Pod.Float32
 opaque USize.toFloat32 : USize → Pod.Float32
 
 @[extern "lean_pod_Int8_toFloat32"]
-opaque Pod.Int8.toFloat32 : Pod.Int8 → Pod.Float32
+opaque Pod.Int8.toFloat32 : Int8 → Pod.Float32
 
 @[extern "lean_pod_Int16_toFloat32"]
-opaque Pod.Int16.toFloat32 : Pod.Int16 → Pod.Float32
+opaque Pod.Int16.toFloat32 : Int16 → Pod.Float32
 
 @[extern "lean_pod_Int32_toFloat32"]
-opaque Pod.Int32.toFloat32 : Pod.Int32 → Pod.Float32
+opaque Pod.Int32.toFloat32 : Int32 → Pod.Float32
 
 @[extern "lean_pod_Int64_toFloat32"]
-opaque Pod.Int64.toFloat32 : Pod.Int64 → Pod.Float32
+opaque Pod.Int64.toFloat32 : Int64 → Pod.Float32
 
 @[extern "lean_pod_String_toFloat32"]
 opaque String.toFloat32? : @& String → Option Pod.Float32
@@ -296,12 +296,6 @@ end Pod
 
 
 /-! # Float -/
-
-@[extern "lean_pod_Float_bits"]
-opaque Float.bits : Float → UInt64
-
-@[extern "lean_pod_Float_ofBits"]
-opaque Float.ofBits : UInt64 → Float
 
 @[extern "lean_pod_Float_toLittleEndian"]
 opaque Float.toLittleEndian : Float → Float
