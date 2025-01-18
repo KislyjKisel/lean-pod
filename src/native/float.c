@@ -2,19 +2,19 @@
 #include <lean/lean.h>
 #include "include/lean_pod.h"
 
-#define LEAN_POD_CAST_FLOAT32_FROM(ltyp, ctyp, abiatyp)\
+#define LEAN_POD_CAST_FLOAT32_FROM(ltyp, abiatyp, fromabi)\
 LEAN_EXPORT float lean_pod_##ltyp##_toFloat32(abiatyp x) {\
-    return (ctyp)x;\
+    return (float)(fromabi(x));\
 }
 
-LEAN_POD_CAST_FLOAT32_FROM(UInt8, uint8_t, uint8_t);
-LEAN_POD_CAST_FLOAT32_FROM(UInt16, uint16_t, uint16_t);
-LEAN_POD_CAST_FLOAT32_FROM(UInt32, uint32_t, uint32_t);
-LEAN_POD_CAST_FLOAT32_FROM(USize, size_t, size_t);
-LEAN_POD_CAST_FLOAT32_FROM(Int8, int8_t, int8_t);
-LEAN_POD_CAST_FLOAT32_FROM(Int16, int16_t, int16_t);
-LEAN_POD_CAST_FLOAT32_FROM(Int32, int32_t, int32_t);
-LEAN_POD_CAST_FLOAT32_FROM(Int64, int64_t, int64_t);
+LEAN_POD_CAST_FLOAT32_FROM(UInt8, uint8_t, LEAN_POD_IDENTITY);
+LEAN_POD_CAST_FLOAT32_FROM(UInt16, uint16_t, LEAN_POD_IDENTITY);
+LEAN_POD_CAST_FLOAT32_FROM(UInt32, uint32_t, LEAN_POD_IDENTITY);
+LEAN_POD_CAST_FLOAT32_FROM(USize, size_t, LEAN_POD_IDENTITY);
+LEAN_POD_CAST_FLOAT32_FROM(Int8, lean_pod_Int8, lean_pod_Int8_fromRepr);
+LEAN_POD_CAST_FLOAT32_FROM(Int16, lean_pod_Int16, lean_pod_Int16_fromRepr);
+LEAN_POD_CAST_FLOAT32_FROM(Int32, lean_pod_Int32, lean_pod_Int32_fromRepr);
+LEAN_POD_CAST_FLOAT32_FROM(Int64, lean_pod_Int64, lean_pod_Int64_fromRepr);
 
 LEAN_EXPORT lean_obj_arg lean_pod_String_toFloat32(b_lean_obj_arg s) {
     char* retEnd = NULL;
@@ -43,15 +43,15 @@ LEAN_EXPORT lean_obj_arg lean_pod_Substring_toFloat32(b_lean_obj_arg s) {
     return lean_mk_option_some(lean_box_float32(x));
 }
 
-#define LEAN_POD_CAST_FLOAT32_TO(ltyp, ctyp, abirtyp)\
+#define LEAN_POD_CAST_FLOAT32_TO(ltyp, ctyp, abirtyp, toabi)\
 LEAN_EXPORT abirtyp lean_pod_Float32_to##ltyp(float x) {\
-    return (ctyp)x;\
+    return toabi((ctyp)x);\
 }
 
-LEAN_POD_CAST_FLOAT32_TO(Int8, int8_t, int8_t);
-LEAN_POD_CAST_FLOAT32_TO(Int16, int16_t, int16_t);
-LEAN_POD_CAST_FLOAT32_TO(Int32, int32_t, int32_t);
-LEAN_POD_CAST_FLOAT32_TO(Int64, int64_t, int64_t);
+LEAN_POD_CAST_FLOAT32_TO(Int8, int8_t, lean_pod_Int8, lean_pod_Int8_toRepr);
+LEAN_POD_CAST_FLOAT32_TO(Int16, int16_t, lean_pod_Int16, lean_pod_Int16_toRepr);
+LEAN_POD_CAST_FLOAT32_TO(Int32, int32_t, lean_pod_Int32, lean_pod_Int32_toRepr);
+LEAN_POD_CAST_FLOAT32_TO(Int64, int64_t, lean_pod_Int64, lean_pod_Int64_toRepr);
 
 LEAN_EXPORT uint8_t lean_pod_Float32_isNormal(float x) {
     return isnormal(x);

@@ -199,37 +199,17 @@ static inline lean_object* lean_pod_Ptr_box(void* cvalue) {\
 
 // # Signed integers
 
-static inline lean_obj_res lean_pod_Int8_box(int8_t x) {
-    return lean_box((uint8_t)x);
-}
+#define LEAN_POD_STATIC_INTEGER(bits, lfnsuffix)\
+typedef uint##bits##_t lean_pod_Int##bits;\
+static inline int##bits##_t lean_pod_Int##bits##_fromRepr(lean_pod_Int##bits x) {  return (int##bits##_t)x; }\
+static inline int##bits##_t lean_pod_Int##bits##_unbox(b_lean_obj_arg obj) { return lean_pod_Int##bits##_fromRepr(lean_unbox##lfnsuffix(obj)); }\
+static inline uint##bits##_t lean_pod_Int##bits##_toRepr(int##bits##_t x) { return (uint##bits##_t)x; }\
+static inline lean_object* lean_pod_Int##bits##_box(int##bits##_t x) { return lean_box##lfnsuffix(lean_pod_Int##bits##_toRepr(x)); }
 
-static inline lean_obj_res lean_pod_Int16_box(int16_t x) {
-    return lean_box((uint16_t)x);
-}
-
-static inline lean_obj_res lean_pod_Int32_box(int32_t x) {
-    return lean_box_uint32((uint32_t)x);
-}
-
-static inline lean_obj_res lean_pod_Int64_box(int64_t x) {
-    return lean_box_uint64((uint64_t)x);
-}
-
-static inline int8_t lean_pod_Int8_unbox(b_lean_obj_arg x) {
-    return (uint8_t)lean_unbox(x);
-}
-
-static inline int16_t lean_pod_Int16_unbox(b_lean_obj_arg x) {
-    return (uint16_t)lean_unbox(x);
-}
-
-static inline int32_t lean_pod_Int32_unbox(b_lean_obj_arg x) {
-    return lean_unbox_uint32(x);
-}
-
-static inline int64_t lean_pod_Int64_unbox(b_lean_obj_arg x) {
-    return lean_unbox_uint64(x);
-}
+LEAN_POD_STATIC_INTEGER(8, )
+LEAN_POD_STATIC_INTEGER(16, )
+LEAN_POD_STATIC_INTEGER(32, _uint32)
+LEAN_POD_STATIC_INTEGER(64, _uint64)
 
 
 // # UFixnum
