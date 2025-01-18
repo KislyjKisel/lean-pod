@@ -13,7 +13,10 @@ typedef struct {
 typedef struct lean_pod_FixnumSlotMap_data {
     size_t size;
     size_t capacity;
+    // Must be <= firstUnused
     size_t firstEmpty;
+    // Must be <= capacity
+    size_t firstUnused;
     lean_pod_SlotMap_entry values[];
 } lean_pod_FixnumSlotMap_data;
 

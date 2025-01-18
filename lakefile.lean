@@ -5,8 +5,8 @@ def optionBindingsCompiler := (get_config? cc).getD "cc"
 def optionBindingsFlags := Array.mk $ ((get_config? cflags).getD "").splitOn.filter $ not ∘ String.isEmpty
 def optionAllocator := get_config? alloc
 
-require Specs from git
-  "https://github.com/axiomed/Specs.lean" @ "ab52219"
+require LSpec from git
+  "https://github.com/argumentcomputer/LSpec" @ "b7d4dc6"
 
 package «pod» where
   srcDir := "src/lean"
@@ -17,8 +17,7 @@ lean_lib Pod where
   precompileModules := true
 
 @[test_driver]
-lean_exe "pod-tests" where
-  root := `Tests
+lean_exe Tests
 
 
 def bindingsSources : Array String := #[

@@ -179,7 +179,7 @@ macro "#pod_c_rwbytes_instance" typeId:ident : command => do
 #pod_c_rwbytes_instance Int16
 #pod_c_rwbytes_instance Int32
 #pod_c_rwbytes_instance Int64
-#pod_c_rwbytes_instance Pod.Float32
+#pod_c_rwbytes_instance Float32
 
 instance {size alignment} : GetElem (Pod.BytesView size alignment) Nat UInt8 λ _ i ↦ i < size where
   getElem bv i h := Pod.readBytesViewOff_UInt8 bv i h
