@@ -121,8 +121,8 @@ static inline size_t lean_pod_Substring_utf8_byte_size(b_lean_obj_arg ss) {
 
 // `(obj, typ, idx, tag, nbox, nusize, n8, n4, n2, n1)`:
 // * `obj`: lean ctor object;
-// * `typ`: field's type, one of `BOX` `USIZE` `U8` `U16` `U32` `U64` `F64`;
-// * `idx`: field's index among fields of the same type (`F64` and `U64` share indices);
+// * `typ`: field's type, one of `BOX` `USIZE` `U8` `U16` `U32` `F32` `U64` `F64`;
+// * `idx`: field's index among fields of the same type (`F64` and `U64` share indices, similarly with `F32` and `U32`);
 // * `tag`: ctor tag
 // * `n..`: number of ctor fields of corresponding type.
 // Can be used with a macro defining type's and field's layouts:
@@ -137,8 +137,8 @@ static inline size_t lean_pod_Substring_utf8_byte_size(b_lean_obj_arg ss) {
 // `(obj, val, typ, idx, tag, nbox, nusize, n8, n4, n2, n1)`:
 // * `obj`: lean ctor object;
 // * `val`: c value to be set;
-// * `typ`: field's type, one of `BOX` `USIZE` `U8` `U16` `U32` `U64` `F64`;
-// * `idx`: field's index among fields of the same type (`F64` and `U64` share indices);
+// * `typ`: field's type, one of `BOX` `USIZE` `U8` `U16` `U32` `F32` `U64` `F64`;
+// * `idx`: field's index among fields of the same type (`F64` and `U64` share indices, similarly with `F32` and `U32`);
 // * `tag`: ctor tag
 // * `n..`: number of ctor fields of corresponding type.
 // Can be used with a macro defining type's and field's layouts:
