@@ -38,7 +38,7 @@ Or on a 64-bit machine, UInt63.
 -/
 structure UFixnum where
   val : Fin UFixnum.size
-deriving Repr, DecidableEq
+deriving Repr, DecidableEq, Hashable
 
 instance : Inhabited UFixnum where
   default := ⟨0, Nat.lt_of_lt_of_le (by decide) UFixnum.size_ge⟩
@@ -174,6 +174,24 @@ instance : Sub UFixnum := ⟨UFixnum.sub⟩
 instance : Mul UFixnum := ⟨UFixnum.mul⟩
 instance : Div UFixnum := ⟨UFixnum.div⟩
 instance : Mod UFixnum := ⟨UFixnum.mod⟩
+
+instance : LT UFixnum where
+  lt x y := x.val < y.val
+
+instance : LE UFixnum where
+  le x y := x.val ≤ y.val
+
+instance : DecidableLT UFixnum := λ x y ↦
+  Fin.decLt x.val y.val
+
+instance : DecidableLE UFixnum := λ x y ↦
+  Fin.decLe x.val y.val
+
+instance : Max UFixnum where
+  max x y := ⟨⟨max x.1.val y.1.val, Nat.max_lt.mpr ⟨x.1.isLt, y.1.isLt⟩⟩⟩
+
+instance : Min UFixnum where
+  min x y := ⟨⟨min x.1.val y.1.val, Nat.lt_of_le_of_lt (Nat.min_le_left ..) x.1.isLt⟩⟩
 
 instance : ToString UFixnum where
   toString x := toString x.toNat
