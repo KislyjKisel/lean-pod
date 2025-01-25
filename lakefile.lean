@@ -4,6 +4,7 @@ open Lake DSL
 def optionBindingsCompiler := (get_config? cc).getD "cc"
 def optionBindingsFlags := Array.mk $ ((get_config? cflags).getD "").splitOn.filter $ not ∘ String.isEmpty
 def optionAllocator := get_config? alloc
+def optionPrecompile := (get_config? precompile).isSome
 
 require LSpec from git
   "https://github.com/argumentcomputer/LSpec" @ "b7d4dc6"
@@ -14,7 +15,7 @@ package «pod» where
 
 @[default_target]
 lean_lib Pod where
-  precompileModules := true
+  precompileModules := optionPrecompile
 
 @[test_driver]
 lean_exe Tests
