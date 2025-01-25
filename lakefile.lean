@@ -10,7 +10,7 @@ require LSpec from git
   "https://github.com/argumentcomputer/LSpec" @ "b7d4dc6"
 
 package «pod» where
-  srcDir := "src/lean"
+  srcDir := "src"
   leanOptions := #[⟨`autoImplicit, false⟩]
 
 @[default_target]
@@ -37,7 +37,7 @@ def bindingsSources : Array String := #[
   "deque"
 ]
 
-def bindingsSourceDirectory : System.FilePath := .mk "src" / "native"
+def bindingsSourceDirectory : System.FilePath := .mk "ffi"
 
 def bindingsExtraTrace : Array System.FilePath := #[
   bindingsSourceDirectory / "include" / "lean_pod.h",
@@ -57,6 +57,6 @@ extern_lib «lean-pod» pkg := do
 
   buildStaticLib (pkg.nativeLibDir / name)
     (← bindingsSources.mapM λ stem ↦ do
-      let oFile := pkg.irDir / "native" / (stem ++ ".o")
+      let oFile := pkg.irDir / "__ffi__" / (stem ++ ".o")
       let srcJob ← inputTextFile <| pkg.dir / bindingsSourceDirectory / (stem ++ ".c")
       buildO oFile srcJob weakArgs traceArgs optionBindingsCompiler (pure extraTrace))
