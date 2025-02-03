@@ -39,7 +39,7 @@ static inline lean_obj_res lean_pod_FixnumSlotMap_ensureExclusive(lean_obj_arg d
     memcpy(data_clone_c, data_c, sizeof(lean_pod_FixnumSlotMap_data));
     for (size_t i = 0; i < data_c->firstUnused; ++i) {
         lean_pod_SlotMap_entry* x = &data_c->values[i];
-        if (x->generation & 1 > 0) {
+        if ((x->generation & 1) > 0) {
             lean_inc(x->value);
         }
         data_clone_c->values[i] = *x;
@@ -163,7 +163,7 @@ LEAN_EXPORT lean_obj_res lean_pod_FixnumSlotMap_insert(
         for (size_t i = 0; i < data_c->firstUnused; ++i) {
             lean_pod_SlotMap_entry* entry = &data_c->values[i];
             newData_c->values[i] = *entry;
-            assert(entry->generation & 1 > 0);
+            assert((entry->generation & 1) > 0);
             lean_inc(entry->value);
         }
         newData_c->capacity = newCapacity;
