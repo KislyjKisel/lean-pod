@@ -7,7 +7,7 @@ def optionAllocator := get_config? alloc
 def optionPrecompile := (get_config? precompile).isSome
 
 require LSpec from git
-  "https://github.com/argumentcomputer/LSpec" @ "b7d4dc6"
+  "https://github.com/argumentcomputer/LSpec" @ "7f2c46b"
 
 package «pod» where
   srcDir := "src"
@@ -18,7 +18,7 @@ lean_lib Pod where
   precompileModules := optionPrecompile
 
 @[test_driver]
-lean_exe Tests
+lean_exe PodTests
 
 
 def bindingsSources : Array String := #[
