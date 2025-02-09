@@ -226,6 +226,8 @@ typedef lean_object* lean_pod_UFixnum;
 
 // Float32 (for compatibility)
 
+typedef float lean_pod_Float32;
+
 static inline float lean_pod_Float32_fromRepr(float x) {
     return x;
 }
