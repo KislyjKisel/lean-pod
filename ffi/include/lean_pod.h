@@ -224,14 +224,33 @@ typedef lean_object* lean_pod_UFixnum;
 #define lean_pod_UFixnum_unbox lean_unbox
 
 
+// Float32 (for compatibility)
+
+static inline float lean_pod_Float32_fromRepr(float x) {
+    return x;
+}
+
+static inline float lean_pod_Float32_unbox(b_lean_obj_arg obj) {
+    return lean_pod_Float32_fromRepr(lean_unbox_float32(obj));
+}
+
+static inline float lean_pod_Float32_toRepr(float x) {
+    return x;
+}
+
+static inline lean_object* lean_pod_Float32_box(float x) {
+    return lean_box_float32(x);
+}
+
+
 // # Storable
 
-/// @returns @& Nat
+/// @returns \@& Nat
 static inline b_lean_obj_res lean_pod_Storable_byteSize(b_lean_obj_arg storable) {
     return lean_ctor_get(storable, 0);
 }
 
-/// @returns @& Nat
+/// @returns \@& Nat
 static inline b_lean_obj_res lean_pod_Storable_alignment(b_lean_obj_arg storable) {
     return lean_ctor_get(storable, 1);
 }
