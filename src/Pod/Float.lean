@@ -34,13 +34,9 @@ def toBigEndian : Float32 → Float32 :=
 
 end Float32
 
-namespace Pod
-
 instance : Storable Float32 where
   byteSize := byteSize UInt32
   alignment := alignment UInt32
-
-end Pod
 
 def Float.toLittleEndian : Float → Float :=
   Float.ofBits ∘ UInt64.toLittleEndian ∘ Float.toBits
