@@ -6,15 +6,14 @@ open LSpec
 namespace Pod.Tests
 
 def float32 := group "Float32"
-  <| test "Substring.toFloat32? 1.24" ("1.24".toSubstring.toFloat32? == some 1.24)
-  <| test "Substring.toFloat32? -0.1" ("-0.1".toSubstring.toFloat32? == some (-0.1))
-  <| test "Substring.toFloat32? 1.4x" ("1.4x".toSubstring.toFloat32? == none)
+  <| test "Substring.toFloat32? 1.24" (Pod.Substring.toFloat32? "1.24".toSubstring == some 1.24)
+  <| test "Substring.toFloat32? -0.1" (Pod.Substring.toFloat32? "-0.1".toSubstring == some (-0.1))
+  <| test "Substring.toFloat32? 1.4x" (Pod.Substring.toFloat32? "1.4x".toSubstring == none)
   <| test "toLittleEndian toBits bswap = toBits toBigEndian"
-    ((3.14 : Float32).toLittleEndian.toBits.bswap == (3.14 : Float32).toBits.toBigEndian)
-  <| test "isNormal 1" (1 : Float32).isNormal
-  <| test "¬ isNormal 0" (0 : Float32).isNormal.not
-  <| test "¬ isNormal ∞" Float32.inf.isNormal.not
-  <| test "toInt32 74" ((74 : Float32).toInt32 == 74)
+    ((Pod.Float32.toLittleEndian (3.14 : Float32)).toBits.bswap == (3.14 : Float32).toBits.toBigEndian)
+  <| test "isNormal 1" (Pod.Float32.isNormal 1)
+  <| test "¬ isNormal 0" (Pod.Float32.isNormal 0).not
+  <| test "¬ isNormal ∞" (Pod.Float32.isNormal Pod.Float32.inf).not
 
 instance : Repr ByteArray where
   reprPrec x _ := "#" ++ repr x.data
@@ -96,14 +95,13 @@ def fixnumSlotMap :=
   <| test "{ 1, 2, 3 } |>.set 2 |>.get 2" ((m123.setD k2 4).get? k2 = some 4)
   <| test "{ 1, 2, 3 } \\ 2 |>.set 2 |>.get 2" ((m13.setD k2 4).get? k2 = none)
 
-def all := TestSeq.done
-  ++ float32
-  ++ bytesView
-  ++ bytesRef
-  ++ deque
-  ++ fixnumSlotMap
-
 end Pod.Tests
 
-def main :=
-  lspecIO Pod.Tests.all
+def main : List String → IO UInt32 :=
+  lspecIO ∘ Std.HashMap.ofList ∘ List.map (Prod.map id List.singleton) <| [
+    ("float32", Pod.Tests.float32),
+    ("bytesView", Pod.Tests.bytesView),
+    ("bytesRef", Pod.Tests.bytesRef),
+    ("deque", Pod.Tests.deque),
+    ("fixnumSlotMap", Pod.Tests.fixnumSlotMap),
+  ]

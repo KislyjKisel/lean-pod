@@ -21,7 +21,7 @@ theorem _root_.Fin.toNat_sub_distrib {n} (a b : Fin n) (h : b ≤ a) :
   · exact aLt
 
 theorem usize_size_ge_2_pow_32 : USize.size ≥ 2 ^ 32 :=
-  match usize_size_eq with
+  match USize.size_eq with
     | Or.inl p => Nat.le_of_eq p.symm
     | Or.inr p => Nat.le_of_lt $ Nat.lt_of_lt_of_eq (by decide) p.symm
 

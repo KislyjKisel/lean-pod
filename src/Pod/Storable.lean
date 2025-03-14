@@ -15,7 +15,7 @@ abbrev byteSizeArray (α : Type) [Storable α] (n : Nat) : Nat := n * byteSize �
 
 theorem not_alignment_eq_zero {α} [Storable α] : ¬ alignment α = 0 := by
   intro h
-  apply Nat.not_eq_zero_of_lt $ byteSize_gt_zero (α := α)
+  apply Nat.ne_zero_of_lt $ byteSize_gt_zero (α := α)
   apply (@alignment_dvd_byteSize α).elim
   intro k b
   rw [b, h]

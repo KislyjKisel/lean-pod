@@ -29,7 +29,7 @@ scoped macro mods:declModifiers "define_foreign_type " id:declId binders:bracket
   let argNames : Array Lean.Syntax := binders.flatMap λ x ↦
     match x.raw with
     | Lean.Syntax.node _ `Lean.Parser.Term.explicitBinder args =>
-      Lean.Syntax.getArgs <$> (args.get? 1) |>.getD #[]
+      Lean.Syntax.getArgs <$> args[1]? |>.getD #[]
     | _ => #[]
   let applied := Lean.TSyntaxArray.mk argNames
   let level : Lean.TSyntax `level := ty.elim

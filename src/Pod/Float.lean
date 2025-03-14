@@ -2,6 +2,8 @@ import Pod.UInt
 import Pod.Storable
 import Pod.Int
 
+namespace Pod
+
 namespace Float32
 
 def inf : Float32 := .ofBits 0x7F800000
@@ -10,30 +12,6 @@ def pi : Float32 := .ofBits 0x40490FDB
 
 end Float32
 
-@[extern "lean_pod_UInt8_toFloat32"]
-opaque UInt8.toFloat32 : UInt8 → Float32
-
-@[extern "lean_pod_UInt16_toFloat32"]
-opaque UInt16.toFloat32 : UInt16 → Float32
-
-@[extern "lean_pod_UInt32_toFloat32"]
-opaque UInt32.toFloat32 : UInt32 → Float32
-
-@[extern "lean_pod_USize_toFloat32"]
-opaque USize.toFloat32 : USize → Float32
-
-@[extern "lean_pod_Int8_toFloat32"]
-opaque Int8.toFloat32 : Int8 → Float32
-
-@[extern "lean_pod_Int16_toFloat32"]
-opaque Int16.toFloat32 : Int16 → Float32
-
-@[extern "lean_pod_Int32_toFloat32"]
-opaque Int32.toFloat32 : Int32 → Float32
-
-@[extern "lean_pod_Int64_toFloat32"]
-opaque Int64.toFloat32 : Int64 → Float32
-
 @[extern "lean_pod_String_toFloat32"]
 opaque String.toFloat32? : @& String → Option Float32
 
@@ -41,18 +19,6 @@ opaque String.toFloat32? : @& String → Option Float32
 opaque Substring.toFloat32? : @& Substring → Option Float32
 
 namespace Float32
-
-@[extern "lean_pod_Float32_toInt8"]
-opaque toInt8 : Float32 → Int8
-
-@[extern "lean_pod_Float32_toInt16"]
-opaque toInt16 : Float32 → Int16
-
-@[extern "lean_pod_Float32_toInt32"]
-opaque toInt32 : Float32 → Int32
-
-@[extern "lean_pod_Float32_toInt64"]
-opaque toInt64 : Float32 → Int64
 
 @[extern "lean_pod_Float32_isNormal"]
 opaque isNormal : Float32 → Bool

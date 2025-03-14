@@ -7,7 +7,7 @@ def optionAllocator := get_config? alloc
 def optionPrecompile := (get_config? precompile).isSome
 
 require LSpec from git
-  "https://github.com/argumentcomputer/LSpec" @ "7f2c46b"
+  "https://github.com/argumentcomputer/LSpec" @ "a6652a4"
 
 package «pod» where
   srcDir := "src"

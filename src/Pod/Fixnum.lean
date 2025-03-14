@@ -71,10 +71,10 @@ def UFixnum.ofBool (x : Bool) : UFixnum :=
   cond x 1 0
 
 def UFixnum.ofUInt8 (x : UInt8) : UFixnum :=
-  ⟨x.toNat, Nat.lt_trans x.val.isLt $ Nat.lt_of_lt_of_le (by decide) size_ge⟩
+  ⟨x.toNat, Nat.lt_trans x.toNat_lt_size $ Nat.lt_of_lt_of_le (by decide) size_ge⟩
 
 def UFixnum.ofUInt16 (x : UInt16) : UFixnum :=
-  ⟨x.toNat, Nat.lt_trans x.val.isLt $ Nat.lt_of_lt_of_le (by decide) size_ge⟩
+  ⟨x.toNat, Nat.lt_trans x.toNat_lt_size $ Nat.lt_of_lt_of_le (by decide) size_ge⟩
 
 @[extern c inline "lean_box(#1 & (((size_t)1 << ((sizeof(size_t) * 8) - 1)) - 1))"]
 opaque UFixnum.ofUInt32 (x : UInt32) : UFixnum
@@ -107,7 +107,7 @@ def UFixnum.toUInt32 (x : UFixnum) : UInt32 :=
 
 @[extern c inline "lean_unbox(#1)"]
 def UFixnum.toUInt64 (x : UFixnum) : UInt64 :=
-  UInt64.ofNatCore x.toNat (Nat.lt_trans (toNat_lt x) (by decide))
+  UInt64.ofNatLT x.toNat (Nat.lt_trans (toNat_lt x) (by decide))
 
 @[extern c inline "#1 == #2"]
 def UFixnum.beq (x y : UFixnum) : Bool :=
