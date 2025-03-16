@@ -126,7 +126,7 @@ def Registry.Key.modifyGetIoImpl
     pure res
 
 @[implemented_by modifyGetIoImpl]
-unsafe opaque Registry.Key.modifyGetIo
+opaque Registry.Key.modifyGetIo
   {α : ι → Type} {β} [Nonempty β] {reg : Registry α} {i}
   (key : Key reg i) (f : α i → BaseIO (β × α i)) : BaseIO β
 
