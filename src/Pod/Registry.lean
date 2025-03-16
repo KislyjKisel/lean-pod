@@ -2,7 +2,7 @@ import Std.Sync.Mutex
 import Std.Data.HashMap
 import Pod.Array
 
-namespace A61d.Ext
+namespace Pod
 
 universe u
 variable {ι : Type u}
