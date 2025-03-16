@@ -219,3 +219,9 @@ def modify
   [irk : IsRegistryKey α]
   (reg : Registry.Downstream α β) {i} (key : α i) (f : β key → β key) : BaseIO Unit :=
     reg.modifyGet key λ x ↦ ((), f x)
+
+/-- For each *used* `key : α i`, `f` is called with `β key`. -/
+unsafe opaque forIo
+  [irk : IsRegistryKey α]
+  (reg : Registry.Downstream α β) (f : NonScalar → BaseIO Unit) : BaseIO Unit := do
+    (← reg.data.get).forM λ _ ↦ f
