@@ -100,6 +100,19 @@ opaque Registry.Key.modifyGet
   {α : ι → Type} {β} [Nonempty β] {reg : Registry α} {i}
   (key : Key reg i) (f : α i → β × α i) : BaseIO β
 
+private unsafe
+def Registry.Key.modifyIoImpl
+  {α : ι → Type} {reg : Registry α} {i}
+  (key : Key reg i) (f : α i → BaseIO (α i)) : BaseIO Unit := do
+    let data ← reg.data.take -- `Ref.take` is marked unsafe, why?
+    let data ← data.modifyM key.val λ x ↦
+      @unsafeCast (α i) NonScalar <$> (f <| @unsafeCast NonScalar (α i) x)
+    reg.data.set data -- Always called because `BaseIO` can't throw.
+
+@[implemented_by modifyIoImpl]
+unsafe opaque Registry.Key.modifyIo
+  {α : ι → Type} {reg : Registry α} {i}
+  (key : Key reg i) (f : α i → BaseIO (α i)) : BaseIO Unit
 
 
 /--
