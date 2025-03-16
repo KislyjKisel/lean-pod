@@ -110,7 +110,7 @@ def Registry.Key.modifyIoImpl
     reg.data.set data -- Always called because `BaseIO` can't throw.
 
 @[implemented_by modifyIoImpl]
-unsafe opaque Registry.Key.modifyIo
+opaque Registry.Key.modifyIo
   {α : ι → Type} {reg : Registry α} {i}
   (key : Key reg i) (f : α i → BaseIO (α i)) : BaseIO Unit
 
