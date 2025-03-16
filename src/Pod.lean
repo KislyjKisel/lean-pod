@@ -17,3 +17,4 @@ import Pod.Instances
 import Pod.UVector
 import Pod.SlotMap
 import Pod.Deque
+import Pod.Registry
