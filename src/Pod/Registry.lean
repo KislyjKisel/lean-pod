@@ -156,7 +156,7 @@ def newImpl (init : ∀ i, (k : α i) → β k) : BaseIO (Downstream α β) := d
 @[implemented_by newImpl]
 opaque new (init : ∀ i, (k : α i) → β k) : BaseIO (Downstream α β)
 
-private unsafe
+@[specialize] private unsafe
 def modifyGetImpl
   {γ} [Nonempty γ] [irk : IsRegistryKey α]
   (reg : Registry.Downstream α β) {i} (key : α i) (f : β key → γ × β key) : BaseIO γ := do
@@ -179,3 +179,15 @@ def get
   [irk : IsRegistryKey α] (reg : Registry.Downstream α β) {i} (key : α i) [Nonempty (β key)]
   : BaseIO (β key) :=
     reg.modifyGet key (λ x ↦ (x, x))
+
+@[inline]
+def set
+  [irk : IsRegistryKey α] (reg : Registry.Downstream α β) {i} (key : α i) (value : β key)
+  : BaseIO Unit :=
+    reg.modifyGet key (λ _ ↦ ((), value))
+
+@[inline]
+def modify
+  [irk : IsRegistryKey α]
+  (reg : Registry.Downstream α β) {i} (key : α i) (f : β key → β key) : BaseIO Unit :=
+    reg.modifyGet key λ x ↦ ((), f x)
