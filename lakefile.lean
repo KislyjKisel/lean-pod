@@ -1,7 +1,7 @@
 import Lake
 open Lake DSL
 
-def optionBindingsCompiler := (get_config? cc).getD "cc"
+def optionBindingsCompiler := get_config? cc
 def optionBindingsFlags := Array.mk $ ((get_config? cflags).getD "").splitOn.filter $ not ∘ String.isEmpty
 def optionAllocator := get_config? alloc
 def optionPrecompile := (get_config? precompile).isSome
@@ -46,17 +46,26 @@ def bindingsExtraTrace : Array System.FilePath := #[
 
 extern_lib «lean-pod» pkg := do
   let name := nameToStaticLib "lean-pod"
-  let mut weakArgs := #["-I", (← getLeanIncludeDir).toString].append optionBindingsFlags
-  let mut traceArgs := #["-fPIC"]
+  let mut weakArgs := #["-I", (← getLeanIncludeDir).toString]
+  let mut traceArgs := #["-fPIC"].append optionBindingsFlags
   let extraTrace ← mixTraceArray <$> (bindingsExtraTrace.mapM λ file ↦ computeTrace (pkg.dir / file))
+  let extraTrace : BuildTrace := mixTrace extraTrace (← getLeanTrace)
 
   match optionAllocator with
   | .none | .some "lean" => pure ()
   | .some "native" => traceArgs := traceArgs.push "-DLEAN_POD_ALLOC_NATIVE"
   | .some _ => error "Unknown `alloc` option"
 
+  if (get_config? cc).isNone && (← getLeanCc?).isNone && (← IO.getEnv "CC").isNone then
+    weakArgs := weakArgs ++ #["-I", ((← getLeanIncludeDir) / "clang").toString]
+
   buildStaticLib (pkg.nativeLibDir / name)
     (← bindingsSources.mapM λ stem ↦ do
-      let oFile := pkg.buildDir / "ffi" / (stem ++ ".o")
-      let srcJob ← inputTextFile <| pkg.dir / bindingsSourceDirectory / (stem ++ ".c")
-      buildO oFile srcJob weakArgs traceArgs optionBindingsCompiler (pure extraTrace))
+      buildO
+        (pkg.buildDir / "ffi" / (stem ++ ".o"))
+        (← inputTextFile <| pkg.dir / bindingsSourceDirectory / (stem ++ ".c"))
+        weakArgs
+        traceArgs
+        ((get_config? cc).getD (← getLeanCc).toString)
+        (pure extraTrace)
+    )
