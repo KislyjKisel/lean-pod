@@ -59,7 +59,7 @@ extern_lib «lean-pod» pkg := do
   if (get_config? cc).isNone && (← getLeanCc?).isNone && (← IO.getEnv "CC").isNone then
     weakArgs := weakArgs ++ #["-I", ((← getLeanIncludeDir) / "clang").toString]
 
-  buildStaticLib (pkg.nativeLibDir / name)
+  buildStaticLib (pkg.staticLibDir / name)
     (← bindingsSources.mapM λ stem ↦ do
       buildO
         (pkg.buildDir / "ffi" / (stem ++ ".o"))

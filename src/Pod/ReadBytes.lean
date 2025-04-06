@@ -100,6 +100,6 @@ def BytesView.getOffEl (bv : BytesView size (alignment α))
 
 @[specialize]
 def ReadBytes.zero : α :=
-  let ba := ByteArray.mk (Array.mkArray (byteSize α) 0)
-  have : ba.size = (byteSize α) := Array.size_mkArray _ _
+  let ba := ByteArray.mk (Array.replicate (byteSize α) 0)
+  have : ba.size = (byteSize α) := Array.size_replicate
   this ▸ (ba |>.view) |>.getUnal

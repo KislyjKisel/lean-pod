@@ -63,7 +63,7 @@ def deque :=
   <| test "toList∘ofArray ['a','b','c']" ((Deque.ofArray #["a", "b", "c"]).toList == ["a", "b", "c"])
   <| test "toList∘ofArray #[]" ((Deque.ofArray (#[] : Array Nat)).toList == [])
   <| test "(replicate 5 'w').toArray = Array.mkArray 5 'w'"
-    ((Deque.replicate 5 'w').toArray == (Array.mkArray 5 'w'))
+    ((Deque.replicate 5 'w').toArray == (Array.replicate 5 'w'))
   <| test "(empty.pushBack 1).peekBack _ = 1"
     ((if h: _ then (Deque.empty.pushBack 1).peekBack h else 0) == 1)
   <| test "(empty.pushFront 'x' |>.pushBack 'y').peekFront _ = 'x'"

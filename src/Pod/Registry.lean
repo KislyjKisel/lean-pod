@@ -175,7 +175,7 @@ def init' (reg : Downstream α β) : ∀ i, (k : α i) → β k :=
 
 private unsafe
 def newImpl (init : ∀ i, (k : α i) → β k) : BaseIO (Downstream α β) := do
-  let data ← IO.mkRef .empty
+  let data ← IO.mkRef ∅
   pure {
     init := unsafeCast init
     data

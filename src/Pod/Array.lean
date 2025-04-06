@@ -5,7 +5,7 @@ unsafe def Array.modifyGetImpl {α β} (a : Array α) (i : Nat) (h : i < a.size)
   let v := a[i]
   let a' := a.set i (unsafeCast ())
   let (x, v) := f v
-  (x, a'.set i v (Nat.lt_of_lt_of_eq h (Array.size_set a ..).symm))
+  (x, a'.set i v (Nat.lt_of_lt_of_eq h (Array.size_set ..).symm))
 
 @[implemented_by modifyGetImpl]
 def Array.modifyGet {α β} (a : Array α) (i : Nat) (h : i < a.size) (f : α → β × α) : β × Array α :=
@@ -19,7 +19,7 @@ unsafe def Array.modifyGetIoImpl
     let v := a[i]
     let a' := a.set i (unsafeCast ())
     let (x, v) ← f v
-    pure (x, a'.set i v (Nat.lt_of_lt_of_eq h (Array.size_set a ..).symm))
+    pure (x, a'.set i v (Nat.lt_of_lt_of_eq h (Array.size_set ..).symm))
 
 @[implemented_by modifyGetIoImpl]
 def Array.modifyGetIo
