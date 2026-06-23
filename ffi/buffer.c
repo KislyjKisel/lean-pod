@@ -34,6 +34,6 @@ LEAN_EXPORT lean_pod_Buffer lean_pod_Buffer_withRef(b_lean_obj_arg sz_nat, b_lea
         lean_pod_BytesRef_box(lean_pod_Buffer_fromRepr(buf_res)->data),
         lean_box(0)
     );
-    lean_dec_ref(fres);
+    assert(lean_is_scalar(fres));
     return buf_res;
 }

@@ -89,7 +89,7 @@ macro "#pod_c_rwbytes_instance" typeId:ident : command => do
     ← `(command|
       @[extern $(mkStrLit $ "lean_pod_" ++ declName_vu0):str]
       opaque $(mkIdent $ Name.mkSimple declName_vu0)
-         {align : @& Nat} (bv : @& BytesView (byteSize $typeId) align) : $typeId
+        {align : @& Nat} (bv : @& BytesView (byteSize $typeId) align) : $typeId
     ),
     ← `(command|
       @[extern $(mkStrLit $ "lean_pod_" ++ declName_vu1):str]

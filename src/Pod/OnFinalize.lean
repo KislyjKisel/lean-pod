@@ -2,7 +2,7 @@ import Pod.Meta
 
 namespace Pod
 
-/-- Noop. May be useful for artificially extending object lifetime when debugging. -/
+/-- Noop. May be useful for artificially extending object lifetime when debugging. See also: `Runtime.hold`. -/
 @[extern "lean_pod_touch"]
 opaque touch {α β} (val : @& α) (res : β) : β := res
 

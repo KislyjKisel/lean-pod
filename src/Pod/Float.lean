@@ -16,7 +16,7 @@ end Float32
 opaque String.toFloat32? : @& String → Option Float32
 
 @[extern "lean_pod_Substring_toFloat32"]
-opaque Substring.toFloat32? : @& Substring → Option Float32
+opaque Substring.toFloat32? : @& String.Slice → Option Float32
 
 namespace Float32
 

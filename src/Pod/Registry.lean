@@ -29,7 +29,7 @@ class IsRegistryKey (α : ι → Type) where
   private mk ::
   private toNat : ∀ {i}, α i → Nat
 
-@[always_inline, inline]
+@[reducible]
 def IsRegistryKey.wrapper
   {ι ι'} {α : ι → Type} {β : ι' → Type} [IsRegistryKey α]
   (mapI : ι' → ι) (to : ∀ {i}, β i → α (mapI i))

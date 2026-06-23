@@ -1,5 +1,7 @@
 import Pod.Endianness
 
+namespace Pod
+
 @[extern "lean_pod_UInt16_bswap"]
 def UInt16.bswap (value : UInt16) : UInt16 :=
   (value <<< 8) ||| (value >>> 8)
@@ -8,13 +10,13 @@ def UInt16.bswap (value : UInt16) : UInt16 :=
 def UInt16.toBigEndian (value : UInt16) :=
   if Pod.endianness = .big
     then value
-    else value.bswap
+    else bswap value
 
 @[extern "lean_pod_UInt16_toLittleEndian"]
 def UInt16.toLittleEndian (value : UInt16) :=
   if Pod.endianness = .little
     then value
-    else value.bswap
+    else bswap value
 
 @[extern "lean_pod_UInt32_bswap"]
 def UInt32.bswap (value : UInt32) : UInt32 :=
@@ -27,13 +29,13 @@ def UInt32.bswap (value : UInt32) : UInt32 :=
 def UInt32.toBigEndian (value : UInt32) :=
   if Pod.endianness = .big
     then value
-    else value.bswap
+    else bswap value
 
 @[extern "lean_pod_UInt32_toLittleEndian"]
 def UInt32.toLittleEndian (value : UInt32) :=
   if Pod.endianness = .little
     then value
-    else value.bswap
+    else bswap value
 
 @[extern "lean_pod_UInt64_bswap"]
 def UInt64.bswap (value : UInt64) : UInt64 :=
@@ -50,13 +52,13 @@ def UInt64.bswap (value : UInt64) : UInt64 :=
 def UInt64.toBigEndian (value : UInt64) :=
   if Pod.endianness = .big
     then value
-    else value.bswap
+    else bswap value
 
 @[extern "lean_pod_UInt64_toLittleEndian"]
 def UInt64.toLittleEndian (value : UInt64) :=
   if Pod.endianness = .little
     then value
-    else value.bswap
+    else bswap value
 
 @[extern "lean_pod_USize_bswap"]
 opaque USize.bswap (value : USize) : USize
@@ -65,10 +67,10 @@ opaque USize.bswap (value : USize) : USize
 def USize.toBigEndian (value : USize) :=
   if Pod.endianness = .big
     then value
-    else value.bswap
+    else bswap value
 
 @[extern "lean_pod_USize_toLittleEndian"]
 def USize.toLittleEndian (value : USize) :=
   if Pod.endianness = .little
     then value
-    else value.bswap
+    else bswap value

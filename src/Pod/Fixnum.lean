@@ -56,13 +56,16 @@ def UFixnum.ofNatCore (x : Nat) (h : x < size) : UFixnum :=
 def UFixnum.ofNatCore' (x : Nat) (h : x < 2147483648) : UFixnum :=
   ⟨x, Nat.lt_of_lt_of_le h size_ge⟩
 
-private unsafe
-def UFixnum.ofNatImpl (x : Nat) : UFixnum :=
-  ⟨(x &&& ((1 <<< bitWidth) - 1)), lcProof⟩
-
-@[implemented_by ofNatImpl]
 def UFixnum.ofNat (x : Nat) : UFixnum :=
-  .mk $ Fin.ofNat' size x
+  ⟨(x &&& ((1 <<< bitWidth) - 1)), by
+    apply Nat.and_lt_two_pow
+    rw [Nat.shiftLeft_eq, Nat.one_mul]
+    apply Nat.sub_one_lt
+    rw [ne_eq]
+    intro h
+    have := Nat.pow_eq_zero.mp h
+    contradiction
+  ⟩
 
 instance UFixnum.instOfNat {n} : OfNat UFixnum n := ⟨.ofNat n⟩
 
@@ -163,7 +166,7 @@ def UFixnum.mod (x y : UFixnum) : UFixnum :=
   .mk <| x.val % y.val
 
 instance : BEq UFixnum := ⟨UFixnum.beq⟩
-instance : Xor UFixnum := ⟨UFixnum.xor⟩
+instance : XorOp UFixnum := ⟨UFixnum.xor⟩
 instance : OrOp UFixnum := ⟨UFixnum.lor⟩
 instance : AndOp UFixnum := ⟨UFixnum.land⟩
 instance : Complement UFixnum := ⟨UFixnum.complement⟩

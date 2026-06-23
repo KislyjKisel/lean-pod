@@ -44,7 +44,7 @@ static void lean_pod_Buffer_finalize(void* obj) {
     lean_pod_free(buf);
 }
 
-LEAN_EXPORT lean_obj_res lean_pod_initialize_types(lean_obj_arg io_) {
+LEAN_EXPORT lean_obj_res lean_pod_initialize_types() {
     LEAN_POD_INITIALIZE_EXTERNAL_CLASS(pod_Ptr, lean_pod_default_finalize, lean_pod_default_foreach)
     LEAN_POD_INITIALIZE_EXTERNAL_CLASS_S(pod_OnFinalize)
     LEAN_POD_INITIALIZE_EXTERNAL_CLASS(pod_OnFinalizeMut, lean_pod_OnFinalizeMut_finalize, lean_pod_OnFinalize_foreach)
@@ -53,5 +53,5 @@ LEAN_EXPORT lean_obj_res lean_pod_initialize_types(lean_obj_arg io_) {
     LEAN_POD_INITIALIZE_EXTERNAL_CLASS(pod_UVector, lean_pod_free, lean_pod_default_foreach)
     LEAN_POD_INITIALIZE_EXTERNAL_CLASS_S(pod_FixnumSlotMap)
     LEAN_POD_INITIALIZE_EXTERNAL_CLASS_S(pod_Deque)
-    return lean_io_result_mk_ok(lean_box(0));
+    return lean_box(0);
 }

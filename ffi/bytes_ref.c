@@ -92,7 +92,7 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesRef_toByteArray(
     size_t sz = lean_usize_of_nat(sz_nat);
     lean_object* arr = lean_alloc_sarray(1, sz, sz);
     memcpy(lean_sarray_cptr(arr), lean_pod_BytesRef_fromRepr(br), sz);
-    return lean_io_result_mk_ok(arr);
+    return arr;
 }
 
 LEAN_EXPORT lean_obj_res lean_pod_BytesRef_copy(
@@ -101,5 +101,5 @@ LEAN_EXPORT lean_obj_res lean_pod_BytesRef_copy(
 ) {
     size_t sz = lean_usize_of_nat(sz_nat);
     memcpy(lean_pod_BytesRef_fromRepr(dst), lean_pod_BytesRef_fromRepr(src), sz);
-    return lean_io_result_mk_ok(lean_box(0));
+    return lean_box(0);
 }

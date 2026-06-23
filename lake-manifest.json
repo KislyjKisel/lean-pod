@@ -1,15 +1,16 @@
-{"version": "1.1.0",
+{"version": "1.2.0",
  "packagesDir": ".lake/packages",
  "packages":
- [{"url": "https://github.com/argumentcomputer/LSpec",
+ [{"url": "https://github.com/srghma/LSpec",
    "type": "git",
    "subDir": null,
    "scope": "",
-   "rev": "24cceb69c20fadca0fd3acabe39fa9270dfb47e6",
+   "rev": "3fb9628a8c7e4e8dc8deefc5d7d9622003ab6e40",
    "name": "LSpec",
    "manifestFile": "lake-manifest.json",
-   "inputRev": "24cceb6",
+   "inputRev": "3fb9628",
    "inherited": false,
    "configFile": "lakefile.toml"}],
  "name": "pod",
- "lakeDir": ".lake"}
+ "lakeDir": ".lake",
+ "fixedToolchain": false}
