@@ -1,5 +1,9 @@
+module
+
 import Pod.Meta
 import Pod.Lemmas
+
+public section
 
 namespace Pod
 
@@ -37,7 +41,6 @@ instance : Storable UInt32 where
 
 local instance : Inhabited (Unit → { n : Nat // n = 4 ∨ n = 8 }) := ⟨λ _ ↦ ⟨8, Or.inr rfl⟩⟩
 
-private
 define_foreign_constant uint64Alignment : { n : Nat // n = 4 ∨ n = 8 } := "lean_pod_UInt64_getAlignment"
 
 instance : Storable UInt64 where
@@ -61,7 +64,6 @@ instance : Storable USize where
     | 32, Or.inl _ => alignment_dvd_byteSize
     | 64, Or.inr _ => alignment_dvd_byteSize
 
-private
 define_foreign_constant floatAlignment : { n : Nat // n = 4 ∨ n = 8 } := "lean_pod_Float_getAlignment"
 
 instance : Storable Float where

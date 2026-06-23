@@ -1,3 +1,5 @@
+module
+
 import LSpec
 import Pod
 
@@ -24,8 +26,8 @@ instance : BEq ByteArray where
 def bytesView :=
   let ba1 := ByteArray.mk #[1, 2, 3, 4, 5]
   group "BytesView"
-  <| test "view toByteArray" (ba1 == ba1.view.toByteArray)
-  <| test "getElem = view drop take get" (ba1[1] == (ba1.view.drop 1 (by decide) |>.take 1 (by decide) |>.get))
+  <| test "view toByteArray" (ba1 == (ByteArray.view ba1).toByteArray)
+  <| test "getElem = view drop take get" (ba1[1] == ((ByteArray.view ba1).drop 1 (by decide) |>.take 1 (by decide) |>.get))
 
 def bytesRef :=
   let ba1 := ByteArray.mk #[1, 2, 3, 4, 5]
@@ -33,13 +35,13 @@ def bytesRef :=
   <| test "set = withRef setOffElUnal" (
       let i : Fin ba1.size := ⟨4, by decide⟩
       let y : UInt8 := 42
-      (ba1.set i y) == (Prod.snd <| runST <| λ _ ↦ ba1.withRef λ br ↦ br.setOffElUnal i.val y i.isLt)
+      (ba1.set i y) == (Prod.snd <| runST <| λ _ ↦ (ByteArray.withRef ba1) λ br ↦ br.setOffElUnal i.val y i.isLt)
   )
   <| test "getElem = view asRef drop take get" (
       let i : Fin ba1.size := ⟨2, by decide⟩
       ba1[i] == (
         runST λ _ ↦
-          ba1.view.asRef λ br ↦
+          (ByteArray.view ba1).asRef λ br ↦
             Nat.gcd_one_left _ ▸ br.drop i (Nat.le_of_lt i.isLt) |>.take 1 (by decide) |>.get
       )
   )
@@ -97,7 +99,7 @@ def fixnumSlotMap :=
 
 end Pod.Tests
 
-def main : List String → IO UInt32 :=
+public def main : List String → IO UInt32 :=
   lspecIO ∘ Std.HashMap.ofList ∘ List.map (Prod.map id List.singleton) <| [
     ("float32", Pod.Tests.float32),
     ("bytesView", Pod.Tests.bytesView),

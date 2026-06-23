@@ -1,16 +1,19 @@
+module
+
+public import Pod.Fixnum
+public import Pod.Float
+public import Pod.Int
+public import Pod.ReadBytes
+public import Pod.Storable
+public import Pod.WriteBytes
+
 import Lean.Syntax
-import Pod.Fixnum
-import Pod.Int
-import Pod.Float
-import Pod.Storable
-import Pod.ReadBytes
-import Pod.WriteBytes
 
 open Lean Syntax
 
 namespace Pod
 
-section Instances
+public section Instances
 
 macro "#pod_c_rwbytes_instance" typeId:ident : command => do
   let typeStr := typeId.getId.toStringWithSep "_" false

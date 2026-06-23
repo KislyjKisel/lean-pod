@@ -1,7 +1,11 @@
+module
+
 import Pod.Meta
 import Pod.Initialization
 import Pod.Lemmas
 import Pod.UInt
+
+public section
 
 namespace Pod
 
@@ -9,7 +13,7 @@ namespace Pod
 define_foreign_type BytesView (size align : Nat)
 
 @[extern "lean_pod_ByteArray_view"]
-opaque _root_.ByteArray.view (ba : ByteArray) : BytesView ba.size 1
+opaque ByteArray.view (ba : ByteArray) : BytesView ba.size 1
 
 namespace BytesView
 

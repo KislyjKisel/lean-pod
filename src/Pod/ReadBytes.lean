@@ -1,6 +1,10 @@
-import Pod.Storable
-import Pod.BytesRef
-import Pod.BytesView
+module
+
+public import Pod.Storable
+public import Pod.BytesRef
+public import Pod.BytesView
+
+public section
 
 namespace Pod
 
@@ -102,4 +106,4 @@ def BytesView.getOffEl (bv : BytesView size (alignment α))
 def ReadBytes.zero : α :=
   let ba := ByteArray.mk (Array.replicate (byteSize α) 0)
   have : ba.size = (byteSize α) := Array.size_replicate
-  this ▸ (ba |>.view) |>.getUnal
+  this ▸ (Pod.ByteArray.view ba) |>.getUnal

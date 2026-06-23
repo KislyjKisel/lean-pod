@@ -1,3 +1,5 @@
+module
+
 import Pod.Meta
 
 namespace Pod

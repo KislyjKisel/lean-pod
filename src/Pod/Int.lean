@@ -1,5 +1,10 @@
+module
+
+public import Pod.Storable
+
 import Pod.UInt
-import Pod.Storable
+
+public section
 
 namespace Pod
 

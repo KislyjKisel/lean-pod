@@ -1,6 +1,10 @@
+module
+
+public section
+
 namespace Pod
 
-theorem _root_.Fin.toNat_sub_distrib {n} (a b : Fin n) (h : b ≤ a) :
+theorem Fin.toNat_sub_distrib {n} (a b : Fin n) (h : b ≤ a) :
   (a - b).val = a.val - b.val := by
   let aLt := a.isLt
   let a := a.val

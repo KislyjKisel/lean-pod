@@ -1,4 +1,8 @@
+module
+
 import Pod.Endianness
+
+public section
 
 namespace Pod
 

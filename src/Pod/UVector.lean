@@ -1,8 +1,13 @@
+module
+
+public import Pod.Storable
+public import Pod.ReadBytes
+public import Pod.WriteBytes
+
 import Pod.Meta
 import Pod.Initialization
-import Pod.Storable
-import Pod.ReadBytes
-import Pod.WriteBytes
+
+public section
 
 namespace Pod
 

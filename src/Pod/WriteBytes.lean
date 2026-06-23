@@ -1,5 +1,9 @@
-import Pod.Storable
-import Pod.BytesRef
+module
+
+public import Pod.Storable
+public import Pod.BytesRef
+
+public section
 
 namespace Pod
 

@@ -1,7 +1,12 @@
+module
+
+public import Pod.BytesView
+public import Pod.BytesRef
+
 import Pod.Meta
 import Pod.Initialization
-import Pod.BytesView
-import Pod.BytesRef
+
+public section
 
 namespace Pod
 

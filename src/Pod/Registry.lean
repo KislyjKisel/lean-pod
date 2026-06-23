@@ -1,5 +1,10 @@
-import Std.Data.HashMap
+module
+
+public import Std.Data.HashMap
+
 import Pod.Array
+
+public section
 
 namespace Pod
 
@@ -49,8 +54,8 @@ structure Registry.Key {α : ι → Type} (reg : Registry α) (i : ι) where
 instance {α : ι → Type} {reg : Registry α} {i} [Nonempty (α i)] : Nonempty (Registry.Key reg i) :=
   .intro ⟨inferInstance, 0⟩
 
-instance {α : ι → Type} {reg : Registry α} : IsRegistryKey (Registry.Key reg) where
-  toNat k := k.val
+@[reducible, instance]
+def isRegistryKey {α : ι → Type} {reg : Registry α} : IsRegistryKey (Registry.Key reg) := IsRegistryKey.mk (fun k => k.val)
 
 private unsafe
 def Registry.registerImpl {α : ι → Type} (reg : Registry α) {i} (x : α i) : BaseIO (Key reg i) :=

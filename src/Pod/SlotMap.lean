@@ -1,12 +1,16 @@
+module
+
+public import Pod.Fixnum
+
 import Pod.Meta
-import Pod.Fixnum
 import Pod.Initialization
+
+public section
 
 variable {α : Type _}
 
 namespace Pod
 
-private
 define_foreign_type FixnumSlotMapImpl.{u} (idxW : Nat) (genW : Nat) (α : Type u) : Type u
 
 /--

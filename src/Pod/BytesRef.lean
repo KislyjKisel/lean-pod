@@ -1,8 +1,13 @@
+module
+
+public import Pod.BytesView
+
 import Pod.Meta
 import Pod.Initialization
 import Pod.Lemmas
 import Pod.UInt
-import Pod.BytesView
+
+public section
 
 namespace Pod
 
@@ -20,12 +25,12 @@ abbrev BytesRefImm (σ : Type) := BytesRef σ .Immutable
 
 /-- Clones array if it is shared. -/
 @[extern "lean_pod_ByteArray_withRef"]
-opaque _root_.ByteArray.withRef
+opaque ByteArray.withRef
   {σ α} {m : Type → Type → Type} [Nonempty (m σ (α × ByteArray))] [@& Functor (m σ)]
   (ba : ByteArray) (f : ∀{σ}, BytesRefMut σ ba.size 1 → m σ α) : m σ (α × ByteArray)
 
 @[extern "lean_pod_ByteArray_withRefImm"]
-opaque _root_.ByteArray.withRefImm
+opaque ByteArray.withRefImm
   {σ α} {m : Type → Type → Type} [Nonempty (m σ α)]
   (ba : @& ByteArray) (f : ∀{σ}, BytesRefImm σ ba.size 1 → m σ α) : m σ α
 

@@ -1,3 +1,5 @@
+module
+
 import Lean.Parser.Command
 
 namespace Pod
@@ -16,10 +18,11 @@ scoped macro mods:declModifiers "define_foreign_constant " name:ident &" : " typ
     $mods:declModifiers
     def $name : $type := getValue ())
 
+public
 syntax foreignTypeSort := &" : " &"Type " level
 
 /-- Defines a type that can be used to pass opaque foreign objects. -/
-scoped macro mods:declModifiers "define_foreign_type " id:declId binders:bracketedBinder* ty:(foreignTypeSort)? : command => do
+scoped macro doc:(docComment)? vis:(visibility)? "define_foreign_type " id:declId binders:bracketedBinder* ty:(foreignTypeSort)? : command => do
   let name := Lean.TSyntax.mk (id.raw.getArg 0)
   let univs := (id.raw.getArg 1).getArgs
   let univs := univs[1:univs.size - 1]
@@ -39,11 +42,10 @@ scoped macro mods:declModifiers "define_foreign_type " id:declId binders:bracket
   --   Lean.TSyntaxArray.mk $ argNames.map λ n ↦
   --     dbg_trace n;
   --     Lean.Syntax.node .none `Lean.Parser.Term.implicitBinder #[.atom .none "{", n, .atom .none "}"]
-  `(private opaque $pairIdent.{$univs,*} $binders* : NonemptyType.{$level}
-    $mods:declModifiers
-    def $name.{$univs,*} $binders* : Type $level := ($(pairIdent) $applied*).type
+  `($[$vis:visibility]? opaque $pairIdent.{$univs,*} $binders* : NonemptyType.{$level}
+    $[$doc:docComment]? $[$vis:visibility]? def $name.{$univs,*} $binders* : Type $level := ($(pairIdent) $applied*).type
     set_option autoImplicit true in
-    instance : Nonempty ($name $applied*) := ($(pairIdent) $applied*).property)
+    $[$vis:visibility]? instance : Nonempty ($name $applied*) := ($(pairIdent) $applied*).property)
 
 scoped macro "extern_initialize" &" => " cFn:str : command =>
   `(@[extern $cFn:str] private
