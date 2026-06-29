@@ -1,6 +1,11 @@
 module
 
-import Pod.Meta
+import Alloy.C
+import Pod.Alloy
+
+open scoped Alloy.C
+
+alloy c include <lean/lean.h>
 
 public section
 
@@ -12,9 +17,20 @@ inductive Endianness where
 deriving Repr, Inhabited
 
 instance : DecidableEq Endianness
-| .little, .little => isTrue rfl
-| .little, .big => isFalse $ by intro; contradiction
-| .big, .little => isFalse $ by intro; contradiction
-| .big, .big => isTrue rfl
+  | .little, .little => isTrue rfl
+  | .little, .big => isFalse <| by intro; contradiction
+  | .big, .little => isFalse <| by intro; contradiction
+  | .big, .big => isTrue rfl
 
-define_foreign_constant endianness : Endianness := "lean_pod_getEndianness"
+define_foreign_constant endianness : Endianness := alloy c {
+  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    return 0;
+  /**/
+  #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+    return 1;
+  /**/
+  #else
+    #error unsupported
+  /**/
+  #endif
+}

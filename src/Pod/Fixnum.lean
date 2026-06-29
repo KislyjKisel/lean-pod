@@ -1,7 +1,5 @@
 module
 
-public import Pod.Storable
-
 import Pod.Meta
 import Pod.UInt
 
@@ -79,10 +77,10 @@ def UFixnum.ofBool (x : Bool) : UFixnum :=
   cond x 1 0
 
 def UFixnum.ofUInt8 (x : UInt8) : UFixnum :=
-  ⟨x.toNat, Nat.lt_trans x.toNat_lt_size $ Nat.lt_of_lt_of_le (by decide) size_ge⟩
+  ⟨x.toNat, Nat.lt_trans x.toNat_lt_size <| Nat.lt_of_lt_of_le (by decide) size_ge⟩
 
 def UFixnum.ofUInt16 (x : UInt16) : UFixnum :=
-  ⟨x.toNat, Nat.lt_trans x.toNat_lt_size $ Nat.lt_of_lt_of_le (by decide) size_ge⟩
+  ⟨x.toNat, Nat.lt_trans x.toNat_lt_size <| Nat.lt_of_lt_of_le (by decide) size_ge⟩
 
 @[extern c inline "lean_box(#1 & (((size_t)1 << ((sizeof(size_t) * 8) - 1)) - 1))"]
 opaque UFixnum.ofUInt32 (x : UInt32) : UFixnum
@@ -189,10 +187,10 @@ instance : LT UFixnum where
 instance : LE UFixnum where
   le x y := x.val ≤ y.val
 
-instance : DecidableLT UFixnum := λ x y ↦
+instance : DecidableLT UFixnum := fun x y ↦
   Fin.decLt x.val y.val
 
-instance : DecidableLE UFixnum := λ x y ↦
+instance : DecidableLE UFixnum := fun x y ↦
   Fin.decLe x.val y.val
 
 instance : Max UFixnum where
@@ -203,9 +201,3 @@ instance : Min UFixnum where
 
 instance : ToString UFixnum where
   toString x := toString x.toNat
-
-instance : Storable UFixnum where
-  byteSize := byteSize USize
-  alignment := alignment USize
-  alignment_dvd_byteSize := alignment_dvd_byteSize
-  byteSize_gt_zero := byteSize_gt_zero

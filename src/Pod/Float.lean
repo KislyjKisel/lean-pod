@@ -1,9 +1,14 @@
 module
 
-public import Pod.Storable
+import Alloy.C
+public import Pod.UInt
 
-import Pod.UInt
-import Pod.Int
+open scoped Alloy.C
+
+alloy c include
+  <stdlib.h>
+  <math.h>
+  <lean/lean.h>
 
 public section
 
@@ -11,40 +16,90 @@ namespace Pod
 
 namespace Float32
 
-def inf : Float32 := .ofBits 0x7F800000
-def negInf : Float32 := .ofBits 0xFF800000
-def pi : Float32 := .ofBits 0x40490FDB
+abbrev inf : Float32 := .ofBits 0x7F800000
+abbrev negInf : Float32 := .ofBits 0xFF800000
+abbrev pi : Float32 := .ofBits 0x40490FDB
 
-end Float32
+@[expose, inline]
+def isUnordered (x y : Float32) : Bool :=
+  x.isNaN || y.isNaN
 
-@[extern "lean_pod_String_toFloat32"]
-opaque String.toFloat32? : @& String → Option Float32
+@[expose, inline]
+def bswap : Float32 → Float32 :=
+  Float32.ofBits ∘ UInt32.bswap ∘ Float32.toBits
 
-@[extern "lean_pod_Substring_toFloat32"]
-opaque Substring.toFloat32? : @& String.Slice → Option Float32
-
-namespace Float32
-
-@[extern "lean_pod_Float32_isNormal"]
-opaque isNormal : Float32 → Bool
-
-@[extern "lean_pod_Float32_isUnordered"]
-opaque isUnordered : Float32 → Float32 → Bool
-
+@[expose, inline]
 def toLittleEndian : Float32 → Float32 :=
   Float32.ofBits ∘ UInt32.toLittleEndian ∘ Float32.toBits
 
+@[expose, inline]
 def toBigEndian : Float32 → Float32 :=
   Float32.ofBits ∘ UInt32.toBigEndian ∘ Float32.toBits
 
+alloy c extern def ofString? (s : @& String) : Option Float32 := {
+  char* retEnd = NULL;
+  const char* cstr = lean_string_cstr(s);
+  const char* cstrEnd = cstr + lean_string_size(s) - 1;
+  float x = strtof(cstr, &retEnd);
+  if (retEnd != cstrEnd) {
+    return lean_box(0);
+  }
+  lean_object* result = lean_alloc_ctor(1, 1, 0);
+  lean_ctor_set(result, 0, lean_box_float32(x));
+  return result;
+}
+
+@[expose, inline]
+def ofSlice? (s : @& String.Slice) : Option Float32 :=
+  ofString? s.toString
+
+alloy c extern def isNormal (x : Float32) : Bool := {
+  return isnormal(x);
+}
+
 end Float32
 
-instance : Storable Float32 where
-  byteSize := byteSize UInt32
-  alignment := alignment UInt32
+namespace Float
 
-def Float.toLittleEndian : Float → Float :=
+abbrev inf : Float := .ofBits 0x7FF0000000000000
+abbrev negInf : Float := .ofBits 0xFFF0000000000000
+abbrev pi : Float := .ofBits 0x400921FB54442D18
+
+@[expose, inline]
+def isUnordered (x y : Float) : Bool :=
+  x.isNaN || y.isNaN
+
+@[expose, inline]
+def bswap : Float → Float :=
+  Float.ofBits ∘ UInt64.bswap ∘ Float.toBits
+
+@[expose, inline]
+def toLittleEndian : Float → Float :=
   Float.ofBits ∘ UInt64.toLittleEndian ∘ Float.toBits
 
-def Float.toBigEndian : Float → Float :=
+@[expose, inline]
+def toBigEndian : Float → Float :=
   Float.ofBits ∘ UInt64.toBigEndian ∘ Float.toBits
+
+alloy c extern def ofString? (s : @& String) : Option Float := {
+  char* retEnd = NULL;
+  const char* cstr = lean_string_cstr(s);
+  const char* cstrEnd = cstr + lean_string_size(s) - 1;
+  double x = strtod(cstr, &retEnd);
+  if (retEnd != cstrEnd) {
+    return lean_box(0);
+  }
+  lean_object* result = lean_alloc_ctor(1, 1, 0);
+  lean_ctor_set(result, 0, lean_box_float(x));
+  return result;
+}
+
+@[expose, inline]
+def ofSlice? (s : @& String.Slice) : Option Float :=
+  ofString? s.toString
+
+alloy c extern def isNormal (x : Float) : Bool := {
+  return isnormal(x);
+}
+
+end Float
