@@ -192,8 +192,7 @@ def downloadGit  (ps : downloadGit.Params) : IO System.FilePath := do
         "-C", repoDir.toString, "ls-files", "--exclude-standard", "--others", "--deduplicate", "--full-name"
       ]
     }
-    for file in gitUntracked.split "\n" do
-      if file.isEmpty then continue
+    for file in gitUntracked.lines do
       IO.FS.removeFile <| repoDir / file.toString
     return repoDir
   if !ps.quiet then
