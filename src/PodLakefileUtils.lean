@@ -78,8 +78,8 @@ def parseCliArgs (s : String) : Array String :=
     return acc
 
 structure tryRunProcess.Params where
-  silence : Bool := false
   cmd : String
+  quiet : Bool := false
   args : Array String := #[]
   cwd : Option System.FilePath := none
   env : Array (String × Option String) := #[]
@@ -98,7 +98,7 @@ def tryRunProcess.command (ps : tryRunProcess.Params) : IO String := do
   let currentDir ← IO.currentDir
   let processDir ← IO.FS.realPath <| match ps.cwd with | none => "." | some wd => wd.toString
   let processDir := processDir.toString.replace currentDir.toString "./"
-  unless ps.silence do
+  unless ps.quiet do
     let stdout ← IO.getStdout
     stdout.putStrLn <|
       if ← stdout.isTty then
@@ -123,7 +123,7 @@ def tryRunProcess (ps : tryRunProcess.Params) : IO Unit := do
   let command ← tryRunProcess.command ps
   let process ← IO.Process.spawn { ps with
     toStdioConfig :=
-      if ps.silence
+      if ps.quiet
         then { stdout := .null, stderr := .inherit, stdin := .null }
         else { stdout := .inherit, stderr := .inherit, stdin := .null }
   }
@@ -137,7 +137,7 @@ def buildDir : m System.FilePath :=
 structure downloadGit.Params where
   /-- Git binary to execute. -/
   git : String := "git"
-  silence : Bool
+  quiet : Bool := false
   url : String
   commit : String
   /-- Preferably under `.lake/build` so that it will be cleaned by `lake clean`. -/
@@ -156,59 +156,60 @@ def downloadGit  (ps : downloadGit.Params) : IO System.FilePath := do
     let gitCdup ←
       try
         tryRunProcessGetOutput {
-          silence := ps.silence
-          cmd := ps.git,
-          args := #["-C", repoDir.toString, "rev-parse", "--show-cdup"],
+          cmd := ps.git
+          quiet := ps.quiet
+          args := #["-C", repoDir.toString, "rev-parse", "--show-cdup"]
         }
       catch _ =>
         break
     unless gitCdup.trimAsciiEnd.isEmpty do break
     let gitOrigin ← tryRunProcessGetOutput {
-      silence := ps.silence
-      cmd := ps.git,
-      args := #["-C", repoDir.toString, "remote", "get-url", "origin"],
+      cmd := ps.git
+      quiet := ps.quiet
+      args := #["-C", repoDir.toString, "remote", "get-url", "origin"]
     }
     unless gitOrigin.trimAsciiEnd == ps.url do break
     let gitCommit ← tryRunProcessGetOutput {
-      silence := ps.silence
-      cmd := ps.git,
-      args := #["-C", repoDir.toString, "rev-parse", "--verify", "HEAD"],
+      cmd := ps.git
+      quiet := ps.quiet
+      args := #["-C", repoDir.toString, "rev-parse", "--verify", "HEAD"]
     }
     unless gitCommit.trimAsciiEnd == ps.commit do break
     try
       let args := #["-C", repoDir.toString, "diff-index", "HEAD", "--"]
-      let args := if ps.silence then args.insertIdx! 3 "--quiet" else args
-      tryRunProcess { silence := ps.silence, cmd := ps.git, args := args }
+      let args := if ps.quiet then args.insertIdx! 3 "--quiet" else args
+      tryRunProcess { cmd := ps.git, quiet := ps.quiet, args := args }
     catch _ =>
       tryRunProcess {
-        silence := ps.silence
-        cmd := ps.git,
-        args := #["-C", repoDir.toString, "reset", "--hard", "HEAD"],
+        cmd := ps.git
+        quiet := ps.quiet
+        args := #["-C", repoDir.toString, "reset", "--hard", "HEAD"]
       }
     let gitUntracked ← tryRunProcessGetOutput {
-      silence := ps.silence
-      cmd := ps.git,
+      cmd := ps.git
+      quiet := ps.quiet
       args := #[
         "-C", repoDir.toString, "ls-files", "--exclude-standard", "--others", "--deduplicate", "--full-name"
-      ],
+      ]
     }
     for file in gitUntracked.split "\n" do
       if file.isEmpty then continue
       IO.FS.removeFile <| repoDir / file.toString
     return repoDir
-  if !ps.silence then
+  if !ps.quiet then
     println! "Removing {repoDir}"
   try IO.FS.removeDirAll repoDir catch _ => pure ()
   tryRunProcess {
-    silence := ps.silence
-    cmd := ps.git,
-    args := #["clone", "--revision=" ++ ps.commit, "--depth=1", ps.url, repoDir.toString],
+    cmd := ps.git
+    quiet := ps.quiet
+    args := #["clone", "--revision=" ++ ps.commit, "--depth=1", ps.url, repoDir.toString]
   }
   return repoDir
 
 structure cmakeGenerate.Params where
   /-- CMake binary to execute. -/
   cmake : String := "cmake"
+  quiet : Bool := false
   settings : Array (String × String) := #[]
   source : Option String := none
   output : Option String := none
@@ -223,11 +224,16 @@ def cmakeGenerate (ps : cmakeGenerate.Params) : IO Unit := do
     args := args.push "-B" |>.push output
   if let some generator := ps.generator then
     args := args.push "-G" |>.push generator
-  tryRunProcess { cmd := ps.cmake, args := args ++ ps.extraArgs }
+  tryRunProcess {
+    cmd := ps.cmake
+    quiet := ps.quiet
+    args := args ++ ps.extraArgs
+  }
 
 structure cmakeBuild.Params where
   /-- CMake binary to execute. -/
   cmake : String := "cmake"
+  quiet : Bool := false
   directory : String
   /-- Empty means default target. -/
   targets : Array String := #[]
@@ -241,6 +247,10 @@ def cmakeBuild (ps : cmakeBuild.Params) : IO Unit := do
   args := args ++ ps.extraArgs
   unless ps.buildToolArgs.isEmpty do
     args := args.push "--" |>.append ps.buildToolArgs
-  tryRunProcess { cmd := ps.cmake, args }
+  tryRunProcess {
+    cmd := ps.cmake
+    quiet := ps.quiet
+    args
+  }
 
 end PodLakefileUtils
