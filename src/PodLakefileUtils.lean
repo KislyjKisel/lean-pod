@@ -112,12 +112,23 @@ def tryRunProcess.waitCheckExitCode {stdioConfig} (command : String) (process : 
   if exitCode ≠ 0 then
     Lake.error s!"external command returned non-zero exit status {exitCode}: {command}"
 
-def tryRunProcessGetOutput (ps : tryRunProcess.Params) : IO String := do
+def tryRunProcessGetStdout (ps : tryRunProcess.Params) : IO String := do
   let command ← tryRunProcess.command ps
   let process ← IO.Process.spawn { ps with stdout := .piped, stderr := .inherit, stdin := .null }
   let stdout ← IO.asTask process.stdout.readToEnd Task.Priority.dedicated
   tryRunProcess.waitCheckExitCode command process
   return ← IO.ofExcept stdout.get
+
+def tryRunProcessGetStderr (ps : tryRunProcess.Params) : IO String := do
+  let command ← tryRunProcess.command ps
+  let process ← IO.Process.spawn { ps with
+    stdout := cond ps.quiet .null .inherit
+    stderr := .piped
+    stdin := .null
+  }
+  let stderr ← IO.asTask process.stderr.readToEnd Task.Priority.dedicated
+  tryRunProcess.waitCheckExitCode command process
+  return ← IO.ofExcept stderr.get
 
 def tryRunProcess (ps : tryRunProcess.Params) : IO Unit := do
   let command ← tryRunProcess.command ps
@@ -155,7 +166,7 @@ def downloadGit  (ps : downloadGit.Params) : IO System.FilePath := do
   repeat
     let gitCdup ←
       try
-        tryRunProcessGetOutput {
+        tryRunProcessGetStdout {
           cmd := ps.git
           quiet := ps.quiet
           args := #["-C", repoDir.toString, "rev-parse", "--show-cdup"]
@@ -163,13 +174,13 @@ def downloadGit  (ps : downloadGit.Params) : IO System.FilePath := do
       catch _ =>
         break
     unless gitCdup.trimAsciiEnd.isEmpty do break
-    let gitOrigin ← tryRunProcessGetOutput {
+    let gitOrigin ← tryRunProcessGetStdout {
       cmd := ps.git
       quiet := ps.quiet
       args := #["-C", repoDir.toString, "remote", "get-url", "origin"]
     }
     unless gitOrigin.trimAsciiEnd == ps.url do break
-    let gitCommit ← tryRunProcessGetOutput {
+    let gitCommit ← tryRunProcessGetStdout {
       cmd := ps.git
       quiet := ps.quiet
       args := #["-C", repoDir.toString, "rev-parse", "--verify", "HEAD"]
@@ -185,7 +196,7 @@ def downloadGit  (ps : downloadGit.Params) : IO System.FilePath := do
         quiet := ps.quiet
         args := #["-C", repoDir.toString, "reset", "--hard", "HEAD"]
       }
-    let gitUntracked ← tryRunProcessGetOutput {
+    let gitUntracked ← tryRunProcessGetStdout {
       cmd := ps.git
       quiet := ps.quiet
       args := #[
