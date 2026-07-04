@@ -155,6 +155,15 @@ structure downloadGit.Params where
   directory : System.FilePath
   /-- Repository directory name. The path will be `{params.directory}/{params.name}`. -/
   name : String
+  cwd : Option System.FilePath := none
+  env : Array (String × Option String) := #[]
+  inheritEnv : Bool := true
+  setsid : Bool := false
+
+attribute [inherit_doc IO.Process.SpawnArgs.cwd] downloadGit.Params.cwd
+attribute [inherit_doc IO.Process.SpawnArgs.env] downloadGit.Params.env
+attribute [inherit_doc IO.Process.SpawnArgs.inheritEnv] downloadGit.Params.inheritEnv
+attribute [inherit_doc IO.Process.SpawnArgs.setsid] downloadGit.Params.setsid
 
 /--
 Ensures `{params.directory}/{params.name}` contains a vaild git repository with the specified commit.
@@ -166,39 +175,34 @@ def downloadGit  (ps : downloadGit.Params) : IO System.FilePath := do
   repeat
     let gitCdup ←
       try
-        tryRunProcessGetStdout {
+        tryRunProcessGetStdout { ps with
           cmd := ps.git
-          quiet := ps.quiet
           args := #["-C", repoDir.toString, "rev-parse", "--show-cdup"]
         }
       catch _ =>
         break
     unless gitCdup.trimAsciiEnd.isEmpty do break
-    let gitOrigin ← tryRunProcessGetStdout {
+    let gitOrigin ← tryRunProcessGetStdout { ps with
       cmd := ps.git
-      quiet := ps.quiet
       args := #["-C", repoDir.toString, "remote", "get-url", "origin"]
     }
     unless gitOrigin.trimAsciiEnd == ps.url do break
-    let gitCommit ← tryRunProcessGetStdout {
+    let gitCommit ← tryRunProcessGetStdout { ps with
       cmd := ps.git
-      quiet := ps.quiet
       args := #["-C", repoDir.toString, "rev-parse", "--verify", "HEAD"]
     }
     unless gitCommit.trimAsciiEnd == ps.commit do break
     try
       let args := #["-C", repoDir.toString, "diff-index", "HEAD", "--"]
       let args := if ps.quiet then args.insertIdx! 3 "--quiet" else args
-      tryRunProcess { cmd := ps.git, quiet := ps.quiet, args := args }
+      tryRunProcess { ps with cmd := ps.git, args }
     catch _ =>
-      tryRunProcess {
+      tryRunProcess { ps with
         cmd := ps.git
-        quiet := ps.quiet
         args := #["-C", repoDir.toString, "reset", "--hard", "HEAD"]
       }
-    let gitUntracked ← tryRunProcessGetStdout {
+    let gitUntracked ← tryRunProcessGetStdout { ps with
       cmd := ps.git
-      quiet := ps.quiet
       args := #[
         "-C", repoDir.toString, "ls-files", "--exclude-standard", "--others", "--deduplicate", "--full-name"
       ]
@@ -209,9 +213,8 @@ def downloadGit  (ps : downloadGit.Params) : IO System.FilePath := do
   if !ps.quiet then
     println! "Removing {repoDir}"
   try IO.FS.removeDirAll repoDir catch _ => pure ()
-  tryRunProcess {
+  tryRunProcess { ps with
     cmd := ps.git
-    quiet := ps.quiet
     args := #["clone", "--revision=" ++ ps.commit, "--depth=1", ps.url, repoDir.toString]
   }
   return repoDir
@@ -225,6 +228,15 @@ structure cmakeGenerate.Params where
   output : Option String := none
   generator : Option String := none
   extraArgs : Array String := #[]
+  cwd : Option System.FilePath := none
+  env : Array (String × Option String) := #[]
+  inheritEnv : Bool := true
+  setsid : Bool := false
+
+attribute [inherit_doc IO.Process.SpawnArgs.cwd] cmakeGenerate.Params.cwd
+attribute [inherit_doc IO.Process.SpawnArgs.env] cmakeGenerate.Params.env
+attribute [inherit_doc IO.Process.SpawnArgs.inheritEnv] cmakeGenerate.Params.inheritEnv
+attribute [inherit_doc IO.Process.SpawnArgs.setsid] cmakeGenerate.Params.setsid
 
 def cmakeGenerate (ps : cmakeGenerate.Params) : IO Unit := do
   let mut args := ps.settings.map fun (k, v) => s!"-D{k}={v}"
@@ -234,11 +246,7 @@ def cmakeGenerate (ps : cmakeGenerate.Params) : IO Unit := do
     args := args.push "-B" |>.push output
   if let some generator := ps.generator then
     args := args.push "-G" |>.push generator
-  tryRunProcess {
-    cmd := ps.cmake
-    quiet := ps.quiet
-    args := args ++ ps.extraArgs
-  }
+  tryRunProcess { ps with cmd := ps.cmake, args := args ++ ps.extraArgs }
 
 structure cmakeBuild.Params where
   /-- CMake binary to execute. -/
@@ -249,6 +257,15 @@ structure cmakeBuild.Params where
   targets : Array String := #[]
   extraArgs : Array String := #[]
   buildToolArgs : Array String := #[]
+  cwd : Option System.FilePath := none
+  env : Array (String × Option String) := #[]
+  inheritEnv : Bool := true
+  setsid : Bool := false
+
+attribute [inherit_doc IO.Process.SpawnArgs.cwd] cmakeBuild.Params.cwd
+attribute [inherit_doc IO.Process.SpawnArgs.env] cmakeBuild.Params.env
+attribute [inherit_doc IO.Process.SpawnArgs.inheritEnv] cmakeBuild.Params.inheritEnv
+attribute [inherit_doc IO.Process.SpawnArgs.setsid] cmakeBuild.Params.setsid
 
 def cmakeBuild (ps : cmakeBuild.Params) : IO Unit := do
   let mut args := #["--build", ps.directory]
@@ -257,10 +274,6 @@ def cmakeBuild (ps : cmakeBuild.Params) : IO Unit := do
   args := args ++ ps.extraArgs
   unless ps.buildToolArgs.isEmpty do
     args := args.push "--" |>.append ps.buildToolArgs
-  tryRunProcess {
-    cmd := ps.cmake
-    quiet := ps.quiet
-    args
-  }
+  tryRunProcess { ps with cmd := ps.cmake, args }
 
 end PodLakefileUtils
