@@ -31,6 +31,5 @@ define_foreign_constant endianness : Endianness := alloy c {
   /**/
   #else
     #error unsupported
-  /**/
   #endif
 }
