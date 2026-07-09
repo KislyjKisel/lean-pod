@@ -276,4 +276,60 @@ def cmakeBuild (ps : cmakeBuild.Params) : IO Unit := do
     args := args.push "--" |>.append ps.buildToolArgs
   tryRunProcess { ps with cmd := ps.cmake, args }
 
+inductive getClangIncludeDirs.Language where
+| c
+| cpp
+
+structure getClangIncludeDirs.Params where
+  /-- clang binary to execute. -/
+  clang : String := "clang"
+  quiet : Bool := false
+  language : getClangIncludeDirs.Language := .c
+
+def getClangCppIncludeDirs (ps : getClangIncludeDirs.Params) : IO (Array String.Slice) := do
+  let clangOutput ←
+    IO.FS.withTempFile fun _ emptyFile =>
+      PodLakefileUtils.tryRunProcessGetStderr {
+        cmd := ps.clang,
+        quiet := ps.quiet,
+        args := #[
+          "-E",
+          "-v",
+          "-x",
+          match ps.language with | .c => "c" | .cpp => "c++",
+          emptyFile.toString,
+        ]
+      }
+  let mut lineIt := clangOutput.lines
+  repeat
+    match lineIt.step with
+    | .yield it line _ =>
+      lineIt := it
+      if line.contains "#include <...> search starts here:" then
+        break
+    | .skip it _ =>
+      lineIt := it
+    | .done _ =>
+      return #[]
+  let mut paths := #[]
+  repeat
+    match lineIt.step with
+    | .yield it line _ => (lineIt, paths) := (it, paths.push line.trimAscii)
+    | .skip it _ => lineIt := it
+    | .done _ => break
+  return paths
+
+structure getClangLibcppIncludeDir.params where
+  /-- clang binary to execute. -/
+  clang : String := "clang"
+  quiet : Bool := false
+
+def getClangLibcppIncludeDir (ps : getClangLibcppIncludeDir.params) : IO System.FilePath := do
+  let candidates ← getClangCppIncludeDirs { ps with language := .cpp }
+  for candidate in candidates do
+    let includeDir := System.FilePath.mk candidate.toString / "c++" / "v1"
+    if ← (includeDir / "cstddef").pathExists then
+      return includeDir
+  Lake.error "could not find libc++ include path"
+
 end PodLakefileUtils
