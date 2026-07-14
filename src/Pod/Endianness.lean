@@ -4,6 +4,7 @@ import Alloy.C
 import Pod.Alloy
 
 open scoped Alloy.C
+open scoped Pod.Alloy
 
 alloy c include <lean/lean.h>
 

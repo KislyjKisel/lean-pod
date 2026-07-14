@@ -6,7 +6,7 @@ open scoped Alloy.C
 
 public section
 
-namespace Pod
+namespace Pod.Alloy
 
 scoped elab "alloy " &"c " &"print" : command => do
   println! Alloy.C.shimExt.getState (← Lean.getEnv) |>.text.source
